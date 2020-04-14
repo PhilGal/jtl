@@ -1,18 +1,17 @@
-/*
-Copyright © 2020 Philipp Galichkin <phil.gal@outlook.com>
+// Copyright © 2020 Philipp Galichkin
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
@@ -35,13 +34,21 @@ import (
 // pushCmd represents the push command
 var pushCmd = &cobra.Command{
 	Use:   "push",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Pushes data to a remote Jira server defined as <host> in config.yaml.",
+	Long: `Pushes data to a remote server defined as <host> in config.yaml.
+For correct work this command reqiures a configured <host> and user <credentials> in the config.yaml:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+  host: https://jira.server.url
+	credentials:
+	  username: <username>
+	  password: <password>
+
+However, if username and password are not defined, a user will be prompted to enter them.
+
+Preview mode:
+To make sure the data to be pushed is correct, the command can be executed with -p flag. 
+The preview output contains host, username and prepared requests bodies for POST request to Jira. 
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		PushToServer(cmd, args)
 	},
@@ -78,7 +85,7 @@ func (creds *credentials) isValid() bool {
 
 const jiraURLTemplate = "/rest/api/2/issue/%v/worklog"
 
-var Creds credentials
+var creds credentials
 
 //PushToServer reads report data and logs work on jira server
 func PushToServer(cmd *cobra.Command, args []string) {
@@ -170,25 +177,25 @@ func basicAuth(cred *credentials) string {
 
 func readCredentials() *credentials {
 	//Read from config first
-	err := viper.UnmarshalKey("credentials", &Creds)
+	err := viper.UnmarshalKey("credentials", &creds)
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
-	Creds = *Creds.trim()
-	if Creds.isValid() {
-		return &Creds
+	creds = *creds.trim()
+	if creds.isValid() {
+		return &creds
 	}
 	//Otherwise read from user input
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Enter Username: ")
-	Creds.Username, _ = reader.ReadString('\n')
+	creds.Username, _ = reader.ReadString('\n')
 
 	fmt.Print("Enter Password: ")
 	bytePassword, err := terminal.ReadPassword(0)
 	if err == nil {
 		fmt.Println("\nPassword typed: " + string(bytePassword))
 	}
-	Creds.Password = string(bytePassword)
-	Creds = *Creds.trim()
-	return &Creds
+	creds.Password = string(bytePassword)
+	creds = *creds.trim()
+	return &creds
 }
