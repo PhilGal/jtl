@@ -94,6 +94,10 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 			validateJiraTicketName(aliasTicket)
 			dataRow[4] = aliasTicket
 			dataRow[5] = alias
+		} else {
+			validateJiraTicketName(rec.jiraTicket)
+			dataRow[4] = rec.jiraTicket
+			dataRow[5] = "jira"
 		}
 	} else {
 		validateJiraTicketName(rec.jiraTicket)
@@ -132,6 +136,14 @@ func readCsv(file string) ([]string, [][]string, error) {
 func writeRowCsv(file string, row []string) {
 	header, data, err := readCsv(file)
 	fcsv, err := os.Create(file)
+	
+	defer func() {
+		cerr := fcsv.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+
 	if err != nil {
 		log.Fatal(err)
 	}
