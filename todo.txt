@@ -1,0 +1,8 @@
+BUGS:
+BACKLOG:
+- Track sent requests to: 
+	a) avoid duplicates 
+	b) display requests not sent due to erros
+- Implement "report" feature with summaries
+- Update help messages
+- Clean up commands output (extra fmt.Prints)
