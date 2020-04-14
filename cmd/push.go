@@ -29,6 +29,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh/terminal"
+	data "github.com/philgal/jtl/cmd/internal/data"
 )
 
 // pushCmd represents the push command
@@ -89,7 +90,7 @@ var creds credentials
 
 //PushToServer reads report data and logs work on jira server
 func PushToServer(cmd *cobra.Command, args []string) {
-	_, data, _ := readCsv(dataFile)
+	_, data, _ := data.ReadCsv(dataFile)
 	jreq := convertCsvDataIntoJiraRequest(data)
 	preview := func(jr jiraRequest) {
 		fmt.Printf("------------\n%v\n------------\n", "PREVIEW MODE")

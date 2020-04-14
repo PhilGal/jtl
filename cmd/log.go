@@ -15,14 +15,12 @@
 package cmd
 
 import (
-	"encoding/csv"
 	"fmt"
 	"log"
-	"os"
 	"regexp"
-	"strconv"
 	"time"
 
+	data "github.com/philgal/jtl/cmd/internal/data"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -103,7 +101,7 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 		dataRow[4] = rec.jiraTicket
 		dataRow[5] = "jira"
 	}
-	writeRowCsv(dataFile, dataRow)
+	data.WriteRowCsv(dataFile, dataRow)
 }
 
 const (
@@ -118,42 +116,4 @@ func validateJiraTicketName(val string) {
 	if !match {
 		log.Fatalf("String '%v' does not seem like a valid Jira ticket.\n", val)
 	}
-}
-
-func readCsv(file string) ([]string, [][]string, error) {
-	fcsv, err := os.Open(file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	reader := csv.NewReader(fcsv)
-	//Read header to skip it. Maybe later add a param like "readHeader: bool"
-	header, err := reader.Read()
-	records, err := reader.ReadAll()
-	return header, records, err
-}
-
-func writeRowCsv(file string, row []string) {
-	header, data, err := readCsv(file)
-	fcsv, err := os.Create(file)
-	
-	defer func() {
-		cerr := fcsv.Close()
-		if err == nil {
-			err = cerr
-		}
-	}()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	row[0] = strconv.Itoa(len(data) + 1)
-	data = append(data, row)
-	writer := csv.NewWriter(fcsv)
-	writer.Comma = ','
-	err = writer.Write(header)
-	err = writer.WriteAll(data)
-	if err != nil {
-		log.Fatal(err)
-	}
-	writer.Flush()
 }

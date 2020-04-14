@@ -17,24 +17,27 @@ package cmd
 import (
 	"fmt"
 
+	data "github.com/philgal/jtl/cmd/internal/data"
 	"github.com/spf13/cobra"
 )
 
 // reportCmd represents the report command
 var reportCmd = &cobra.Command{
 	Use:   "report",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Displays summarized report for data file",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("report called")
+		displayReport()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(reportCmd)
+}
+
+func displayReport() {
+	_, rows, _ := data.ReadCsv(dataFile)
+	fmt.Println("\nTotal records: ", len(rows))
+	for _, r := range rows {
+		fmt.Println(r)
+	}
 }
