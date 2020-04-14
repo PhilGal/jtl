@@ -64,11 +64,21 @@ type jiraRequestRow struct {
 type jiraRequest []jiraRequestRow
 
 type credentials struct {
-	username string
-	password string
+	Username string
+	Password string
+}
+
+func (creds *credentials) trim() *credentials {
+	return &credentials{strings.TrimSpace(creds.Username), strings.TrimSpace(creds.Password)}
+}
+
+func (creds *credentials) isValid() bool {
+	return creds.Username != "" && creds.Password != ""
 }
 
 const jiraURLTemplate = "/rest/api/2/issue/%v/worklog"
+
+var Creds credentials
 
 //PushToServer reads report data and logs work on jira server
 func PushToServer(cmd *cobra.Command, args []string) {
@@ -77,6 +87,7 @@ func PushToServer(cmd *cobra.Command, args []string) {
 	preview := func(jr jiraRequest) {
 		fmt.Printf("------------\n%v\n------------\n", "PREVIEW MODE")
 		fmt.Printf("Jira server: %v\n", viper.GetString("host"))
+		fmt.Println("User:", readCredentials().Username)
 		for _, row := range jr {
 			fmt.Println()
 			fmt.Println("POST", postURL(row.jiraticket))
@@ -153,27 +164,31 @@ func convertDateToDateTimeIso(date string) string {
 }
 
 func basicAuth(cred *credentials) string {
-	auth := cred.username + ":" + cred.password
+	auth := cred.Username + ":" + cred.Password
 	return base64.StdEncoding.EncodeToString([]byte(auth))
 }
 
 func readCredentials() *credentials {
 	//Read from config first
-	username := viper.GetString("user.username")
-	password := viper.GetString("user.password")
-	if len(strings.TrimSpace(username)) > 0 && len(strings.TrimSpace(password)) > 0 {
-		return &credentials{strings.TrimSpace(username), strings.TrimSpace(password)}
+	err := viper.UnmarshalKey("credentials", &Creds)
+	if err != nil {
+		log.Fatalf("unable to decode into struct, %v", err)
+	}
+	Creds = *Creds.trim()
+	if Creds.isValid() {
+		return &Creds
 	}
 	//Otherwise read from user input
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Enter Username: ")
-	username, _ = reader.ReadString('\n')
+	Creds.Username, _ = reader.ReadString('\n')
 
 	fmt.Print("Enter Password: ")
 	bytePassword, err := terminal.ReadPassword(0)
 	if err == nil {
 		fmt.Println("\nPassword typed: " + string(bytePassword))
 	}
-	password = string(bytePassword)
-	return &credentials{strings.TrimSpace(username), strings.TrimSpace(password)}
+	Creds.Password = string(bytePassword)
+	Creds = *Creds.trim()
+	return &Creds
 }
