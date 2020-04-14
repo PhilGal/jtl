@@ -167,7 +167,7 @@ func convertDateToDateTimeIso(date string) string {
 		log.Fatal(err)
 	}
 	const iso = "2006-01-02T15:04:05.000-0700"
-	return parsedDate.Local().Add(time.Hour * 10).Format(iso)
+	return parsedDate.Local().Format(iso)
 }
 
 func basicAuth(cred *credentials) string {
