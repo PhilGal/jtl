@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
+Copyright © 2020 Philipp Galichkin <phil.gal@outlook.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -92,8 +92,8 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Println("Config file not loaded", err)
 	}
 
 	viper.SetDefault("DateTimePattern", defaultDateTimePattern)
@@ -102,7 +102,6 @@ func initConfig() {
 func initDataFile() {
 	dataDir := path.Join(homeDir(), ".jtl", "data")
 	f := path.Join(dataDir, dataFileName())
-	fmt.Println("Loaded data file: ", f)
 	createDirIfNotExists(dataDir)
 	createFileIfNotExists(f, dataFileHeader)
 	//upgrade file to full path in context

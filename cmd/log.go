@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
+Copyright © 2020 Philipp Galichkin <phil.gal@outlook.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,12 +32,23 @@ import (
 var logCmd = &cobra.Command{
 	Use:   "log",
 	Short: "Adds Jira work log occurrence into a data file",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `
+Adds Jira work log occurrence into a data file. Currently, the file is in a CSV format, so it can easily be edited manually before being pushed to a remote Jira <host>.
+To save yourself some typing, you can create ticket aliases in a config. Then these aliases can be used instead of ticket ids in the log command with -j flag.
+Ticket values specified in a config will the be logged and pushed.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+  -----------------------
+  %HOME%/.jtl/config.yaml
+  -----------------------
+  alias:
+    jt1: JIRATICKET-1
+    l666: ANOTHERLONGTICKET-666
+  -----------------------
+
+Examples:
+  jtl log -j JIRA-101 -t 30m -s "14 Apr 2020 10:00" -m "Comment"
+  jtl log -j l666 -t 1h -s "06 Jun 2020 06:00" -m "Some repeatedly meeting!"
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//use App for testing
 		runLogCommand(cmd, args)
@@ -56,12 +67,12 @@ func init() {
 	//`{"timeSpent": "%vh", "comment":"%v", "started": "%v"}`
 
 	//todo improve duration parsing
-	logCmd.Flags().StringP("jiraTicket", "j", "", "Jira ticket")
+	logCmd.Flags().StringP("jiraTicket", "j", "", "[Required] Jira ticket. Ticket aliases can be used. See > jtl help log")
 	logCmd.MarkFlagRequired("jiraTicket")
-	logCmd.Flags().StringP("timeSpent", "t", "1h", "Time spent. Default value is one hour (1h)")
+	logCmd.Flags().StringP("timeSpent", "t", "1h", "[Required] Time spent. Default - 1h")
 	logCmd.MarkFlagRequired("timeSpent")
-	logCmd.Flags().StringP("message", "m", "", "Comment to the work log. Will be displayed in Jira")
-	logCmd.Flags().StringP("started", "s", time.Now().String(), "Date and time when the work has been started. Default Now()")
+	logCmd.Flags().StringP("message", "m", "", "Comment to the work log. Will be displayed in Jira. Default - empty")
+	logCmd.Flags().StringP("started", "s", time.Now().String(), "Date and time when the work has been started. Default - current timestamp")
 }
 
 func runLogCommand(cmd *cobra.Command, args []string) {
