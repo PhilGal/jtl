@@ -100,12 +100,24 @@ func initConfig() {
 }
 
 func initDataFile() {
-	dataDir := path.Join(homeDir(), ".jtl", "data")
-	f := path.Join(dataDir, dataFileName())
-	createDirIfNotExists(dataDir)
-	createFileIfNotExists(f, dataFileHeader)
-	//upgrade file to full path in context
-	dataFile = f
+
+	createNewDataFile := func(){
+		dataDir := path.Join(homeDir(), ".jtl", "data")
+		f := path.Join(dataDir, dataFileName())
+		createDirIfNotExists(dataDir)
+		createFileIfNotExists(f, dataFileHeader)
+		//upgrade file to full path in context
+		dataFile = f
+	}
+
+	if dataFile == "" {
+		createNewDataFile()
+	} else {
+		if !fileExists(dataFile) {
+			fmt.Println("Provided data file doesn't exist. Default one will be created.")
+			createNewDataFile()
+		}
+	}
 }
 
 func dataFileName() string {
