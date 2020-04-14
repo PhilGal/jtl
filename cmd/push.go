@@ -162,12 +162,12 @@ func jsonBodyStr(jr *jiraRequestRow) string {
 
 //convertDateToIDateTimeIso converts date "02-01-2006" to iso "2006-01-02T15:04:05.000-0700"
 func convertDateToDateTimeIso(date string) string {
-	parsedDate, err := time.Parse("02 Jan 2006 15:04", date)
+	parsedDate, err := time.ParseInLocation("02 Jan 2006 15:04", date, time.Local)
 	if err != nil {
 		log.Fatal(err)
 	}
 	const iso = "2006-01-02T15:04:05.000-0700"
-	return parsedDate.Local().Format(iso)
+	return parsedDate.Format(iso)
 }
 
 func basicAuth(cred *credentials) string {
