@@ -18,6 +18,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -26,10 +27,10 @@ import (
 	"strings"
 	"time"
 
+	data "github.com/philgal/jtl/cmd/internal/data"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh/terminal"
-	data "github.com/philgal/jtl/cmd/internal/data"
 )
 
 // pushCmd represents the push command
@@ -71,6 +72,44 @@ type jiraRequestRow struct {
 
 type jiraRequest []jiraRequestRow
 
+type jiraResponse struct {
+
+	//{
+	//   "self": "https://your-domain.atlassian.net/rest/api/2/issue/10010/worklog/10000",
+	//   "author": {
+	//     "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
+	//     "accountId": "5b10a2844c20165700ede21g",
+	//     "displayName": "Mia Krystof",
+	//     "active": false
+	//   },
+	//   "updateAuthor": {
+	//     "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
+	//     "accountId": "5b10a2844c20165700ede21g",
+	//     "displayName": "Mia Krystof",
+	//     "active": false
+	//   },
+	//   "comment": "I did some work here.",
+	//   "updated": "2020-04-09T00:28:56.597+0000",
+	//   "visibility": {
+	//     "type": "group",
+	//     "value": "jira-developers"
+	//   },
+	//   "started": "2020-04-09T00:28:56.595+0000",
+	//   "timeSpent": "3h 20m",
+	//   "timeSpentSeconds": 12000,
+	//   "id": "100028",
+	//   "issueId": "10002"
+	// }
+
+	Id        string
+	IssueId   string
+	Timespent string
+	Comment   string
+	Started   string
+	//row index in file...
+	idx int
+}
+
 type credentials struct {
 	Username string
 	Password string
@@ -90,7 +129,10 @@ var creds credentials
 
 //PushToServer reads report data and logs work on jira server
 func PushToServer(cmd *cobra.Command, args []string) {
-	_, data, _ := data.ReadCsv(dataFile)
+	// _, data, _ := data.ReadCsv(dataFile)
+	csv := data.NewCsvFile(dataFile)
+	csv.Read()
+	data := csv.Records.AsRows()
 	jreq := convertCsvDataIntoJiraRequest(data)
 	preview := func(jr jiraRequest) {
 		fmt.Printf("------------\n%v\n------------\n", "PREVIEW MODE")
@@ -98,17 +140,18 @@ func PushToServer(cmd *cobra.Command, args []string) {
 		fmt.Println("User:", readCredentials().Username)
 		for _, row := range jr {
 			fmt.Println()
-			fmt.Println("POST", postURL(row.jiraticket))
+			fmt.Println("POST", buildPostURL(row.jiraticket))
 			fmt.Println(jsonBodyStr(&row))
 			fmt.Println()
 		}
 		fmt.Printf("Total requests: %v\n", len(jreq))
 		fmt.Printf("-----\n%v\n-----\n", "Done!")
 	}
-	post := func(cred *credentials, jr jiraRequest) {
+	post := func(cred *credentials, jiraReq jiraRequest) []jiraResponse {
 		client := &http.Client{}
 		client.Timeout = time.Second * 30
-		for _, row := range jr {
+		responses := []jiraResponse{}
+		for idx, row := range jiraReq {
 			req, _ := buildHTTPRequest(row.jiraticket, cred, &row)
 			res, err := client.Do(req)
 			if err != nil {
@@ -119,8 +162,20 @@ func PushToServer(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			log.Printf("Jira responded: %v {%q}\n", res.Status, body)
+			//if response was successful
+			if res.StatusCode == 201 {
+				//unmarshall response
+				var jiraRes jiraResponse
+				err = json.Unmarshal(body, &jiraRes)
+				if err != nil {
+					log.Println("Error unmarshalling json:", err)
+				}
+				jiraRes.idx = idx
+				responses = append(responses, jiraRes)
+			}
+			log.Printf("Jira responded: %v\n{%q}\n", res.Status, body)
 		}
+		return responses
 	}
 	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {
 		preview(jreq)
@@ -146,13 +201,13 @@ func convertCsvDataIntoJiraRequest(data [][]string) jiraRequest {
 
 func buildHTTPRequest(jiraTicket string, cred *credentials, jr *jiraRequestRow) (*http.Request, error) {
 	jsonBody := []byte(jsonBodyStr(jr))
-	req, err := http.NewRequest("POST", postURL(jiraTicket), bytes.NewBuffer(jsonBody))
+	req, err := http.NewRequest("POST", buildPostURL(jiraTicket), bytes.NewBuffer(jsonBody))
 	req.Header.Add("Authorization", fmt.Sprintf("Basic %v", basicAuth(cred)))
 	req.Header.Add("Content-Type", "application/json")
 	return req, err
 }
 
-func postURL(jiraTicket string) string {
+func buildPostURL(jiraTicket string) string {
 	return strings.TrimSuffix(viper.GetString("Host"), "/") + fmt.Sprintf(jiraURLTemplate, jiraTicket)
 }
 

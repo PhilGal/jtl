@@ -101,7 +101,10 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 		dataRow[4] = rec.jiraTicket
 		dataRow[5] = "jira"
 	}
-	data.WriteRowCsv(dataFile, dataRow)
+	csv := data.NewCsvFile(dataFile)
+	csv.Read()
+	csv.AddRecord(data.NewCsvRecord(dataRow))
+	csv.Write()
 }
 
 const (

@@ -35,9 +35,10 @@ func init() {
 }
 
 func displayReport() {
-	_, rows, _ := data.ReadCsv(dataFile)
-	fmt.Println("\nTotal records: ", len(rows))
-	for _, r := range rows {
+	csv := data.NewCsvFile(dataFile)
+	csv.Read()
+	fmt.Println("\nTotal records: ", len(csv.Records))
+	for _, r := range csv.Records {
 		fmt.Println(r)
 	}
 }
