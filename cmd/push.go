@@ -28,6 +28,7 @@ import (
 	"time"
 
 	data "github.com/philgal/jtl/cmd/internal/data"
+	model "github.com/philgal/jtl/cmd/internal/model"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh/terminal"
@@ -62,97 +63,32 @@ func init() {
 	pushCmd.Flags().BoolP("preview", "p", false, "Preview request to be sent to Jira server")
 }
 
-type jiraRequestRow struct {
-	rownum     int
-	jiraticket string
-	timespent  string
-	comment    string
-	started    string
-}
-
-type jiraRequest []jiraRequestRow
-
-type jiraResponse struct {
-
-	//{
-	//   "self": "https://your-domain.atlassian.net/rest/api/2/issue/10010/worklog/10000",
-	//   "author": {
-	//     "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
-	//     "accountId": "5b10a2844c20165700ede21g",
-	//     "displayName": "Mia Krystof",
-	//     "active": false
-	//   },
-	//   "updateAuthor": {
-	//     "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
-	//     "accountId": "5b10a2844c20165700ede21g",
-	//     "displayName": "Mia Krystof",
-	//     "active": false
-	//   },
-	//   "comment": "I did some work here.",
-	//   "updated": "2020-04-09T00:28:56.597+0000",
-	//   "visibility": {
-	//     "type": "group",
-	//     "value": "jira-developers"
-	//   },
-	//   "started": "2020-04-09T00:28:56.595+0000",
-	//   "timeSpent": "3h 20m",
-	//   "timeSpentSeconds": 12000,
-	//   "id": "100028",
-	//   "issueId": "10002"
-	// }
-
-	Id        string
-	IssueId   string
-	Timespent string
-	Comment   string
-	Started   string
-	//row index in file...
-	idx int
-}
-
-type credentials struct {
-	Username string
-	Password string
-}
-
-func (creds *credentials) trim() *credentials {
-	return &credentials{strings.TrimSpace(creds.Username), strings.TrimSpace(creds.Password)}
-}
-
-func (creds *credentials) isValid() bool {
-	return creds.Username != "" && creds.Password != ""
-}
-
 const jiraURLTemplate = "/rest/api/2/issue/%v/worklog"
 
-var creds credentials
+var creds model.Credentials
 
 //PushToServer reads report data and logs work on jira server
 func PushToServer(cmd *cobra.Command, args []string) {
 	// _, data, _ := data.ReadCsv(dataFile)
-	csv := data.NewCsvFile(dataFile)
-	csv.Read()
-	data := csv.Records.AsRows()
-	jreq := convertCsvDataIntoJiraRequest(data)
-	preview := func(jr jiraRequest) {
+	preview := func(jr model.JiraRequest) {
 		fmt.Printf("------------\n%v\n------------\n", "PREVIEW MODE")
 		fmt.Printf("Jira server: %v\n", viper.GetString("host"))
 		fmt.Println("User:", readCredentials().Username)
 		for _, row := range jr {
 			fmt.Println()
-			fmt.Println("POST", buildPostURL(row.jiraticket))
+			fmt.Println("POST", buildPostURL(row.Jiraticket))
 			fmt.Println(jsonBodyStr(&row))
 			fmt.Println()
 		}
-		fmt.Printf("Total requests: %v\n", len(jreq))
+		fmt.Printf("Total requests: %v\n", len(jr))
 		fmt.Printf("-----\n%v\n-----\n", "Done!")
 	}
-	post := func(cred *credentials, jiraReq jiraRequest) []jiraResponse {
+	post := func(cred *model.Credentials, jiraReq model.JiraRequest) []model.JiraResponse {
 		client := &http.Client{}
 		client.Timeout = time.Second * 30
-		responses := []jiraResponse{}
-		for idx, row := range jiraReq {
-			req, _ := buildHTTPRequest(row.jiraticket, cred, &row)
+		responses := []model.JiraResponse{}
+		for _, row := range jiraReq {
+			req, _ := buildHTTPRequest(row.Jiraticket, cred, &row)
 			res, err := client.Do(req)
 			if err != nil {
 				log.Fatalf("Failed to send %v: %v\n", req, err)
@@ -165,41 +101,30 @@ func PushToServer(cmd *cobra.Command, args []string) {
 			//if response was successful
 			if res.StatusCode == 201 {
 				//unmarshall response
-				var jiraRes jiraResponse
+				var jiraRes model.JiraResponse
 				err = json.Unmarshal(body, &jiraRes)
 				if err != nil {
 					log.Println("Error unmarshalling json:", err)
 				}
-				jiraRes.idx = idx
 				responses = append(responses, jiraRes)
 			}
 			log.Printf("Jira responded: %v\n{%q}\n", res.Status, body)
 		}
 		return responses
 	}
+	csvFile := data.NewCsvFile(dataFile)
+	csvFile.Read()
+	csvRecords := csvFile.Records
+	jreq := model.NewJiraRequest(&csvRecords)
 	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {
 		preview(jreq)
 	} else {
 		post(readCredentials(), jreq)
+
 	}
 }
 
-func convertCsvDataIntoJiraRequest(data [][]string) jiraRequest {
-	var jr jiraRequest
-	for i, row := range data {
-		req := &jiraRequestRow{
-			i,      //row number
-			row[4], //jira ticket
-			row[3], //hours -> timespent
-			row[2], //comment -> activity
-			row[1], //date -> started
-		}
-		jr = append(jr, *req)
-	}
-	return jr
-}
-
-func buildHTTPRequest(jiraTicket string, cred *credentials, jr *jiraRequestRow) (*http.Request, error) {
+func buildHTTPRequest(jiraTicket string, cred *model.Credentials, jr *model.JiraRequestRow) (*http.Request, error) {
 	jsonBody := []byte(jsonBodyStr(jr))
 	req, err := http.NewRequest("POST", buildPostURL(jiraTicket), bytes.NewBuffer(jsonBody))
 	req.Header.Add("Authorization", fmt.Sprintf("Basic %v", basicAuth(cred)))
@@ -211,9 +136,9 @@ func buildPostURL(jiraTicket string) string {
 	return strings.TrimSuffix(viper.GetString("Host"), "/") + fmt.Sprintf(jiraURLTemplate, jiraTicket)
 }
 
-func jsonBodyStr(jr *jiraRequestRow) string {
+func jsonBodyStr(jr *model.JiraRequestRow) string {
 	jsonBodyTemplate := `{"timeSpent": "%v", "comment":"%v", "started": "%v"}`
-	return fmt.Sprintf(jsonBodyTemplate, jr.timespent, jr.comment, convertDateToDateTimeIso(jr.started))
+	return fmt.Sprintf(jsonBodyTemplate, jr.Timespent, jr.Comment, convertDateToDateTimeIso(jr.Started))
 }
 
 //convertDateToIDateTimeIso converts date "02-01-2006" to iso "2006-01-02T15:04:05.000-0700"
@@ -226,19 +151,19 @@ func convertDateToDateTimeIso(date string) string {
 	return parsedDate.Format(iso)
 }
 
-func basicAuth(cred *credentials) string {
+func basicAuth(cred *model.Credentials) string {
 	auth := cred.Username + ":" + cred.Password
 	return base64.StdEncoding.EncodeToString([]byte(auth))
 }
 
-func readCredentials() *credentials {
+func readCredentials() *model.Credentials {
 	//Read from config first
 	err := viper.UnmarshalKey("credentials", &creds)
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
-	creds = *creds.trim()
-	if creds.isValid() {
+	creds = *creds.Trim()
+	if creds.IsValid() {
 		return &creds
 	}
 	//Otherwise read from user input
@@ -252,6 +177,6 @@ func readCredentials() *credentials {
 		fmt.Println("\nPassword typed: " + string(bytePassword))
 	}
 	creds.Password = string(bytePassword)
-	creds = *creds.trim()
+	creds = *creds.Trim()
 	return &creds
 }

@@ -31,6 +31,7 @@ func (r *CsvRecord) AsRow() []string {
 	return []string{r.ID, r.StartedTs, r.Comment, r.TimeSpent, r.Ticket, r.Category}
 }
 
+//NewCsvRecord created a new CsvRecord from a slice representing a single CSV row.
 func NewCsvRecord(rec []string) CsvRecord {
 	numberOfFieldsInCsvRecord := 6
 	if len(rec) != numberOfFieldsInCsvRecord {
@@ -46,8 +47,10 @@ func NewCsvRecord(rec []string) CsvRecord {
 	}
 }
 
+//CsvRecords is a wrapper on []CsvRecord
 type CsvRecords []CsvRecord
 
+//AsRows converts CsvRecords into 2-d slice representing CSV {records X columns}
 func (recs *CsvRecords) AsRows() [][]string {
 	rows := [][]string{}
 	for _, r := range *recs {
