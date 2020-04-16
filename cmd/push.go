@@ -107,8 +107,11 @@ func PushToServer(cmd *cobra.Command, args []string) {
 					log.Println("Error unmarshalling json:", err)
 				}
 				responses = append(responses, jiraRes)
+			} else {
+				responses = append(responses, model.JiraResponse{IsSuccess: false})
 			}
-			log.Printf("Jira responded: %v\n{%q}\n", res.Status, body)
+			//TODO: print logs to file
+			fmt.Printf("Jira responded: %v\n{%q}\n", res.Status, body)
 		}
 		return responses
 	}
@@ -119,9 +122,23 @@ func PushToServer(cmd *cobra.Command, args []string) {
 	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {
 		preview(jreq)
 	} else {
-		post(readCredentials(), jreq)
-
+		resp := post(readCredentials(), jreq)
+		updatePushedRecordsIds(resp, &csvFile)
 	}
+}
+
+func updatePushedRecordsIds(resp []model.JiraResponse, file *data.CsvFile) {
+	csvRecords := file.Records
+	if len(resp) != len(file.Records) {
+		fmt.Println("[Warning] Mismatch between CSV records and Jira response.")
+	}
+	for i, csvRec := range csvRecords {
+		if resp[i].IsSuccess {
+			csvRec.ID = resp[i].Id
+		}
+	}
+	file.Records = csvRecords
+	file.Write()
 }
 
 func buildHTTPRequest(jiraTicket string, cred *model.Credentials, jr *model.JiraRequestRow) (*http.Request, error) {

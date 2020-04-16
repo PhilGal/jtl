@@ -15,7 +15,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 	"time"
@@ -49,6 +48,7 @@ Examples:
 	Run: func(cmd *cobra.Command, args []string) {
 		//use App for testing
 		runLogCommand(cmd, args)
+		displayReport()
 	},
 }
 
@@ -78,12 +78,11 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 	rec.timeSpent, _ = cmd.Flags().GetString("timeSpent")
 	rec.message, _ = cmd.Flags().GetString("message")
 	rec.dateStarted, _ = cmd.Flags().GetString("started")
-	aliaces := viper.GetStringMapString("alias")
-	fmt.Println(aliaces)
 	dataRow := make([]string, 6)
 	dataRow[1] = rec.dateStarted
 	dataRow[2] = rec.message
 	dataRow[3] = rec.timeSpent
+	aliaces := viper.GetStringMapString("alias")
 	if len(aliaces) > 0 {
 		alias := rec.jiraTicket
 		aliasTicket := aliaces[alias]

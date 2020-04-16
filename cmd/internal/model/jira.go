@@ -64,6 +64,7 @@ type JiraResponse struct {
 	Timespent string
 	Comment   string
 	Started   string
+	IsSuccess bool
 }
 
 type Credentials struct {

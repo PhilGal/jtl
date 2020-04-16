@@ -1,8 +1,6 @@
 BUGS:
 BACKLOG:
-- Track sent requests to: 
-	a) avoid duplicates 
-	b) display requests not sent due to erros
 - Implement "report" feature with summaries
+	- Report flag -d for a "day" report. "Today tracked, left, gaps."
 - Update help messages
 - Clean up commands output (extra fmt.Prints)
