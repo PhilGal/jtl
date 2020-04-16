@@ -4,6 +4,8 @@ import (
 	"encoding/csv"
 	"log"
 	"os"
+
+	"gopkg.in/validator.v2"
 )
 
 //CsvHeader represents header in a CSV file
@@ -21,8 +23,8 @@ type CsvRecord struct {
 	ID        string
 	StartedTs string
 	Comment   string
-	TimeSpent string `validate:"regexp="^(\d+)[dhm]$"`
-	Ticket    string `validate:"regexp="(([A-Za-z]{1,10})-?)[A-Z]+-\d+"`
+	TimeSpent string `validate: "regexp="^(\d+)[dhm]$"`
+	Ticket    string `validate: "regexp="(([A-Za-z]{1,10})-?)[A-Z]+-\d+"`
 	Category  string
 }
 
@@ -31,13 +33,13 @@ func (r *CsvRecord) AsRow() []string {
 	return []string{r.ID, r.StartedTs, r.Comment, r.TimeSpent, r.Ticket, r.Category}
 }
 
-//NewCsvRecord created a new CsvRecord from a slice representing a single CSV row.
+//NewCsvRecord created a new CsvRecord from a slice representing a single CSV row
 func NewCsvRecord(rec []string) CsvRecord {
 	numberOfFieldsInCsvRecord := 6
 	if len(rec) != numberOfFieldsInCsvRecord {
 		log.Fatalf("Cannot create CsvRecord. Slice size is %v, expected: %v", len(rec), numberOfFieldsInCsvRecord)
 	}
-	return CsvRecord{
+	csvRec := CsvRecord{
 		ID:        rec[0],
 		StartedTs: rec[1],
 		Comment:   rec[2],
@@ -45,6 +47,12 @@ func NewCsvRecord(rec []string) CsvRecord {
 		Ticket:    rec[4],
 		Category:  rec[5],
 	}
+
+	if err := validator.Validate(csvRec); err != nil {
+		log.Fatalln("Invalid CsvRecord", err)
+	}
+
+	return csvRec
 }
 
 //CsvRecords is a wrapper on []CsvRecord
@@ -64,19 +72,22 @@ func (recs *CsvRecords) AsRows() [][]string {
 // 	return false
 // }
 
-//CsvFile represents a CSV file with header and records. Use Read() and Write() to read and write data from/to disk.
+//CsvFile represents a CSV file with header and records. Use Read() and Write() to read and write data from/to disk
 type CsvFile struct {
 	Path    string
 	Header  CsvHeader
 	Records CsvRecords
 }
 
+//CsvRecordPredicate used as a condition for rows filtering when reading CSV file
 type CsvRecordPredicate func(CsvRecord) bool
 
+//AllRowsCsvRecordPredicate is an always true condition. All rows will be processed
 var AllRowsCsvRecordPredicate = func(r CsvRecord) bool {
 	return true
 }
 
+//RowsWithoutIDsCsvRecordPredicate filters rows with IDs. Only rows without IDs will be processed
 var RowsWithoutIDsCsvRecordPredicate = func(r CsvRecord) bool {
 	return r.ID == ""
 }
@@ -97,7 +108,7 @@ func (f *CsvFile) ReadAll() {
 }
 
 //ReadAll reads CSV file from disk with records which satisfy recordFilter predicate.
-//Records, not matching the predicate will not be added to CsvFile.Records.
+//Records, not matching the predicate will not be added to CsvFile.Records
 func (f *CsvFile) Read(recordFilter CsvRecordPredicate) {
 	fcsv, err := os.Open(f.Path)
 	if err != nil {

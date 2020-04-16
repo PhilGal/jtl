@@ -1,6 +1,7 @@
 package data
 
 import (
+	"log"
 	"os"
 	"testing"
 
@@ -8,35 +9,31 @@ import (
 )
 
 func TestCsvFile_Write(t *testing.T) {
-	t.Run("Write empty file", func(t *testing.T) {
-		file := CsvFile{Path: "test.csv"}
-		file.Write()
-		if !fileExists(file.Path) {
-			t.Error("File does not exist")
-		}
-	})
-
-	t.Run("Test write-read not empty file", func(t *testing.T) {
-		newFile := CsvFile{
-			Path:    "test.csv",
+	path := "./csv_testdata/write_file_test.csv"
+	t.Cleanup(func() { deleteFileIfExists(path) })
+	t.Run("Write one row into a file", func(t *testing.T) {
+		writtenFile := CsvFile{
+			Path:    path,
 			Header:  GetCsvHeader(),
-			Records: CsvRecords{NewCsvRecord([]string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1", "tik"})},
+			Records: CsvRecords{NewCsvRecord([]string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1", "jira"})},
 		}
-		newFile.Write()
+		writtenFile.Write()
 
 		//read the same and assert fields
-		f := NewCsvFile(newFile.Path)
-		f.Read()
+		readFile := NewCsvFile(writtenFile.Path)
+		readFile.ReadAll()
 
 		assert := assert.New(t)
-		assert.Equal("1", f.Records[0].ID)
-		assert.Equal("14 Apr 2020 11:30", f.Records[0].StartedTs)
-		assert.Equal("US demo", f.Records[0].Comment)
-		assert.Equal("10m", f.Records[0].TimeSpent)
-		assert.Equal("TICKET-1", f.Records[0].Ticket)
-		assert.Equal("tik", f.Records[0].Category)
-
+		assert.ElementsMatch(writtenFile.Records[0].AsRow(), readFile.Records[0].AsRow())
 	})
+}
+
+func deleteFileIfExists(filename string) {
+	if fileExists(filename) {
+		if err := os.Remove(filename); err != nil {
+			log.Fatalln("Cannot remove file!", err)
+		}
+	}
 }
 
 func fileExists(filename string) bool {
@@ -45,4 +42,43 @@ func fileExists(filename string) bool {
 		return false
 	}
 	return !info.IsDir()
+}
+
+func TestCsvFile_ReadAll(t *testing.T) {
+	tests := []struct {
+		name         string
+		file         CsvFile
+		rowsExpected int
+	}{
+		{
+			name: "Reads all rows from not empty file",
+			file: CsvFile{
+				Path:   "./csv_testdata/not_empty.csv",
+				Header: GetCsvHeader(),
+				Records: CsvRecords{
+					NewCsvRecord([]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}),
+					NewCsvRecord([]string{"", "15 Apr 2020 11:30", "Row without ID", "10m", "TICKET-2", "jira"}),
+				},
+			},
+			rowsExpected: 2,
+		},
+
+		{
+			name:         "Reads all rows from an empty file",
+			file:         CsvFile{Path: "./csv_testdata/empty.csv"},
+			rowsExpected: 0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			readFile := &CsvFile{Path: tt.file.Path}
+			readFile.ReadAll()
+			assert.Equal(t, tt.file.Header, readFile.Header, "Headers are not equal!")
+			assert.Equal(t, tt.rowsExpected, len(readFile.Records), "Number of rows are not equal!")
+			for i := 0; i < tt.rowsExpected; i++ {
+				assert.ElementsMatch(t, readFile.Records[i].AsRow(), tt.file.Records[i].AsRow())
+			}
+
+		})
+	}
 }

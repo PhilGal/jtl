@@ -24,8 +24,8 @@ import (
 func Test_updatePushedRecordsIds(t *testing.T) {
 	testFile := "testUpdatePushedRecordsIds.csv"
 	csvFile := data.NewCsvFile(testFile)
-	csvFile.Read()
-	csvRecords := csvFile.Records
+	csvFile.ReadAll()
+	// csvRecords := csvFile.Records
 	type args struct {
 		resp []model.JiraResponse
 		file data.CsvFile
@@ -34,9 +34,9 @@ func Test_updatePushedRecordsIds(t *testing.T) {
 		name string
 		args args
 	}{
-		"Should update ids", args{
-			[]model.JiraResponse{}
-		}
+		// "Should update ids", args{
+		// 	[]model.JiraResponse{}
+		// }
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
