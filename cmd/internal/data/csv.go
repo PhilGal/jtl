@@ -71,6 +71,16 @@ type CsvFile struct {
 	Records CsvRecords
 }
 
+type CsvRecordPredicate func(CsvRecord) bool
+
+var AllRowsCsvRecordPredicate = func(r CsvRecord) bool {
+	return true
+}
+
+var RowsWithoutIDsCsvRecordPredicate = func(r CsvRecord) bool {
+	return r.ID == ""
+}
+
 //NewCsvFile creates a new CsvFile with the given path and default header
 func NewCsvFile(path string) CsvFile {
 	return CsvFile{Path: path, Header: GetCsvHeader(), Records: []CsvRecord{}}
@@ -81,8 +91,14 @@ func (f *CsvFile) AddRecord(rec CsvRecord) {
 	f.Records = append(f.Records, rec)
 }
 
-//Read reads CSV file from disk.
-func (f *CsvFile) Read() {
+//ReadAll reads CSV file from disk with all records
+func (f *CsvFile) ReadAll() {
+	f.Read(AllRowsCsvRecordPredicate)
+}
+
+//ReadAll reads CSV file from disk with records which satisfy recordFilter predicate.
+//Records, not matching the predicate will not be added to CsvFile.Records.
+func (f *CsvFile) Read(recordFilter CsvRecordPredicate) {
 	fcsv, err := os.Open(f.Path)
 	if err != nil {
 		log.Fatal(err)
@@ -99,7 +115,10 @@ func (f *CsvFile) Read() {
 		log.Fatalf("Error reading CSV records: %v", err)
 	}
 	for _, rec := range records {
-		f.AddRecord(NewCsvRecord(rec))
+		csvRec := NewCsvRecord(rec)
+		if recordFilter(csvRec) {
+			f.AddRecord(csvRec)
+		}
 	}
 }
 

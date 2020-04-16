@@ -20,9 +20,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"net/http/httputil"
 	"os"
 	"strings"
 	"time"
@@ -94,7 +94,7 @@ func PushToServer(cmd *cobra.Command, args []string) {
 				log.Fatalf("Failed to send %v: %v\n", req, err)
 			}
 			defer res.Body.Close()
-			body, err := httputil.DumpResponse(res, true)
+			body, err := ioutil.ReadAll(res.Body)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -106,6 +106,7 @@ func PushToServer(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Println("Error unmarshalling json:", err)
 				}
+				jiraRes.IsSuccess = true
 				responses = append(responses, jiraRes)
 			} else {
 				responses = append(responses, model.JiraResponse{IsSuccess: false})
@@ -116,28 +117,38 @@ func PushToServer(cmd *cobra.Command, args []string) {
 		return responses
 	}
 	csvFile := data.NewCsvFile(dataFile)
-	csvFile.Read()
+	//Read only rows with empty IDs
+	csvFile.Read(data.RowsWithoutIDsCsvRecordPredicate)
 	csvRecords := csvFile.Records
 	jreq := model.NewJiraRequest(&csvRecords)
 	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {
 		preview(jreq)
 	} else {
 		resp := post(readCredentials(), jreq)
-		updatePushedRecordsIds(resp, &csvFile)
+		updatePushedRecordsIds(resp, csvFile)
 	}
 }
 
-func updatePushedRecordsIds(resp []model.JiraResponse, file *data.CsvFile) {
+func updatePushedRecordsIds(resp []model.JiraResponse, file data.CsvFile) {
+
+	if len(resp) == 0 {
+		return
+	}
+
+	fmt.Println("JiraResponses:\n", resp)
 	csvRecords := file.Records
 	if len(resp) != len(file.Records) {
 		fmt.Println("[Warning] Mismatch between CSV records and Jira response.")
 	}
+	fmt.Printf("CSV records before update: %q\n", file.Records)
 	for i, csvRec := range csvRecords {
 		if resp[i].IsSuccess {
 			csvRec.ID = resp[i].Id
+			file.Records[i] = csvRec
+			fmt.Printf("Updated CSV record %q with ID %v\n", csvRec, csvRec.ID)
 		}
 	}
-	file.Records = csvRecords
+	fmt.Printf("Final CSV records: %q\n", file.Records)
 	file.Write()
 }
 

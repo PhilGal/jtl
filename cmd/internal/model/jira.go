@@ -19,13 +19,16 @@ type JiraRequest []JiraRequestRow
 func NewJiraRequest(recs *data.CsvRecords) JiraRequest {
 	jr := JiraRequest{}
 	for _, row := range *recs {
-		req := JiraRequestRow{
-			Jiraticket: row.Ticket,
-			Started:    row.StartedTs,
-			Comment:    row.Comment,
-			Timespent:  row.TimeSpent,
+		//Rows with IDs are pushed, don't them into request
+		if row.ID == "" {
+			req := JiraRequestRow{
+				Jiraticket: row.Ticket,
+				Started:    row.StartedTs,
+				Comment:    row.Comment,
+				Timespent:  row.TimeSpent,
+			}
+			jr = append(jr, req)
 		}
-		jr = append(jr, req)
 	}
 	return jr
 }

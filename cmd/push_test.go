@@ -15,30 +15,32 @@
 package cmd
 
 import (
-	"fmt"
+	"testing"
 
 	data "github.com/philgal/jtl/cmd/internal/data"
-	"github.com/spf13/cobra"
+	model "github.com/philgal/jtl/cmd/internal/model"
 )
 
-// reportCmd represents the report command
-var reportCmd = &cobra.Command{
-	Use:   "report",
-	Short: "Displays summarized report for data file",
-	Run: func(cmd *cobra.Command, args []string) {
-		displayReport()
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(reportCmd)
-}
-
-func displayReport() {
-	csv := data.NewCsvFile(dataFile)
-	csv.ReadAll()
-	fmt.Println("\nTotal records: ", len(csv.Records))
-	for _, r := range csv.Records {
-		fmt.Println(r)
+func Test_updatePushedRecordsIds(t *testing.T) {
+	testFile := "testUpdatePushedRecordsIds.csv"
+	csvFile := data.NewCsvFile(testFile)
+	csvFile.Read()
+	csvRecords := csvFile.Records
+	type args struct {
+		resp []model.JiraResponse
+		file data.CsvFile
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		"Should update ids", args{
+			[]model.JiraResponse{}
+		}
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			updatePushedRecordsIds(tt.args.resp, tt.args.file)
+		})
 	}
 }
