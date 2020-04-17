@@ -2,10 +2,12 @@ package data
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
 
-	"gopkg.in/validator.v2"
+	"github.com/go-playground/validator"
+	"github.com/philgal/jtl/validation"
 )
 
 //CsvHeader represents header in a CSV file
@@ -23,8 +25,8 @@ type CsvRecord struct {
 	ID        string
 	StartedTs string
 	Comment   string
-	TimeSpent string `validate: "regexp="^(\d+)[dhm]$"`
-	Ticket    string `validate: "regexp="(([A-Za-z]{1,10})-?)[A-Z]+-\d+"`
+	TimeSpent string `validate:"required,timespent"`
+	Ticket    string `validate:"required,jiraticket"`
 	Category  string
 }
 
@@ -34,7 +36,7 @@ func (r *CsvRecord) AsRow() []string {
 }
 
 //NewCsvRecord created a new CsvRecord from a slice representing a single CSV row
-func NewCsvRecord(rec []string) CsvRecord {
+func NewCsvRecord(rec []string) (CsvRecord, error) {
 	numberOfFieldsInCsvRecord := 6
 	if len(rec) != numberOfFieldsInCsvRecord {
 		log.Fatalf("Cannot create CsvRecord. Slice size is %v, expected: %v", len(rec), numberOfFieldsInCsvRecord)
@@ -48,11 +50,12 @@ func NewCsvRecord(rec []string) CsvRecord {
 		Category:  rec[5],
 	}
 
-	if err := validator.Validate(csvRec); err != nil {
-		log.Fatalln("Invalid CsvRecord", err)
+	if err := validation.Validate.Struct(csvRec); err != nil {
+		validationError := err.(validator.ValidationErrors)
+		return CsvRecord{}, fmt.Errorf("Invalid CsvRecord! %q", validationError)
 	}
 
-	return csvRec
+	return csvRec, nil
 }
 
 //CsvRecords is a wrapper on []CsvRecord
@@ -126,7 +129,7 @@ func (f *CsvFile) Read(recordFilter CsvRecordPredicate) {
 		log.Fatalf("Error reading CSV records: %v", err)
 	}
 	for _, rec := range records {
-		csvRec := NewCsvRecord(rec)
+		csvRec, _ := NewCsvRecord(rec) //ignore validation errors when reading from file
 		if recordFilter(csvRec) {
 			f.AddRecord(csvRec)
 		}

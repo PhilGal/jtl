@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"log"
-	"regexp"
 	"time"
 
 	data "github.com/philgal/jtl/cmd/internal/data"
@@ -87,35 +86,23 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 		alias := rec.jiraTicket
 		aliasTicket := aliaces[alias]
 		if aliasTicket != "" {
-			validateJiraTicketName(aliasTicket)
 			dataRow[4] = aliasTicket
 			dataRow[5] = alias
 		} else {
-			validateJiraTicketName(rec.jiraTicket)
 			dataRow[4] = rec.jiraTicket
 			dataRow[5] = "jira"
 		}
 	} else {
-		validateJiraTicketName(rec.jiraTicket)
 		dataRow[4] = rec.jiraTicket
 		dataRow[5] = "jira"
 	}
 	csv := data.NewCsvFile(dataFile)
 	csv.ReadAll()
-	csv.AddRecord(data.NewCsvRecord(dataRow))
-	csv.Write()
-}
-
-const (
-	jiraTicketRegexp = `(([A-Za-z]{1,10})-?)[A-Z]+-\d+`
-)
-
-func validateJiraTicketName(val string) {
-	match, err := regexp.MatchString(jiraTicketRegexp, val)
+	newRec, err := data.NewCsvRecord(dataRow)
 	if err != nil {
-		log.Fatalf("Error validating Jira ticket name: %v\n", err)
-	}
-	if !match {
-		log.Fatalf("String '%v' does not seem like a valid Jira ticket.\n", val)
+		log.Fatalln(err)
+	} else {
+		csv.AddRecord(newRec)
+		csv.Write()
 	}
 }

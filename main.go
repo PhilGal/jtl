@@ -15,8 +15,12 @@ limitations under the License.
 */
 package main
 
-import "github.com/philgal/jtl/cmd"
+import (
+	"github.com/philgal/jtl/cmd"
+	"github.com/philgal/jtl/validation"
+)
 
 func main() {
+	validation.InitValidator()
 	cmd.Execute()
 }
