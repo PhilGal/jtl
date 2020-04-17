@@ -25,6 +25,8 @@ type CsvRecord struct {
 	ID        string
 	StartedTs string
 	Comment   string
+	// TimeSpent string `validate:"required"`
+	// Ticket    string `validate:"required"`
 	TimeSpent string `validate:"required,timespent"`
 	Ticket    string `validate:"required,jiraticket"`
 	Category  string

@@ -7,8 +7,13 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/philgal/jtl/validation"
 	"github.com/stretchr/testify/assert"
 )
+
+func init() {
+	validation.InitValidator()
+}
 
 func TestCsvFile_Write(t *testing.T) {
 	path := "./csv_testdata/write_file_test.csv"
@@ -110,13 +115,22 @@ func TestNewCsvRecord(t *testing.T) {
 				Ticket:    "TICKET-1",
 				Category:  "jira",
 			}, nil},
-		{"Create record with invalid jira ticket", args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1", "jira"}}, CsvRecord{}, fmt.Errorf("Invalid CsvRecord!")},
-		{"Create record with invalid timeSpent", args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10bns", "TICKET-1", "jira"}}, CsvRecord{}, fmt.Errorf("Invalid CsvRecord!")},
+		{
+			"Create record with invalid jira ticket",
+			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1", "jira"}},
+			CsvRecord{},
+			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.Ticket' Error:Field validation for 'Ticket' failed on the 'jiraticket' tag\"")},
+		{
+			"Create record with invalid timeSpent",
+			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10bns", "TICKET-1", "jira"}},
+			CsvRecord{},
+			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.TimeSpent' Error:Field validation for 'TimeSpent' failed on the 'timespent' tag\""),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := NewCsvRecord(tt.args.rec)
-			t.Logf("%v %v", got, err)
+			t.Logf("%v %q", got, err)
 			if err != nil {
 				fmt.Printf("Expected error: %q", err)
 				assert.Equal(t, tt.wantErr, err)
