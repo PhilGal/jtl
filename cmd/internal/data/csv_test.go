@@ -64,7 +64,7 @@ func TestCsvFile_ReadAll(t *testing.T) {
 		rowsExpected int
 	}{
 		{
-			name: "Reads all rows from not empty file",
+			name: "Should reads all rows from not empty file",
 			file: CsvFile{
 				Path:   "./csv_testdata/not_empty.csv",
 				Header: GetCsvHeader(),
@@ -77,7 +77,7 @@ func TestCsvFile_ReadAll(t *testing.T) {
 		},
 
 		{
-			name:         "Reads all rows from an empty file",
+			name:         "Should reads all rows from an empty file",
 			file:         CsvFile{Path: "./csv_testdata/empty.csv"},
 			rowsExpected: 0,
 		},
@@ -106,7 +106,9 @@ func TestNewCsvRecord(t *testing.T) {
 		want    CsvRecord
 		wantErr error
 	}{
-		{"Create valid", args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}},
+		{
+			"Should create valid CsvRecord",
+			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}},
 			CsvRecord{
 				ID:        "1",
 				StartedTs: "14 Apr 2020 11:30",
@@ -116,12 +118,12 @@ func TestNewCsvRecord(t *testing.T) {
 				Category:  "jira",
 			}, nil},
 		{
-			"Create record with invalid jira ticket",
+			"Should not create record with invalid jira ticket",
 			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1", "jira"}},
 			CsvRecord{},
 			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.Ticket' Error:Field validation for 'Ticket' failed on the 'jiraticket' tag\"")},
 		{
-			"Create record with invalid timeSpent",
+			"Should not create record with invalid timeSpent",
 			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10bns", "TICKET-1", "jira"}},
 			CsvRecord{},
 			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.TimeSpent' Error:Field validation for 'TimeSpent' failed on the 'timespent' tag\""),
