@@ -34,6 +34,11 @@ type CsvRecord struct {
 	Category  string
 }
 
+//GetIdx returns a row's index in CSV file
+func (r *CsvRecord) GetIdx() int {
+	return r._idx
+}
+
 //AsRow represents a CSV-writable row
 func (r *CsvRecord) AsRow() []string {
 	return []string{r.ID, r.StartedTs, r.Comment, r.TimeSpent, r.Ticket, r.Category}
@@ -63,6 +68,17 @@ func NewCsvRecord(rec []string) (CsvRecord, error) {
 
 //CsvRecords is a wrapper on []CsvRecord
 type CsvRecords []CsvRecord
+
+//Filter returns a copy of records, filtered using the given recordFilter
+func (recs *CsvRecords) Filter(recordFilter CsvRecordPredicate) CsvRecords {
+	filteredRecs := CsvRecords{}
+	for _, r := range *recs {
+		if recordFilter(r) {
+			filteredRecs = append(filteredRecs, r)
+		}
+	}
+	return filteredRecs
+}
 
 //AsRows converts CsvRecords into 2-d slice representing CSV {records X columns}
 func (recs *CsvRecords) AsRows() [][]string {

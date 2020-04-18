@@ -18,6 +18,8 @@ import (
 	"fmt"
 
 	data "github.com/philgal/jtl/cmd/internal/data"
+	//TODO impl
+	_ "github.com/philgal/jtl/cmd/internal/report"
 	"github.com/spf13/cobra"
 )
 

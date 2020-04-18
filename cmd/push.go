@@ -27,8 +27,9 @@ import (
 	"strings"
 	"time"
 
-	data "github.com/philgal/jtl/cmd/internal/data"
-	model "github.com/philgal/jtl/cmd/internal/model"
+	"github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/model"
+	"github.com/philgal/jtl/cmd/internal/rest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/ssh/terminal"
@@ -53,7 +54,7 @@ To make sure the data to be pushed is correct, the command can be executed with 
 The preview output contains host, username and prepared requests bodies for POST request to Jira. 
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		PushToServer(cmd, args)
+		PushToServer(cmd)
 	},
 }
 
@@ -68,88 +69,82 @@ const jiraURLTemplate = "/rest/api/2/issue/%v/worklog"
 var creds model.Credentials
 
 //PushToServer reads report data and logs work on jira server
-func PushToServer(cmd *cobra.Command, args []string) {
-	// _, data, _ := data.ReadCsv(dataFile)
-	preview := func(jr model.JiraRequest) {
-		fmt.Printf("------------\n%v\n------------\n", "PREVIEW MODE")
-		fmt.Printf("Jira server: %v\n", viper.GetString("host"))
-		fmt.Println("User:", readCredentials().Username)
-		for _, row := range jr {
-			fmt.Println()
-			fmt.Println("POST", buildPostURL(row.Jiraticket))
-			fmt.Println(jsonBodyStr(&row))
-			fmt.Println()
-		}
-		fmt.Printf("Total requests: %v\n", len(jr))
-		fmt.Printf("-----\n%v\n-----\n", "Done!")
-	}
-	post := func(cred *model.Credentials, jiraReq model.JiraRequest) []model.JiraResponse {
-		client := &http.Client{}
-		client.Timeout = time.Second * 30
-		responses := []model.JiraResponse{}
-		for _, row := range jiraReq {
-			req, _ := buildHTTPRequest(row.Jiraticket, cred, &row)
-			res, err := client.Do(req)
-			if err != nil {
-				log.Fatalf("Failed to send %v: %v\n", req, err)
-			}
-			defer res.Body.Close()
-			body, err := ioutil.ReadAll(res.Body)
-			if err != nil {
-				log.Fatal(err)
-			}
-			//if response was successful
-			if res.StatusCode == 201 {
-				//unmarshall response
-				var jiraRes model.JiraResponse
-				err = json.Unmarshal(body, &jiraRes)
-				if err != nil {
-					log.Println("Error unmarshalling json:", err)
-				}
-				jiraRes.IsSuccess = true
-				responses = append(responses, jiraRes)
-			} else {
-				responses = append(responses, model.JiraResponse{IsSuccess: false})
-			}
-			//TODO: print logs to file
-			fmt.Printf("Jira responded: %v\n{%q}\n", res.Status, body)
-		}
-		return responses
-	}
+func PushToServer(cmd *cobra.Command) {
+	push(cmd, rest.HTTPClient)
+}
+
+func push(cmd *cobra.Command, restClient rest.Client) {
 	csvFile := data.NewCsvFile(dataFile)
-	//Read only rows with empty IDs
-	csvFile.Read(data.RowsWithoutIDsCsvRecordPredicate)
-	csvRecords := csvFile.Records
-	jreq := model.NewJiraRequest(&csvRecords)
+	csvFile.ReadAll()
+	jreq := model.NewJiraRequest(&csvFile.Records)
 	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {
 		preview(jreq)
 	} else {
-		resp := post(readCredentials(), jreq)
-		updatePushedRecordsIds(resp, csvFile)
+		resp := post(readCredentials(), jreq, restClient)
+		updatePushedRecordsIds(resp, csvFile.Records)
+		fmt.Printf("Final CSV records: %q\n", csvFile.Records)
+		csvFile.Write()
 	}
 }
 
-func updatePushedRecordsIds(resp []model.JiraResponse, file data.CsvFile) {
+func preview(jr model.JiraRequest) {
+	fmt.Printf("------------\n%v\n------------\n", "PREVIEW MODE")
+	fmt.Printf("Jira server: %v\n", viper.GetString("host"))
+	fmt.Println("User:", readCredentials().Username)
+	for _, row := range jr {
+		fmt.Println()
+		fmt.Println("POST", buildPostURL(row.Jiraticket))
+		fmt.Println(jsonBodyStr(&row))
+		fmt.Println()
+	}
+	fmt.Printf("Total requests: %v\n", len(jr))
+	fmt.Printf("-----\n%v\n-----\n", "Done!")
+}
 
+func post(cred *model.Credentials, jiraReq model.JiraRequest, restClient rest.Client) []model.JiraResponse {
+	responses := []model.JiraResponse{}
+	for _, row := range jiraReq {
+		req, _ := buildHTTPRequest(row.Jiraticket, cred, &row)
+		res, err := restClient.Do(req)
+		if err != nil {
+			log.Fatalf("Failed to send %v: %v\n", req, err)
+		}
+		defer res.Body.Close()
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		//if response was successful
+		jiraRes := model.JiraResponse{IsSuccess: false}
+		if res.StatusCode == 201 {
+			//unmarshall response
+			err = json.Unmarshal(body, &jiraRes)
+			if err != nil {
+				log.Println("Error unmarshalling json:", err)
+			}
+			jiraRes.IsSuccess = true
+		}
+		responses = append(responses, jiraRes)
+		//TODO: print logs to file
+		fmt.Printf("Jira responded: %v\n{%q}\n", res.Status, body)
+	}
+	return responses
+}
+
+func updatePushedRecordsIds(resp []model.JiraResponse /*file *data.CsvFile*/, csvRecords data.CsvRecords) {
 	if len(resp) == 0 {
 		return
 	}
-
 	fmt.Println("JiraResponses:\n", resp)
-	csvRecords := file.Records
-	if len(resp) != len(file.Records) {
-		fmt.Println("[Warning] Mismatch between CSV records and Jira response.")
-	}
-	fmt.Printf("CSV records before update: %q\n", file.Records)
-	for i, csvRec := range csvRecords {
-		if resp[i].IsSuccess {
-			csvRec.ID = resp[i].Id
-			file.Records[i] = csvRec
-			fmt.Printf("Updated CSV record %q with ID %v\n", csvRec, csvRec.ID)
+	// csvRecords := &file.Records
+	fmt.Printf("CSV records before update: %q\n", csvRecords)
+	for _, responseItem := range resp {
+		if responseItem.IsSuccess {
+			csvRecords[responseItem.GetIdx()].ID = responseItem.Id
+			fmt.Printf("Updated CSV record %q with ID %v\n", csvRecords[responseItem.GetIdx()], responseItem.Id)
 		}
 	}
-	fmt.Printf("Final CSV records: %q\n", file.Records)
-	file.Write()
+	// file.Write()
 }
 
 func buildHTTPRequest(jiraTicket string, cred *model.Credentials, jr *model.JiraRequestRow) (*http.Request, error) {
