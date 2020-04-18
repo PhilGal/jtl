@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -13,6 +14,15 @@ import (
 
 func init() {
 	validation.InitValidator()
+}
+
+var okCsvRecord = CsvRecord{
+	ID:        "1",
+	StartedTs: "14 Apr 2020 11:30",
+	Comment:   "Row with ID",
+	TimeSpent: "10m",
+	Ticket:    "TICKET-1",
+	Category:  "jira",
 }
 
 func TestCsvFile_Write(t *testing.T) {
@@ -82,14 +92,14 @@ func TestCsvFile_ReadAll(t *testing.T) {
 			rowsExpected: 0,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			readFile := &CsvFile{Path: tt.file.Path}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			readFile := &CsvFile{Path: test.file.Path}
 			readFile.ReadAll()
-			assert.Equal(t, tt.file.Header, readFile.Header, "Headers are not equal!")
-			assert.Equal(t, tt.rowsExpected, len(readFile.Records), "Number of rows are not equal!")
-			for i := 0; i < tt.rowsExpected; i++ {
-				assert.ElementsMatch(t, readFile.Records[i].AsRow(), tt.file.Records[i].AsRow())
+			assert.Equal(t, test.file.Header, readFile.Header, "Headers are not equal!")
+			assert.Equal(t, test.rowsExpected, len(readFile.Records), "Number of rows are not equal!")
+			for i := 0; i < test.rowsExpected; i++ {
+				assert.ElementsMatch(t, readFile.Records[i].AsRow(), test.file.Records[i].AsRow())
 			}
 
 		})
@@ -109,14 +119,8 @@ func TestNewCsvRecord(t *testing.T) {
 		{
 			"Should create valid CsvRecord",
 			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}},
-			CsvRecord{
-				ID:        "1",
-				StartedTs: "14 Apr 2020 11:30",
-				Comment:   "Row with ID",
-				TimeSpent: "10m",
-				Ticket:    "TICKET-1",
-				Category:  "jira",
-			}, nil},
+			okCsvRecord,
+			nil},
 		{
 			"Should not create record with invalid jira ticket",
 			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1", "jira"}},
@@ -129,15 +133,44 @@ func TestNewCsvRecord(t *testing.T) {
 			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.TimeSpent' Error:Field validation for 'TimeSpent' failed on the 'timespent' tag\""),
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewCsvRecord(tt.args.rec)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := NewCsvRecord(test.args.rec)
 			t.Logf("%v %q", got, err)
 			if err != nil {
 				fmt.Printf("Expected error: %q", err)
-				assert.Equal(t, tt.wantErr, err)
-			} else if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewCsvRecord() = %v, want %v", got, tt.want)
+				assert.Equal(t, test.wantErr, err)
+			} else if !reflect.DeepEqual(got, test.want) {
+				t.Errorf("NewCsvRecord() = %v, want %v", got, test.want)
+			}
+		})
+	}
+}
+
+func TestUpdateRecord(t *testing.T) {
+	tests := []struct {
+		name          string
+		idx           int
+		rec           CsvRecord
+		expectedError error
+	}{
+		{"Should update record at the given index", 1, okCsvRecord, nil},
+		{"Should return error if the given index is out of range", 5, okCsvRecord, errors.New("Index is out of range")},
+	}
+
+	file := CsvFile{Path: "./csv_testdata/not_empty.csv"}
+	file.ReadAll()
+	//pre-condition
+	if len(file.Records) != 2 {
+		t.Error("Number of records in a file must be 2")
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			err := file.UpdateRecord(test.idx, test.rec)
+			assert.EqualValues(t, err, test.expectedError)
+			if err == nil {
+				assert.Exactly(t, file.Records[test.idx], test.rec)
 			}
 		})
 	}

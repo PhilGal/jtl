@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -105,6 +106,15 @@ func NewCsvFile(path string) CsvFile {
 //AddRecord adds (appends) a given record
 func (f *CsvFile) AddRecord(rec CsvRecord) {
 	f.Records = append(f.Records, rec)
+}
+
+//UpdateRecord replaces record at the given index with the new record.
+func (f *CsvFile) UpdateRecord(idx int, rec CsvRecord) error {
+	if idx < 0 || idx > len(f.Records) {
+		return errors.New("Index is out of range")
+	}
+	f.Records[idx] = rec
+	return nil
 }
 
 //ReadAll reads CSV file from disk with all records
