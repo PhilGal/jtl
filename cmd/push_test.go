@@ -82,10 +82,12 @@ func TestUpdateAfterPost(t *testing.T) {
 		jreq := model.NewJiraRequest(&csvFile.Records)
 		jres := post(&model.Credentials{}, jreq, restClient)
 
+		assert.Equal(t, "1", csvFile.Records[0].ID)
 		assert.Empty(t, csvFile.Records[1].ID)
 
 		updatePushedRecordsIds(jres, csvFile.Records)
 
+		assert.Equal(t, "1", csvFile.Records[0].ID)
 		assert.Equal(t, "100028", csvFile.Records[1].ID)
 	})
 }
