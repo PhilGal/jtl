@@ -41,14 +41,19 @@ var rec = logRecord{}
 
 var rootCmd = &cobra.Command{
 	Use:   "jtl",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Jtl is a command-line tool for posting worktime logs to a Jira server",
+	Long: `These are common Jtl commands used in various situations:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-}
+  # log your work as you go to a local file (see: 'jtl help log'),
+  # display summary report (see: 'jtl help report'),
+  # finally, push all data from file to your company's remote server (see: 'jtl help push')
+  
+For better experience, it is recommended to add a valid configuration file $HOME/.jtl/config.yaml. Type 'jtl help push' for more details.
+
+When you call any command, a programm is trying to locate a data file $HOME/data/<month-year>.csv Thus, each month you'll have a new data file.
+There is, however, a possibility to force programm to use a particular data file with '--data' global option. If you use decide to use --data, use it with every command, because it is a runtime option.
+Same goes for the config file with '--config' option.
+`}
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -63,7 +68,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	cobra.OnInitialize(initDataFile)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jtl/config.yaml)")
-	rootCmd.PersistentFlags().StringVar(&dataFile, "data", "", "data file (default is $HOME/data/<month-year>.<ext>)")
+	rootCmd.PersistentFlags().StringVar(&dataFile, "data", "", "data file (default is $HOME/data/<month-year>.csv)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -96,7 +101,7 @@ func initConfig() {
 
 func initDataFile() {
 
-	createNewDataFile := func(){
+	createNewDataFile := func() {
 		dataDir := path.Join(homeDir(), ".jtl", "data")
 		f := path.Join(dataDir, dataFileName())
 		createDirIfNotExists(dataDir)

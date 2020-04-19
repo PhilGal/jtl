@@ -1,7 +1,6 @@
 package validation
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 
@@ -18,7 +17,6 @@ const (
 
 //InitValidator initializes validation and registers custom validators
 func InitValidator() {
-	fmt.Println("[DEBUG]", "Initializing validation")
 	Validate = validator.New()
 	Validate.RegisterValidation("jiraticket", validateJiraTicketName)
 	Validate.RegisterValidation("timespent", validateTimeSpent)
