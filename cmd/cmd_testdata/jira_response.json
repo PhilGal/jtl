@@ -1,41 +1,26 @@
 {
-    "self": "https://jira.wirecard.sys/rest/api/2/issue/942367/worklog/1417212",
-    "author": {
-      "self": "https://jira.wirecard.sys/rest/api/2/user?username=philipp.galichkin%40wirecard.com",
-      "name": "philipp.galichkin@wirecard.com",
-      "key": "philipp.galichkin@wirecard.com",
-      "emailAddress": "philipp.galichkin@wirecard.com",
-      "avatarUrls": {
-        "48x48": "https://jira.wirecard.sys/secure/useravatar?avatarId=17849",
-        "24x24": "https://jira.wirecard.sys/secure/useravatar?size=small&avatarId=17849",
-        "16x16": "https://jira.wirecard.sys/secure/useravatar?size=xsmall&avatarId=17849",
-        "32x32": "https://jira.wirecard.sys/secure/useravatar?size=medium&avatarId=17849"
-      },
-      "displayName": "Galichkin, Philipp",
-      "active": true,
-      "timeZone": "Europe/Berlin"
-    },
-    "updateAuthor": {
-      "self": "https://jira.wirecard.sys/rest/api/2/user?username=philipp.galichkin%40wirecard.com",
-      "name": "philipp.galichkin@wirecard.com",
-      "key": "philipp.galichkin@wirecard.com",
-      "emailAddress": "philipp.galichkin@wirecard.com",
-      "avatarUrls": {
-        "48x48": "https://jira.wirecard.sys/secure/useravatar?avatarId=17849",
-        "24x24": "https://jira.wirecard.sys/secure/useravatar?size=small&avatarId=17849",
-        "16x16": "https://jira.wirecard.sys/secure/useravatar?size=xsmall&avatarId=17849",
-        "32x32": "https://jira.wirecard.sys/secure/useravatar?size=medium&avatarId=17849"
-      },
-      "displayName": "Galichkin, Philipp",
-      "active": true,
-      "timeZone": "Europe/Berlin"
-    },
-    "comment": "",
-    "created": "2020-04-17T15:01:52.355+0200",
-    "updated": "2020-04-17T15:01:52.355+0200",
-    "started": "2020-04-17T11:00:00.000+0200",
-    "timeSpent": "3h",
-    "timeSpentSeconds": 10800,
-    "id": "666",
-    "issueId": "111"
-  }
+  "self": "https://your-domain.atlassian.net/rest/api/2/issue/10010/worklog/10000",
+  "author": {
+    "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
+    "accountId": "5b10a2844c20165700ede21g",
+    "displayName": "Mia Krystof",
+    "active": false
+  },
+  "updateAuthor": {
+    "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
+    "accountId": "5b10a2844c20165700ede21g",
+    "displayName": "Mia Krystof",
+    "active": false
+  },
+  "comment": "I did some work here.",
+  "updated": "2020-04-09T00:28:56.597+0000",
+  "visibility": {
+    "type": "group",
+    "value": "jira-developers"
+  },
+  "started": "2020-04-09T00:28:56.595+0000",
+  "timeSpent": "3h 20m",
+  "timeSpentSeconds": 12000,
+  "id": "100028",
+  "issueId": "10002"
+}

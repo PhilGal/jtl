@@ -66,7 +66,7 @@ func TestPost(t *testing.T) {
 		jreq := model.NewJiraRequest(&csvFile.Records)
 		jres := post(&model.Credentials{}, jreq, restClient)
 
-		expected := []model.JiraResponse{{RowIdx: 1, Id: "666", IssueId: "111", Timespent: "3h", Started: "2020-04-17T11:00:00.000+0200", IsSuccess: true}}
+		expected := []model.JiraResponse{{RowIdx: 1, Id: "100028", IssueId: "10002", Timespent: "3h 20m", Comment: "I did some work here.", Started: "2020-04-09T00:28:56.595+0000", IsSuccess: true}}
 
 		assert.Equal(t, 1, len(jres), "Bad response size")
 		assert.Exactly(t, expected, jres)
@@ -86,6 +86,6 @@ func TestUpdateAfterPost(t *testing.T) {
 
 		updatePushedRecordsIds(jres, csvFile.Records)
 
-		assert.Equal(t, "666", csvFile.Records[1].ID)
+		assert.Equal(t, "100028", csvFile.Records[1].ID)
 	})
 }
