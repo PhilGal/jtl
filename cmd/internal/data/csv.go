@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -22,6 +23,7 @@ func GetCsvHeader() CsvHeader {
 
 //CsvRecord represents a single record in a CSV file
 type CsvRecord struct {
+	_idx      int
 	ID        string
 	StartedTs string
 	Comment   string
@@ -32,6 +34,11 @@ type CsvRecord struct {
 	Category  string
 }
 
+//GetIdx returns a row's index in CSV file
+func (r *CsvRecord) GetIdx() int {
+	return r._idx
+}
+
 //AsRow represents a CSV-writable row
 func (r *CsvRecord) AsRow() []string {
 	return []string{r.ID, r.StartedTs, r.Comment, r.TimeSpent, r.Ticket, r.Category}
@@ -39,9 +46,8 @@ func (r *CsvRecord) AsRow() []string {
 
 //NewCsvRecord created a new CsvRecord from a slice representing a single CSV row
 func NewCsvRecord(rec []string) (CsvRecord, error) {
-	numberOfFieldsInCsvRecord := 6
-	if len(rec) != numberOfFieldsInCsvRecord {
-		log.Fatalf("Cannot create CsvRecord. Slice size is %v, expected: %v", len(rec), numberOfFieldsInCsvRecord)
+	if len(rec) != len(header) {
+		log.Fatalf("Cannot create CsvRecord. Slice size is %v, expected: %v", len(rec), len(header))
 	}
 	csvRec := CsvRecord{
 		ID:        rec[0],
@@ -62,6 +68,17 @@ func NewCsvRecord(rec []string) (CsvRecord, error) {
 
 //CsvRecords is a wrapper on []CsvRecord
 type CsvRecords []CsvRecord
+
+//Filter returns a copy of records, filtered using the given recordFilter
+func (recs *CsvRecords) Filter(recordFilter CsvRecordPredicate) CsvRecords {
+	filteredRecs := CsvRecords{}
+	for _, r := range *recs {
+		if recordFilter(r) {
+			filteredRecs = append(filteredRecs, r)
+		}
+	}
+	return filteredRecs
+}
 
 //AsRows converts CsvRecords into 2-d slice representing CSV {records X columns}
 func (recs *CsvRecords) AsRows() [][]string {
@@ -104,7 +121,18 @@ func NewCsvFile(path string) CsvFile {
 
 //AddRecord adds (appends) a given record
 func (f *CsvFile) AddRecord(rec CsvRecord) {
+	rec._idx = len(f.Records)
 	f.Records = append(f.Records, rec)
+}
+
+//UpdateRecord replaces record at the given index with the new record.
+func (f *CsvFile) UpdateRecord(idx int, rec CsvRecord) error {
+	if idx < 0 || idx > len(f.Records) {
+		return errors.New("Index is out of range")
+	}
+	rec._idx = idx
+	f.Records[idx] = rec
+	return nil
 }
 
 //ReadAll reads CSV file from disk with all records
@@ -130,8 +158,9 @@ func (f *CsvFile) Read(recordFilter CsvRecordPredicate) {
 	if err != nil {
 		log.Fatalf("Error reading CSV records: %v", err)
 	}
-	for _, rec := range records {
+	for idx, rec := range records {
 		csvRec, _ := NewCsvRecord(rec) //ignore validation errors when reading from file
+		csvRec._idx = idx
 		if recordFilter(csvRec) {
 			f.AddRecord(csvRec)
 		}
@@ -143,8 +172,6 @@ func (f *CsvFile) Write() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// f.Read()
-	// f.AddRecord(NewCsvRecord(row))
 	writer := csv.NewWriter(fcsv)
 	writer.Comma = ','
 	err = writer.Write(f.Header)

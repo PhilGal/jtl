@@ -7,10 +7,15 @@ import (
 )
 
 type JiraRequestRow struct {
+	_rowIdx    int
 	Jiraticket string
 	Timespent  string
 	Comment    string
 	Started    string
+}
+
+func (rr *JiraRequestRow) GetIdx() int {
+	return rr._rowIdx
 }
 
 type JiraRequest []JiraRequestRow
@@ -18,17 +23,16 @@ type JiraRequest []JiraRequestRow
 //NewJiraRequest creates JiraRequest from CsvRecords
 func NewJiraRequest(recs *data.CsvRecords) JiraRequest {
 	jr := JiraRequest{}
-	for _, row := range *recs {
+	for _, row := range recs.Filter(data.RowsWithoutIDsCsvRecordPredicate) {
 		//Rows with IDs are pushed, don't them into request
-		if row.ID == "" {
-			req := JiraRequestRow{
-				Jiraticket: row.Ticket,
-				Started:    row.StartedTs,
-				Comment:    row.Comment,
-				Timespent:  row.TimeSpent,
-			}
-			jr = append(jr, req)
+		req := JiraRequestRow{
+			_rowIdx:    row.GetIdx(),
+			Jiraticket: row.Ticket,
+			Started:    row.StartedTs,
+			Comment:    row.Comment,
+			Timespent:  row.TimeSpent,
 		}
+		jr = append(jr, req)
 	}
 	return jr
 }
@@ -61,7 +65,7 @@ type JiraResponse struct {
 	//   "id": "100028",
 	//   "issueId": "10002"
 	// }
-
+	RowIdx    int
 	Id        string
 	IssueId   string
 	Timespent string

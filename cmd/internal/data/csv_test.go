@@ -1,6 +1,7 @@
 package data
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -15,24 +16,13 @@ func init() {
 	validation.InitValidator()
 }
 
-func TestCsvFile_Write(t *testing.T) {
-	path := "./csv_testdata/write_file_test.csv"
-	t.Cleanup(func() { deleteFileIfExists(path) })
-	t.Run("Write one row into a file", func(t *testing.T) {
-		writtenFile := CsvFile{
-			Path:    path,
-			Header:  GetCsvHeader(),
-			Records: CsvRecords{newCsvRecord([]string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1", "jira"})},
-		}
-		writtenFile.Write()
-
-		//read the same and assert fields
-		readFile := NewCsvFile(writtenFile.Path)
-		readFile.ReadAll()
-
-		assert := assert.New(t)
-		assert.ElementsMatch(writtenFile.Records[0].AsRow(), readFile.Records[0].AsRow())
-	})
+var okCsvRecord = CsvRecord{
+	ID:        "1",
+	StartedTs: "14 Apr 2020 11:30",
+	Comment:   "Row with ID",
+	TimeSpent: "10m",
+	Ticket:    "TICKET-1",
+	Category:  "jira",
 }
 
 func deleteFileIfExists(filename string) {
@@ -52,9 +42,32 @@ func fileExists(filename string) bool {
 }
 
 //Return value, ignore error
-func newCsvRecord(rec []string) CsvRecord {
+func newCsvRecord(idx int, rec []string) CsvRecord {
 	newRec, _ := NewCsvRecord(rec)
+	newRec._idx = idx
 	return newRec
+}
+
+//____TESTS____//
+
+func TestCsvFile_Write(t *testing.T) {
+	path := "./csv_testdata/write_file_test.csv"
+	t.Cleanup(func() { deleteFileIfExists(path) })
+	t.Run("Write one row into a file", func(t *testing.T) {
+		writtenFile := CsvFile{
+			Path:    path,
+			Header:  GetCsvHeader(),
+			Records: CsvRecords{newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1", "jira"})},
+		}
+		writtenFile.Write()
+
+		//read the same and assert fields
+		readFile := NewCsvFile(writtenFile.Path)
+		readFile.ReadAll()
+
+		assert := assert.New(t)
+		assert.ElementsMatch(writtenFile.Records[0].AsRow(), readFile.Records[0].AsRow())
+	})
 }
 
 func TestCsvFile_ReadAll(t *testing.T) {
@@ -69,8 +82,8 @@ func TestCsvFile_ReadAll(t *testing.T) {
 				Path:   "./csv_testdata/not_empty.csv",
 				Header: GetCsvHeader(),
 				Records: CsvRecords{
-					newCsvRecord([]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}),
-					newCsvRecord([]string{"", "15 Apr 2020 11:30", "Row without ID", "10m", "TICKET-2", "jira"}),
+					newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}),
+					newCsvRecord(1, []string{"", "15 Apr 2020 11:30", "Row without ID", "10m", "TICKET-2", "jira"}),
 				},
 			},
 			rowsExpected: 2,
@@ -82,16 +95,11 @@ func TestCsvFile_ReadAll(t *testing.T) {
 			rowsExpected: 0,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			readFile := &CsvFile{Path: tt.file.Path}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			readFile := CsvFile{Path: test.file.Path}
 			readFile.ReadAll()
-			assert.Equal(t, tt.file.Header, readFile.Header, "Headers are not equal!")
-			assert.Equal(t, tt.rowsExpected, len(readFile.Records), "Number of rows are not equal!")
-			for i := 0; i < tt.rowsExpected; i++ {
-				assert.ElementsMatch(t, readFile.Records[i].AsRow(), tt.file.Records[i].AsRow())
-			}
-
+			assert.Exactly(t, test.file, readFile)
 		})
 	}
 }
@@ -109,14 +117,8 @@ func TestNewCsvRecord(t *testing.T) {
 		{
 			"Should create valid CsvRecord",
 			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}},
-			CsvRecord{
-				ID:        "1",
-				StartedTs: "14 Apr 2020 11:30",
-				Comment:   "Row with ID",
-				TimeSpent: "10m",
-				Ticket:    "TICKET-1",
-				Category:  "jira",
-			}, nil},
+			okCsvRecord,
+			nil},
 		{
 			"Should not create record with invalid jira ticket",
 			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1", "jira"}},
@@ -129,15 +131,54 @@ func TestNewCsvRecord(t *testing.T) {
 			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.TimeSpent' Error:Field validation for 'TimeSpent' failed on the 'timespent' tag\""),
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewCsvRecord(tt.args.rec)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := NewCsvRecord(test.args.rec)
 			t.Logf("%v %q", got, err)
 			if err != nil {
 				fmt.Printf("Expected error: %q", err)
-				assert.Equal(t, tt.wantErr, err)
-			} else if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewCsvRecord() = %v, want %v", got, tt.want)
+				assert.Equal(t, test.wantErr, err)
+			} else if !reflect.DeepEqual(got, test.want) {
+				t.Errorf("NewCsvRecord() = %v, want %v", got, test.want)
+			}
+		})
+	}
+}
+
+func TestUpdateRecord(t *testing.T) {
+
+	updatedRec := CsvRecord{
+		_idx:      1,
+		ID:        "666",
+		StartedTs: "14 Apr 2020 11:30",
+		Comment:   "Updated Row with ID",
+		TimeSpent: "10m",
+		Ticket:    "TICKET-666",
+		Category:  "jira",
+	}
+
+	file := CsvFile{Path: "./csv_testdata/not_empty.csv"}
+	file.ReadAll()
+
+	idxOutOfBounds := len(file.Records) + 1
+
+	tests := []struct {
+		name          string
+		idx           int
+		rec           CsvRecord
+		expectedError error
+	}{
+		{"Should update record at the given index", updatedRec._idx, updatedRec, nil},
+		{"Should return error if the given index is out of range", idxOutOfBounds, okCsvRecord, errors.New("Index is out of range")},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			err := file.UpdateRecord(test.idx, test.rec)
+			assert.EqualValues(t, err, test.expectedError)
+			if err == nil {
+				assert.Exactly(t, test.rec, file.Records[test.idx])
+				assert.Equal(t, test.idx, file.Records[test.idx]._idx)
 			}
 		})
 	}
