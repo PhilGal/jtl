@@ -1,0 +1,13 @@
+2020/04/19 10:47:41 Called Push command
+2020/04/19 11:02:43 Total rows read: '\x00'
+2020/04/19 11:02:43 Total filtered rows read: '\x00'
+2020/04/19 11:03:14 Total rows read: 0
+2020/04/19 11:03:14 Total filtered rows read: 0
+2020/04/19 11:04:51 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/19 11:07:18 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/19 11:08:34 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/19 11:08:34 Added CSV Record at index 0
+2020/04/19 11:08:34 Flushed 1 data rows in /Users/phil/.jtl/data/Apr-2020.csv
+2020/04/19 11:08:34 Reading filtered row {'\x00' "" "2020-04-19 11:08:34.666199 +0200 CEST m=+0.002284549" "" "1h" "TESTTICKET-1" "jira"}
+2020/04/19 11:08:34 Added CSV Record at index 0
+2020/04/19 11:08:34 Read (filtered) 1 rows out of total 1 in "/Users/phil/.jtl/data/Apr-2020.csv"

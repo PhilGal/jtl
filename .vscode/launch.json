@@ -4,8 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-        
         {
             "name": "jtl log",
             "type": "go",
@@ -15,7 +13,6 @@
             "env": {},
             "args": ["-j","EE-01", "-t", "30m"]
         },
-
         {
             "name": "jtl push -p",
             "type": "go",

@@ -82,7 +82,7 @@ func push(cmd *cobra.Command, restClient rest.Client) {
 	} else {
 		resp := post(readCredentials(), jreq, restClient)
 		updatePushedRecordsIds(resp, csvFile.Records)
-		fmt.Printf("Final CSV records: %q\n", csvFile.Records)
+		log.Printf("CSV records, updated after push: %q\n", csvFile.Records)
 		csvFile.Write()
 	}
 }
@@ -125,8 +125,7 @@ func post(cred *model.Credentials, jiraReq model.JiraRequest, restClient rest.Cl
 			jiraRes.IsSuccess = true
 		}
 		responses = append(responses, jiraRes)
-		//TODO: print logs to file
-		fmt.Printf("Jira responded: %v\n{%q}\n", res.Status, body)
+		log.Printf("Jira server responded: %v\n{%q}\n", res.Status, body)
 	}
 	return responses
 }
@@ -135,16 +134,14 @@ func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords data.CsvRecord
 	if len(resp) == 0 {
 		return
 	}
-	fmt.Println("JiraResponses:\n", resp)
-	// csvRecords := &file.Records
-	fmt.Printf("CSV records before update: %q\n", csvRecords)
+	log.Println("Generated JiraResponses:\n", resp)
+	log.Printf("CSV records before update: %q\n", csvRecords)
 	for _, responseItem := range resp {
 		if responseItem.IsSuccess {
 			csvRecords[responseItem.RowIdx].ID = responseItem.Id
-			fmt.Printf("Updated CSV record %q with ID %v\n", csvRecords[responseItem.RowIdx], responseItem.Id)
+			log.Printf("Updated CSV record %q with ID %v\n", csvRecords[responseItem.RowIdx], responseItem.Id)
 		}
 	}
-	// file.Write()
 }
 
 func buildHTTPRequest(jiraTicket string, cred *model.Credentials, jr *model.JiraRequestRow) (*http.Request, error) {
@@ -152,6 +149,7 @@ func buildHTTPRequest(jiraTicket string, cred *model.Credentials, jr *model.Jira
 	req, err := http.NewRequest("POST", buildPostURL(jiraTicket), bytes.NewBuffer(jsonBody))
 	req.Header.Add("Authorization", fmt.Sprintf("Basic %v", basicAuth(cred)))
 	req.Header.Add("Content-Type", "application/json")
+	log.Println("[Prepared HTTP Request]\n", req)
 	return req, err
 }
 
@@ -183,7 +181,7 @@ func readCredentials() *model.Credentials {
 	//Read from config first
 	err := viper.UnmarshalKey("credentials", &creds)
 	if err != nil {
-		log.Fatalf("unable to decode into struct, %v", err)
+		log.Fatalf("Unable to decode into struct, %v", err)
 	}
 	creds = *creds.Trim()
 	if creds.IsValid() {
@@ -197,7 +195,8 @@ func readCredentials() *model.Credentials {
 	fmt.Print("Enter Password: ")
 	bytePassword, err := terminal.ReadPassword(0)
 	if err == nil {
-		fmt.Println("\nPassword typed: " + string(bytePassword))
+		fmt.Println("\nError reading password from user: ", err)
+		log.Println("\nError reading password from user: ", err)
 	}
 	creds.Password = string(bytePassword)
 	creds = *creds.Trim()

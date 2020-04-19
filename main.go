@@ -16,11 +16,23 @@ limitations under the License.
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/philgal/jtl/cmd"
 	"github.com/philgal/jtl/validation"
 )
 
 func main() {
+	initFileLogger()
 	validation.InitValidator()
 	cmd.Execute()
+}
+
+func initFileLogger() {
+	f, err := os.OpenFile("jtl.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(f)
 }

@@ -38,33 +38,6 @@ func NewJiraRequest(recs *data.CsvRecords) JiraRequest {
 }
 
 type JiraResponse struct {
-
-	//{
-	//   "self": "https://your-domain.atlassian.net/rest/api/2/issue/10010/worklog/10000",
-	//   "author": {
-	//     "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
-	//     "accountId": "5b10a2844c20165700ede21g",
-	//     "displayName": "Mia Krystof",
-	//     "active": false
-	//   },
-	//   "updateAuthor": {
-	//     "self": "https://your-domain.atlassian.net/rest/api/2/user?accountId=5b10a2844c20165700ede21g",
-	//     "accountId": "5b10a2844c20165700ede21g",
-	//     "displayName": "Mia Krystof",
-	//     "active": false
-	//   },
-	//   "comment": "I did some work here.",
-	//   "updated": "2020-04-09T00:28:56.597+0000",
-	//   "visibility": {
-	//     "type": "group",
-	//     "value": "jira-developers"
-	//   },
-	//   "started": "2020-04-09T00:28:56.595+0000",
-	//   "timeSpent": "3h 20m",
-	//   "timeSpentSeconds": 12000,
-	//   "id": "100028",
-	//   "issueId": "10002"
-	// }
 	RowIdx    int
 	Id        string
 	IssueId   string

@@ -39,8 +39,8 @@ func init() {
 func displayReport() {
 	csv := data.NewCsvFile(dataFile)
 	csv.ReadAll()
-	fmt.Println("\nTotal records: ", len(csv.Records))
 	for _, r := range csv.Records {
 		fmt.Println(r)
 	}
+	fmt.Println("\nTotal records: ", len(csv.Records))
 }

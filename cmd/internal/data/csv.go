@@ -123,6 +123,7 @@ func NewCsvFile(path string) CsvFile {
 func (f *CsvFile) AddRecord(rec CsvRecord) {
 	rec._idx = len(f.Records)
 	f.Records = append(f.Records, rec)
+	log.Println("Added CSV Record at index", rec._idx)
 }
 
 //UpdateRecord replaces record at the given index with the new record.
@@ -132,6 +133,7 @@ func (f *CsvFile) UpdateRecord(idx int, rec CsvRecord) error {
 	}
 	rec._idx = idx
 	f.Records[idx] = rec
+	log.Println("Updated CSV Record at index", idx)
 	return nil
 }
 
@@ -158,13 +160,17 @@ func (f *CsvFile) Read(recordFilter CsvRecordPredicate) {
 	if err != nil {
 		log.Fatalf("Error reading CSV records: %v", err)
 	}
+	countFiltered := 0
 	for idx, rec := range records {
 		csvRec, _ := NewCsvRecord(rec) //ignore validation errors when reading from file
 		csvRec._idx = idx
 		if recordFilter(csvRec) {
+			log.Printf("Reading filtered row %q\n", csvRec)
 			f.AddRecord(csvRec)
+			countFiltered++
 		}
 	}
+	log.Printf("Read (filtered) %v rows out of total %v in %q\n", countFiltered, len(records), f.Path)
 }
 
 func (f *CsvFile) Write() {
@@ -180,4 +186,5 @@ func (f *CsvFile) Write() {
 		log.Fatal(err)
 	}
 	writer.Flush()
+	log.Printf("Flushed %v data rows in %v", len(f.Records), f.Path)
 }
