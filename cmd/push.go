@@ -115,7 +115,7 @@ func post(cred *model.Credentials, jiraReq model.JiraRequest, restClient rest.Cl
 			log.Fatal(err)
 		}
 		//if response was successful
-		jiraRes := model.JiraResponse{IsSuccess: false}
+		jiraRes := model.JiraResponse{RowIdx: row.GetIdx(), IsSuccess: false}
 		if res.StatusCode == 201 {
 			//unmarshall response
 			err = json.Unmarshal(body, &jiraRes)
@@ -131,7 +131,7 @@ func post(cred *model.Credentials, jiraReq model.JiraRequest, restClient rest.Cl
 	return responses
 }
 
-func updatePushedRecordsIds(resp []model.JiraResponse /*file *data.CsvFile*/, csvRecords data.CsvRecords) {
+func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords data.CsvRecords) {
 	if len(resp) == 0 {
 		return
 	}
@@ -140,8 +140,8 @@ func updatePushedRecordsIds(resp []model.JiraResponse /*file *data.CsvFile*/, cs
 	fmt.Printf("CSV records before update: %q\n", csvRecords)
 	for _, responseItem := range resp {
 		if responseItem.IsSuccess {
-			csvRecords[responseItem.GetIdx()].ID = responseItem.Id
-			fmt.Printf("Updated CSV record %q with ID %v\n", csvRecords[responseItem.GetIdx()], responseItem.Id)
+			csvRecords[responseItem.RowIdx].ID = responseItem.Id
+			fmt.Printf("Updated CSV record %q with ID %v\n", csvRecords[responseItem.RowIdx], responseItem.Id)
 		}
 	}
 	// file.Write()

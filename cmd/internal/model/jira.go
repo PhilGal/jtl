@@ -14,6 +14,10 @@ type JiraRequestRow struct {
 	Started    string
 }
 
+func (rr *JiraRequestRow) GetIdx() int {
+	return rr._rowIdx
+}
+
 type JiraRequest []JiraRequestRow
 
 //NewJiraRequest creates JiraRequest from CsvRecords
@@ -61,17 +65,13 @@ type JiraResponse struct {
 	//   "id": "100028",
 	//   "issueId": "10002"
 	// }
-	_rowIdx   int
+	RowIdx    int
 	Id        string
 	IssueId   string
 	Timespent string
 	Comment   string
 	Started   string
 	IsSuccess bool
-}
-
-func (resp *JiraResponse) GetIdx() int {
-	return resp._rowIdx
 }
 
 type Credentials struct {

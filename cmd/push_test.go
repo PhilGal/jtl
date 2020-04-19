@@ -20,9 +20,10 @@ import (
 	"net/http"
 	"testing"
 
-	data "github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/data"
 	"github.com/philgal/jtl/cmd/internal/model"
 	"github.com/philgal/jtl/cmd/internal/rest"
+	"github.com/philgal/jtl/validation"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -50,6 +51,7 @@ func (c *MockRestClient) Do(req *http.Request) (*http.Response, error) {
 
 func init() {
 	restClient = &MockRestClient{}
+	validation.InitValidator()
 }
 
 func TestPost(t *testing.T) {
@@ -62,11 +64,28 @@ func TestPost(t *testing.T) {
 
 	t.Run("Should unmarshall correct response", func(t *testing.T) {
 		jreq := model.NewJiraRequest(&csvFile.Records)
-		jres := post(readCredentials(), jreq, restClient)
+		jres := post(&model.Credentials{}, jreq, restClient)
 
-		expected := []model.JiraResponse{{Id: "666", IssueId: "111", Timespent: "3h", Started: "2020-04-17T11:00:00.000+0200", IsSuccess: true}}
+		expected := []model.JiraResponse{{RowIdx: 1, Id: "666", IssueId: "111", Timespent: "3h", Started: "2020-04-17T11:00:00.000+0200", IsSuccess: true}}
 
-		assert.Equal(t, len(jres), 1, "Bad response size")
+		assert.Equal(t, 1, len(jres), "Bad response size")
 		assert.Exactly(t, expected, jres)
+	})
+}
+
+func TestUpdateAfterPost(t *testing.T) {
+
+	csvFile := data.NewCsvFile("./cmd_testdata/not_empty.csv")
+	csvFile.ReadAll()
+
+	t.Run("Should update row with id from response", func(t *testing.T) {
+		jreq := model.NewJiraRequest(&csvFile.Records)
+		jres := post(&model.Credentials{}, jreq, restClient)
+
+		assert.Empty(t, csvFile.Records[1].ID)
+
+		updatePushedRecordsIds(jres, csvFile.Records)
+
+		assert.Equal(t, "666", csvFile.Records[1].ID)
 	})
 }
