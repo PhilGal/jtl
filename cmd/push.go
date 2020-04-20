@@ -27,6 +27,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/cmd/internal/data"
 	"github.com/philgal/jtl/cmd/internal/model"
 	"github.com/philgal/jtl/cmd/internal/rest"
@@ -43,9 +44,9 @@ var pushCmd = &cobra.Command{
 For correct work this command reqiures a configured <host> and user <credentials> in the config.yaml:
 
   host: https://jira.server.url
-	credentials:
-	  username: <username>
-	  password: <password>
+  credentials:
+    username: <username>
+    password: <password>
 
 However, if username and password are not defined, a user will be prompted to enter them.
 
@@ -74,7 +75,7 @@ func PushToServer(cmd *cobra.Command) {
 }
 
 func push(cmd *cobra.Command, restClient rest.Client) {
-	csvFile := data.NewCsvFile(dataFile)
+	csvFile := data.NewCsvFile(config.DataFilePath())
 	csvFile.ReadAll()
 	jreq := model.NewJiraRequest(&csvFile.Records)
 	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {

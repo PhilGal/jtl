@@ -18,10 +18,13 @@ import (
 	"log"
 	"time"
 
-	data "github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/config"
+	"github.com/philgal/jtl/cmd/internal/data"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
+
+var defaultDateTimePattern string = viper.GetString("defaultDateTimePattern")
 
 // logCmd represents the log command
 var logCmd = &cobra.Command{
@@ -96,7 +99,7 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 		dataRow[4] = rec.jiraTicket
 		dataRow[5] = "jira"
 	}
-	csv := data.NewCsvFile(dataFile)
+	csv := data.NewCsvFile(config.DataFilePath())
 	csv.ReadAll()
 	newRec, err := data.NewCsvRecord(dataRow)
 	if err != nil {
