@@ -3,6 +3,7 @@ package validation
 import (
 	"log"
 	"regexp"
+	"strings"
 
 	"github.com/go-playground/validator"
 )
@@ -12,7 +13,7 @@ var Validate *validator.Validate
 
 const (
 	jiraTicketRegexp = `(([A-Za-z]{1,10})-?)[A-Z]+-\d+`
-	timeSpentRegexp  = `^(\d+)[dhm]$`
+	timeSpentRegexp  = `^(\d+d)? ?(\d+h)? ?(\d+m)?$`
 )
 
 //InitValidator initializes validation and registers custom validators
@@ -31,7 +32,7 @@ func validateTimeSpent(fl validator.FieldLevel) bool {
 }
 
 func validateRegexp(fl validator.FieldLevel, regexpPattern string, message string) bool {
-	val := fl.Field().String()
+	val := strings.Trim(fl.Field().String(), " ")
 	match, err := regexp.MatchString(regexpPattern, val)
 	if err != nil {
 		log.Fatalf("%v: %v\n", message, err)

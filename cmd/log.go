@@ -24,8 +24,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var defaultDateTimePattern string = viper.GetString("defaultDateTimePattern")
-
 // logCmd represents the log command
 var logCmd = &cobra.Command{
 	Use:   "log",
@@ -71,7 +69,7 @@ func init() {
 	logCmd.Flags().StringP("timeSpent", "t", "1h", "[Required] Time spent. Default - 1h")
 	logCmd.MarkFlagRequired("timeSpent")
 	logCmd.Flags().StringP("message", "m", "", "Comment to the work log. Will be displayed in Jira. Default - empty")
-	logCmd.Flags().StringP("started", "s", time.Now().Format(defaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
+	logCmd.Flags().StringP("started", "s", time.Now().Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
 }
 
 func runLogCommand(cmd *cobra.Command, args []string) {
