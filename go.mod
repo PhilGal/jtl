@@ -3,7 +3,6 @@ module github.com/philgal/jtl
 go 1.14
 
 require (
-	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-openapi/strfmt v0.19.5 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect

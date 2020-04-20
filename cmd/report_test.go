@@ -27,12 +27,12 @@ func Test_timeSpentToMinutes(t *testing.T) {
 	tests := []struct {
 		name      string
 		timeSpent string
-		want      float32
+		want      int
 		wantErr   bool
 	}{
-		{"Should parse 1h", "1h", float32(60), false},
-		{"Should parse 1d 2h", "1d 2h", float32((8 + 2) * 60), false},
-		{"Should parse 2d 3h 25m", "2d 3h 25m", float32((16+3)*60 + 25), false},
+		{"Should parse 1h", "1h", 60, false},
+		{"Should parse 1d 2h", "1d 2h", (8 + 2) * 60, false},
+		{"Should parse 2d 3h 25m", "2d 3h 25m", (16+3)*60 + 25, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

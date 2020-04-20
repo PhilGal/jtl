@@ -1,334 +1,379 @@
-2020/04/19 10:47:41 Called Push command
-2020/04/19 11:02:43 Total rows read: '\x00'
-2020/04/19 11:02:43 Total filtered rows read: '\x00'
-2020/04/19 11:03:14 Total rows read: 0
-2020/04/19 11:03:14 Total filtered rows read: 0
-2020/04/19 11:04:51 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/19 11:07:18 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/19 11:08:34 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/19 11:08:34 Added CSV Record at index 0
-2020/04/19 11:08:34 Flushed 1 data rows in /Users/phil/.jtl/data/Apr-2020.csv
-2020/04/19 11:08:34 Reading filtered row {'\x00' "" "2020-04-19 11:08:34.666199 +0200 CEST m=+0.002284549" "" "1h" "TESTTICKET-1" "jira"}
-2020/04/19 11:08:34 Added CSV Record at index 0
-2020/04/19 11:08:34 Read (filtered) 1 rows out of total 1 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/19 20:58:22 Reading filtered row {'\x00' "" "2020-04-19 11:08:34.666199 +0200 CEST m=+0.002284549" "" "1h" "TESTTICKET-1" "jira"}
-2020/04/19 20:58:22 Added CSV Record at index 0
-2020/04/19 20:58:22 Read (filtered) 1 rows out of total 1 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/19 20:58:51 Reading filtered row {'\x00' "" "2020-04-19 11:08:34.666199 +0200 CEST m=+0.002284549" "" "1h" "TESTTICKET-1" "jira"}
-2020/04/19 20:58:51 Added CSV Record at index 0
-2020/04/19 20:58:51 Read (filtered) 1 rows out of total 1 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/19 20:59:56 Reading filtered row {'\x00' "" "2020-04-19 11:08:34.666199 +0200 CEST m=+0.002284549" "" "1h" "TESTTICKET-1" "jira"}
-2020/04/19 20:59:56 Added CSV Record at index 0
-2020/04/19 20:59:56 Read (filtered) 1 rows out of total 1 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 15:25:31 Reading filtered row {'\x00' "" "2020-04-19 11:08:34.666199 +0200 CEST m=+0.002284549" "" "1h" "TESTTICKET-1" "jira"}
-2020/04/20 15:25:31 Added CSV Record at index 0
-2020/04/20 15:25:31 Read (filtered) 1 rows out of total 1 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 15:25:31 Added CSV Record at index 1
-2020/04/20 15:25:31 Flushed 2 data rows in /Users/phil/.jtl/data/Apr-2020.csv
-2020/04/20 15:25:31 Reading filtered row {'\x00' "" "2020-04-19 11:08:34.666199 +0200 CEST m=+0.002284549" "" "1h" "TESTTICKET-1" "jira"}
-2020/04/20 15:25:31 Added CSV Record at index 0
-2020/04/20 15:25:31 Reading filtered row {'\x01' "" "14 Apr 2020 10:00" "Comment" "30m" "JIRA-101" "jira"}
-2020/04/20 15:25:31 Added CSV Record at index 1
-2020/04/20 15:25:31 Read (filtered) 2 rows out of total 2 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 15:51:48 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 15:53:26 Read (filtered) 0 rows out of total 0 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 15:54:58 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 15:54:58 Added CSV Record at index 0
-2020/04/20 15:54:58 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 1
-2020/04/20 15:54:58 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 2
-2020/04/20 15:54:58 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 15:54:58 Added CSV Record at index 3
-2020/04/20 15:54:58 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 15:54:58 Added CSV Record at index 4
-2020/04/20 15:54:58 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 15:54:58 Added CSV Record at index 5
-2020/04/20 15:54:58 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 6
-2020/04/20 15:54:58 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 15:54:58 Added CSV Record at index 7
-2020/04/20 15:54:58 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 8
-2020/04/20 15:54:58 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 9
-2020/04/20 15:54:58 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 10
-2020/04/20 15:54:58 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 11
-2020/04/20 15:54:58 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 15:54:58 Added CSV Record at index 12
-2020/04/20 15:54:58 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 15:54:58 Added CSV Record at index 13
-2020/04/20 15:54:58 Read (filtered) 14 rows out of total 14 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 15:57:10 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 15:57:10 Added CSV Record at index 0
-2020/04/20 15:57:10 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 1
-2020/04/20 15:57:10 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 2
-2020/04/20 15:57:10 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 15:57:10 Added CSV Record at index 3
-2020/04/20 15:57:10 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 15:57:10 Added CSV Record at index 4
-2020/04/20 15:57:10 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 15:57:10 Added CSV Record at index 5
-2020/04/20 15:57:10 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 6
-2020/04/20 15:57:10 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 15:57:10 Added CSV Record at index 7
-2020/04/20 15:57:10 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 8
-2020/04/20 15:57:10 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 9
-2020/04/20 15:57:10 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 10
-2020/04/20 15:57:10 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 11
-2020/04/20 15:57:10 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 15:57:10 Added CSV Record at index 12
-2020/04/20 15:57:10 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 15:57:10 Added CSV Record at index 13
-2020/04/20 15:57:10 Read (filtered) 14 rows out of total 14 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 16:01:04 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 16:01:04 Added CSV Record at index 0
-2020/04/20 16:01:04 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 1
-2020/04/20 16:01:04 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 2
-2020/04/20 16:01:04 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:01:04 Added CSV Record at index 3
-2020/04/20 16:01:04 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:01:04 Added CSV Record at index 4
-2020/04/20 16:01:04 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:01:04 Added CSV Record at index 5
-2020/04/20 16:01:04 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 6
-2020/04/20 16:01:04 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 16:01:04 Added CSV Record at index 7
-2020/04/20 16:01:04 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 8
-2020/04/20 16:01:04 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 9
-2020/04/20 16:01:04 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 10
-2020/04/20 16:01:04 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 11
-2020/04/20 16:01:04 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:01:04 Added CSV Record at index 12
-2020/04/20 16:01:04 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 13
-2020/04/20 16:01:04 Reading filtered row {'\x0e' "1417212" "20 Apr 2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 14
-2020/04/20 16:01:04 Reading filtered row {'\x0f' "1418640" "20 Apr 2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:01:04 Added CSV Record at index 15
-2020/04/20 16:01:04 Read (filtered) 16 rows out of total 16 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 16:02:20 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 16:02:20 Added CSV Record at index 0
-2020/04/20 16:02:20 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 1
-2020/04/20 16:02:20 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 2
-2020/04/20 16:02:20 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:02:20 Added CSV Record at index 3
-2020/04/20 16:02:20 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:02:20 Added CSV Record at index 4
-2020/04/20 16:02:20 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:02:20 Added CSV Record at index 5
-2020/04/20 16:02:20 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 6
-2020/04/20 16:02:20 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 16:02:20 Added CSV Record at index 7
-2020/04/20 16:02:20 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 8
-2020/04/20 16:02:20 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 9
-2020/04/20 16:02:20 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 10
-2020/04/20 16:02:20 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 11
-2020/04/20 16:02:20 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:02:20 Added CSV Record at index 12
-2020/04/20 16:02:20 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 13
-2020/04/20 16:02:20 Reading filtered row {'\x0e' "1417212" "20 Apr 2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 14
-2020/04/20 16:02:20 Reading filtered row {'\x0f' "1418640" "20 Apr 2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:02:20 Added CSV Record at index 15
-2020/04/20 16:02:20 Read (filtered) 16 rows out of total 16 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 16:06:10 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 0
-2020/04/20 16:06:10 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 1
-2020/04/20 16:06:10 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 2
-2020/04/20 16:06:10 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 3
-2020/04/20 16:06:10 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 4
-2020/04/20 16:06:10 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 5
-2020/04/20 16:06:10 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 6
-2020/04/20 16:06:10 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 16:06:10 Added CSV Record at index 7
-2020/04/20 16:06:10 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 8
-2020/04/20 16:06:10 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 9
-2020/04/20 16:06:10 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 10
-2020/04/20 16:06:10 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 11
-2020/04/20 16:06:10 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 12
-2020/04/20 16:06:10 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 13
-2020/04/20 16:06:10 Reading filtered row {'\x0e' "1417212" "20 Apr 2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 14
-2020/04/20 16:06:10 Reading filtered row {'\x0f' "1418640" "20 Apr 2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 15
-2020/04/20 16:06:10 Read (filtered) 16 rows out of total 16 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 16:06:10 Added CSV Record at index 16
-2020/04/20 16:06:10 Flushed 17 data rows in /Users/phil/.jtl/data/Apr-2020.csv
-2020/04/20 16:06:10 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 0
-2020/04/20 16:06:10 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 1
-2020/04/20 16:06:10 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 2
-2020/04/20 16:06:10 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 3
-2020/04/20 16:06:10 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 4
-2020/04/20 16:06:10 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 5
-2020/04/20 16:06:10 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 6
-2020/04/20 16:06:10 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 16:06:10 Added CSV Record at index 7
-2020/04/20 16:06:10 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 8
-2020/04/20 16:06:10 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 9
-2020/04/20 16:06:10 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 10
-2020/04/20 16:06:10 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 11
-2020/04/20 16:06:10 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:06:10 Added CSV Record at index 12
-2020/04/20 16:06:10 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 13
-2020/04/20 16:06:10 Reading filtered row {'\x0e' "1417212" "20 Apr 2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 14
-2020/04/20 16:06:10 Reading filtered row {'\x0f' "1418640" "20 Apr 2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:06:10 Added CSV Record at index 15
-2020/04/20 16:06:10 Reading filtered row {'\x10' "" "2020-04-20 16:06:10.799659 +0200 CEST m=+0.005333112" "" "30m" "PSPTK-9" "opex"}
-2020/04/20 16:06:10 Added CSV Record at index 16
-2020/04/20 16:06:10 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 16:07:15 Error reading CSV records: record on line 18: wrong number of fields
-2020/04/20 16:08:33 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 16:08:33 Added CSV Record at index 0
-2020/04/20 16:08:33 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 1
-2020/04/20 16:08:33 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 2
-2020/04/20 16:08:33 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:08:33 Added CSV Record at index 3
-2020/04/20 16:08:33 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:08:33 Added CSV Record at index 4
-2020/04/20 16:08:33 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:08:33 Added CSV Record at index 5
-2020/04/20 16:08:33 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 6
-2020/04/20 16:08:33 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 16:08:33 Added CSV Record at index 7
-2020/04/20 16:08:33 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 8
-2020/04/20 16:08:33 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 9
-2020/04/20 16:08:33 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 10
-2020/04/20 16:08:33 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 11
-2020/04/20 16:08:33 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:08:33 Added CSV Record at index 12
-2020/04/20 16:08:33 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 13
-2020/04/20 16:08:33 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 14
-2020/04/20 16:08:33 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:08:33 Added CSV Record at index 15
-2020/04/20 16:08:33 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
-2020/04/20 16:08:33 Added CSV Record at index 16
-2020/04/20 16:08:33 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 16:08:37 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 16:08:37 Added CSV Record at index 0
-2020/04/20 16:08:37 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 1
-2020/04/20 16:08:37 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 2
-2020/04/20 16:08:37 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:08:37 Added CSV Record at index 3
-2020/04/20 16:08:37 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:08:37 Added CSV Record at index 4
-2020/04/20 16:08:37 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:08:37 Added CSV Record at index 5
-2020/04/20 16:08:37 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 6
-2020/04/20 16:08:37 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 16:08:37 Added CSV Record at index 7
-2020/04/20 16:08:37 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 8
-2020/04/20 16:08:37 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 9
-2020/04/20 16:08:37 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 10
-2020/04/20 16:08:37 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 11
-2020/04/20 16:08:37 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:08:37 Added CSV Record at index 12
-2020/04/20 16:08:37 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 13
-2020/04/20 16:08:37 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 14
-2020/04/20 16:08:37 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:08:37 Added CSV Record at index 15
-2020/04/20 16:08:37 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
-2020/04/20 16:08:37 Added CSV Record at index 16
-2020/04/20 16:08:37 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
-2020/04/20 16:09:20 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
-2020/04/20 16:09:20 Added CSV Record at index 0
-2020/04/20 16:09:20 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 1
-2020/04/20 16:09:20 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 2
-2020/04/20 16:09:20 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:09:20 Added CSV Record at index 3
-2020/04/20 16:09:20 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:09:20 Added CSV Record at index 4
-2020/04/20 16:09:20 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
-2020/04/20 16:09:20 Added CSV Record at index 5
-2020/04/20 16:09:20 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 6
-2020/04/20 16:09:20 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
-2020/04/20 16:09:20 Added CSV Record at index 7
-2020/04/20 16:09:20 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 8
-2020/04/20 16:09:20 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 9
-2020/04/20 16:09:20 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 10
-2020/04/20 16:09:20 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 11
-2020/04/20 16:09:20 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
-2020/04/20 16:09:20 Added CSV Record at index 12
-2020/04/20 16:09:20 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 13
-2020/04/20 16:09:20 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 14
-2020/04/20 16:09:20 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
-2020/04/20 16:09:20 Added CSV Record at index 15
-2020/04/20 16:09:20 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
-2020/04/20 16:09:20 Added CSV Record at index 16
-2020/04/20 16:09:20 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:15:59 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:15:59 Added CSV Record at index 0
+2020/04/20 16:15:59 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 1
+2020/04/20 16:15:59 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 2
+2020/04/20 16:15:59 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:15:59 Added CSV Record at index 3
+2020/04/20 16:15:59 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:15:59 Added CSV Record at index 4
+2020/04/20 16:15:59 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:15:59 Added CSV Record at index 5
+2020/04/20 16:15:59 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 6
+2020/04/20 16:15:59 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:15:59 Added CSV Record at index 7
+2020/04/20 16:15:59 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 8
+2020/04/20 16:15:59 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 9
+2020/04/20 16:15:59 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 10
+2020/04/20 16:15:59 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 11
+2020/04/20 16:15:59 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:15:59 Added CSV Record at index 12
+2020/04/20 16:15:59 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 13
+2020/04/20 16:15:59 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 14
+2020/04/20 16:15:59 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:15:59 Added CSV Record at index 15
+2020/04/20 16:15:59 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:15:59 Added CSV Record at index 16
+2020/04/20 16:15:59 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:18:26 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:18:26 Added CSV Record at index 0
+2020/04/20 16:18:26 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 1
+2020/04/20 16:18:26 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 2
+2020/04/20 16:18:26 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:18:26 Added CSV Record at index 3
+2020/04/20 16:18:26 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:18:26 Added CSV Record at index 4
+2020/04/20 16:18:26 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:18:26 Added CSV Record at index 5
+2020/04/20 16:18:26 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 6
+2020/04/20 16:18:26 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:18:26 Added CSV Record at index 7
+2020/04/20 16:18:26 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 8
+2020/04/20 16:18:26 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 9
+2020/04/20 16:18:26 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 10
+2020/04/20 16:18:26 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 11
+2020/04/20 16:18:26 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:18:26 Added CSV Record at index 12
+2020/04/20 16:18:26 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 13
+2020/04/20 16:18:26 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 14
+2020/04/20 16:18:26 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:18:26 Added CSV Record at index 15
+2020/04/20 16:18:26 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:18:26 Added CSV Record at index 16
+2020/04/20 16:18:26 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:19:22 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:19:22 Added CSV Record at index 0
+2020/04/20 16:19:22 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 1
+2020/04/20 16:19:22 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 2
+2020/04/20 16:19:22 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:19:22 Added CSV Record at index 3
+2020/04/20 16:19:22 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:19:22 Added CSV Record at index 4
+2020/04/20 16:19:22 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:19:22 Added CSV Record at index 5
+2020/04/20 16:19:22 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 6
+2020/04/20 16:19:22 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:19:22 Added CSV Record at index 7
+2020/04/20 16:19:22 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 8
+2020/04/20 16:19:22 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 9
+2020/04/20 16:19:22 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 10
+2020/04/20 16:19:22 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 11
+2020/04/20 16:19:22 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:19:22 Added CSV Record at index 12
+2020/04/20 16:19:22 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 13
+2020/04/20 16:19:22 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 14
+2020/04/20 16:19:22 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:19:22 Added CSV Record at index 15
+2020/04/20 16:19:22 Read (filtered) 16 rows out of total 16 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:19:27 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:19:27 Added CSV Record at index 0
+2020/04/20 16:19:27 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 1
+2020/04/20 16:19:27 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 2
+2020/04/20 16:19:27 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:19:27 Added CSV Record at index 3
+2020/04/20 16:19:27 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:19:27 Added CSV Record at index 4
+2020/04/20 16:19:27 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:19:27 Added CSV Record at index 5
+2020/04/20 16:19:27 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 6
+2020/04/20 16:19:27 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:19:27 Added CSV Record at index 7
+2020/04/20 16:19:27 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 8
+2020/04/20 16:19:27 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 9
+2020/04/20 16:19:27 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 10
+2020/04/20 16:19:27 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 11
+2020/04/20 16:19:27 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:19:27 Added CSV Record at index 12
+2020/04/20 16:19:27 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 13
+2020/04/20 16:19:27 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 14
+2020/04/20 16:19:27 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:19:27 Added CSV Record at index 15
+2020/04/20 16:19:27 Read (filtered) 16 rows out of total 16 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:20:14 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:20:14 Added CSV Record at index 0
+2020/04/20 16:20:14 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 1
+2020/04/20 16:20:14 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 2
+2020/04/20 16:20:14 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:20:14 Added CSV Record at index 3
+2020/04/20 16:20:14 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:20:14 Added CSV Record at index 4
+2020/04/20 16:20:14 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:20:14 Added CSV Record at index 5
+2020/04/20 16:20:14 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 6
+2020/04/20 16:20:14 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:20:14 Added CSV Record at index 7
+2020/04/20 16:20:14 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 8
+2020/04/20 16:20:14 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 9
+2020/04/20 16:20:14 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 10
+2020/04/20 16:20:14 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 11
+2020/04/20 16:20:14 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:20:14 Added CSV Record at index 12
+2020/04/20 16:20:14 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 13
+2020/04/20 16:20:14 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 14
+2020/04/20 16:20:14 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:20:14 Added CSV Record at index 15
+2020/04/20 16:20:14 Read (filtered) 16 rows out of total 16 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:24:17 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:24:17 Added CSV Record at index 0
+2020/04/20 16:24:17 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 1
+2020/04/20 16:24:17 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 2
+2020/04/20 16:24:17 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:24:17 Added CSV Record at index 3
+2020/04/20 16:24:17 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:24:17 Added CSV Record at index 4
+2020/04/20 16:24:17 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:24:17 Added CSV Record at index 5
+2020/04/20 16:24:17 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 6
+2020/04/20 16:24:17 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:24:17 Added CSV Record at index 7
+2020/04/20 16:24:17 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 8
+2020/04/20 16:24:17 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 9
+2020/04/20 16:24:17 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 10
+2020/04/20 16:24:17 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 11
+2020/04/20 16:24:17 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:24:17 Added CSV Record at index 12
+2020/04/20 16:24:17 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 13
+2020/04/20 16:24:17 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 14
+2020/04/20 16:24:17 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:24:17 Added CSV Record at index 15
+2020/04/20 16:24:17 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:24:17 Added CSV Record at index 16
+2020/04/20 16:24:17 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:25:40 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:25:40 Added CSV Record at index 0
+2020/04/20 16:25:40 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 1
+2020/04/20 16:25:40 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 2
+2020/04/20 16:25:40 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:25:40 Added CSV Record at index 3
+2020/04/20 16:25:40 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:25:40 Added CSV Record at index 4
+2020/04/20 16:25:40 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:25:40 Added CSV Record at index 5
+2020/04/20 16:25:40 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 6
+2020/04/20 16:25:40 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:25:40 Added CSV Record at index 7
+2020/04/20 16:25:40 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 8
+2020/04/20 16:25:40 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 9
+2020/04/20 16:25:40 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 10
+2020/04/20 16:25:40 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 11
+2020/04/20 16:25:40 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:25:40 Added CSV Record at index 12
+2020/04/20 16:25:40 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 13
+2020/04/20 16:25:40 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 14
+2020/04/20 16:25:40 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:25:40 Added CSV Record at index 15
+2020/04/20 16:25:40 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:25:40 Added CSV Record at index 16
+2020/04/20 16:25:40 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:27:39 Reading filtered row {'\x00' "1415667" "14.04.2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:27:39 Added CSV Record at index 0
+2020/04/20 16:27:39 Reading filtered row {'\x01' "1415668" "14.04.2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 1
+2020/04/20 16:27:39 Reading filtered row {'\x02' "1415669" "15.04.2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 2
+2020/04/20 16:27:39 Reading filtered row {'\x03' "1415670" "15.04.2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:27:39 Added CSV Record at index 3
+2020/04/20 16:27:39 Reading filtered row {'\x04' "1415671" "15.04.2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:27:39 Added CSV Record at index 4
+2020/04/20 16:27:39 Reading filtered row {'\x05' "1415672" "15.04.2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:27:39 Added CSV Record at index 5
+2020/04/20 16:27:39 Reading filtered row {'\x06' "1415673" "15.04.2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 6
+2020/04/20 16:27:39 Reading filtered row {'\a' "1415674" "15.04.2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:27:39 Added CSV Record at index 7
+2020/04/20 16:27:39 Reading filtered row {'\b' "1415675" "16.04.2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 8
+2020/04/20 16:27:39 Reading filtered row {'\t' "1415531" "16.04.2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 9
+2020/04/20 16:27:39 Reading filtered row {'\n' "1415433" "16.04.2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 10
+2020/04/20 16:27:39 Reading filtered row {'\v' "1417210" "17.04.2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 11
+2020/04/20 16:27:39 Reading filtered row {'\f' "1417211" "17.04.2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:27:39 Added CSV Record at index 12
+2020/04/20 16:27:39 Reading filtered row {'\r' "1417212" "17.04.2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 13
+2020/04/20 16:27:39 Reading filtered row {'\x0e' "1417212" "20.04.2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 14
+2020/04/20 16:27:39 Reading filtered row {'\x0f' "1418640" "20.04.2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:27:39 Added CSV Record at index 15
+2020/04/20 16:27:39 Reading filtered row {'\x10' "" "20.04.2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:27:39 Added CSV Record at index 16
+2020/04/20 16:27:39 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:33:54 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:33:54 Added CSV Record at index 0
+2020/04/20 16:33:54 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 1
+2020/04/20 16:33:54 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 2
+2020/04/20 16:33:54 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:33:54 Added CSV Record at index 3
+2020/04/20 16:33:54 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:33:54 Added CSV Record at index 4
+2020/04/20 16:33:54 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:33:54 Added CSV Record at index 5
+2020/04/20 16:33:54 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 6
+2020/04/20 16:33:54 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:33:54 Added CSV Record at index 7
+2020/04/20 16:33:54 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 8
+2020/04/20 16:33:54 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 9
+2020/04/20 16:33:54 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 10
+2020/04/20 16:33:54 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 11
+2020/04/20 16:33:54 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:33:54 Added CSV Record at index 12
+2020/04/20 16:33:54 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 13
+2020/04/20 16:33:54 Reading filtered row {'\x0e' "1417212" "20 Apr 2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 14
+2020/04/20 16:33:54 Reading filtered row {'\x0f' "1418640" "20 Apr 2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:33:54 Added CSV Record at index 15
+2020/04/20 16:33:54 Reading filtered row {'\x10' "" "20 Apr 2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:33:54 Added CSV Record at index 16
+2020/04/20 16:33:54 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:41:24 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:41:24 Added CSV Record at index 0
+2020/04/20 16:41:24 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 1
+2020/04/20 16:41:24 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 2
+2020/04/20 16:41:24 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:41:24 Added CSV Record at index 3
+2020/04/20 16:41:24 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:41:24 Added CSV Record at index 4
+2020/04/20 16:41:24 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:41:24 Added CSV Record at index 5
+2020/04/20 16:41:24 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 6
+2020/04/20 16:41:24 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:41:24 Added CSV Record at index 7
+2020/04/20 16:41:24 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 8
+2020/04/20 16:41:24 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 9
+2020/04/20 16:41:24 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 10
+2020/04/20 16:41:24 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 11
+2020/04/20 16:41:24 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:41:24 Added CSV Record at index 12
+2020/04/20 16:41:24 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 13
+2020/04/20 16:41:24 Reading filtered row {'\x0e' "1417212" "20 Apr 2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 14
+2020/04/20 16:41:24 Reading filtered row {'\x0f' "1418640" "20 Apr 2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:41:24 Added CSV Record at index 15
+2020/04/20 16:41:24 Reading filtered row {'\x10' "" "20 Apr 2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:41:24 Added CSV Record at index 16
+2020/04/20 16:41:24 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"
+2020/04/20 16:46:40 Reading filtered row {'\x00' "1415667" "14 Apr 2020 11:30" "US demo" "10m" "PSPTK-2" "capex"}
+2020/04/20 16:46:40 Added CSV Record at index 0
+2020/04/20 16:46:40 Reading filtered row {'\x01' "1415668" "14 Apr 2020 15:30" "Code review" "10m" "EEGLOBAL-16023" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 1
+2020/04/20 16:46:40 Reading filtered row {'\x02' "1415669" "15 Apr 2020 09:00" "business review" "30m" "EEGLOBAL-15108" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 2
+2020/04/20 16:46:40 Reading filtered row {'\x03' "1415670" "15 Apr 2020 09:30" "sprint demo" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:46:40 Added CSV Record at index 3
+2020/04/20 16:46:40 Reading filtered row {'\x04' "1415671" "15 Apr 2020 10:00" "sprint retro" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:46:40 Added CSV Record at index 4
+2020/04/20 16:46:40 Reading filtered row {'\x05' "1415672" "15 Apr 2020 13:00" "sprint planning" "30m" "PSPTK-2" "capex"}
+2020/04/20 16:46:40 Added CSV Record at index 5
+2020/04/20 16:46:40 Reading filtered row {'\x06' "1415673" "15 Apr 2020 13:30" "" "6h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 6
+2020/04/20 16:46:40 Reading filtered row {'\a' "1415674" "15 Apr 2020 13:30" "EEPA discussion" "30m" "PSPTK-2" " capex"}
+2020/04/20 16:46:40 Added CSV Record at index 7
+2020/04/20 16:46:40 Reading filtered row {'\b' "1415675" "16 Apr 2020 10:00" "" "4h" "EEGLOBAL-16586" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 8
+2020/04/20 16:46:40 Reading filtered row {'\t' "1415531" "16 Apr 2020 08:00" "" "2h" "EEGLOBAL-16585" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 9
+2020/04/20 16:46:40 Reading filtered row {'\n' "1415433" "16 Apr 2020 14:30" "" "2h" "EEGLOBAL-16605" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 10
+2020/04/20 16:46:40 Reading filtered row {'\v' "1417210" "17 Apr 2020 08:20" "" "2h" "EEBATCH-680" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 11
+2020/04/20 16:46:40 Reading filtered row {'\f' "1417211" "17 Apr 2020 10:00" "" "1h" "PSPTK-2" "capex"}
+2020/04/20 16:46:40 Added CSV Record at index 12
+2020/04/20 16:46:40 Reading filtered row {'\r' "1417212" "17 Apr 2020 11:00" "" "3h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 13
+2020/04/20 16:46:40 Reading filtered row {'\x0e' "1417212" "20 Apr 2020 10:00" "" "5h" "EEGLOBAL-16607" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 14
+2020/04/20 16:46:40 Reading filtered row {'\x0f' "1418640" "20 Apr 2020 15:00" "" "3h" "EEGLOBAL-16332" "jira"}
+2020/04/20 16:46:40 Added CSV Record at index 15
+2020/04/20 16:46:40 Reading filtered row {'\x10' "" "20 Apr 2020 16:00" "" "30m" "PSPTK-9" "opex"}
+2020/04/20 16:46:40 Added CSV Record at index 16
+2020/04/20 16:46:40 Read (filtered) 17 rows out of total 17 in "/Users/phil/.jtl/data/Apr-2020.csv"

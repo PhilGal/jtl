@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -46,8 +47,22 @@ func init() {
 type monthlyReport struct {
 	weeklyReports      []*weeklyReport
 	reportsByWeekStart map[string]*weeklyReport
-	totalHours         float32 //30h
-	totalTasks         int
+}
+
+func (r *monthlyReport) totalTime() string {
+	var totalMinutes int
+	for _, wr := range r.weeklyReports {
+		totalMinutes += wr.totalMinutes
+	}
+	return minutesToDurationString(totalMinutes)
+}
+
+func (r *monthlyReport) totalTasks() int {
+	var totalTasks int
+	for _, wr := range r.weeklyReports {
+		totalTasks += wr.totalTasks
+	}
+	return totalTasks
 }
 
 func (r *monthlyReport) weeklyReportByWeekStart(date string) *weeklyReport {
@@ -68,23 +83,26 @@ type weeklyReport struct {
 	weekStart    string
 	weekEnd      string
 	totalTasks   int //including aliased, len(records)
-	totalMinutes float32
-	_dueHours    float32 //from configuration, how many ours it is required to log
-	hoursLeft    float32 //number dueHours - totalHours, convert to human readable time
+	totalMinutes int
+	_dueHours    int //from configuration, how many ours it is required to log
+	hoursLeft    int //number dueHours - totalHours, convert to human readable time
 	aliasReports []aliasReport
 }
 
 func (wr *weeklyReport) totalTime() string {
-	return time.Duration(time.Duration(wr.totalMinutes) * time.Minute).String()
+	return minutesToDurationString(wr.totalMinutes)
+}
+
+func minutesToDurationString(minutes int) string {
+	durationString := time.Duration(time.Duration(minutes) * time.Minute).String()
+	return strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S")
 }
 
 type aliasReport struct {
 	alias      string
-	totalHours float32 //30h
+	totalTime  string //30h
 	totalTasks int
 }
-
-const dataTimeFormat = "02 Jan 2006 15:04"
 
 var mr *monthlyReport
 
@@ -106,7 +124,7 @@ func buildMonthlyReport(csvRecords data.CsvRecords) *monthlyReport {
 		wr.totalTasks++
 		tsm, err := timeSpentToMinutes(r.TimeSpent)
 		if err != nil {
-			//do smth
+			log.Println("Unable to convert timeSpent to minutes!", err)
 		}
 		wr.totalMinutes += tsm
 		// wr.hoursLeft = wr._dueHours - wr.totalHours
@@ -114,7 +132,7 @@ func buildMonthlyReport(csvRecords data.CsvRecords) *monthlyReport {
 	return mr
 }
 
-func timeSpentToMinutes(timeSpent string) (float32, error) {
+func timeSpentToMinutes(timeSpent string) (int, error) {
 
 	//2d, 4h, 2h 30m, 1d 7h 40m
 	//TODO add restrictions for 1h = 60m, ...
@@ -125,17 +143,16 @@ func timeSpentToMinutes(timeSpent string) (float32, error) {
 		return v0 + v1, err
 	}
 	//1 working day = 8h
-	value64, _ := strconv.ParseFloat(strings.TrimRight(timeSpent, "dhm"), 32)
-	value := float32(value64)
-	hour := float32(60)
-	day := float32(hour) * 8
+	value, _ := strconv.Atoi(strings.TrimRight(timeSpent, "dhm"))
+	hour := 60
+	day := hour * 8
 	if strings.HasSuffix(timeSpent, "d") {
 		value = day * value
 	} else if strings.HasSuffix(timeSpent, "h") {
 		value = hour * value
 	} else if strings.HasSuffix(timeSpent, "m") {
 	} else {
-		return float32(0), fmt.Errorf("")
+		return 0, fmt.Errorf("")
 	}
 	return value, nil
 }
@@ -179,6 +196,6 @@ func printMonthlyReport(mr *monthlyReport) {
 			wr.totalTime(),
 		})
 	}
-	t.AppendFooter(table.Row{dataFileName(), "Total", mr.totalTasks, mr.totalTasks})
+	t.AppendFooter(table.Row{dataFileName(), "Total", mr.totalTasks(), mr.totalTime()})
 	t.Render()
 }
