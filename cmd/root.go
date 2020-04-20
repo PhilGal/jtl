@@ -34,7 +34,8 @@ var (
 
 const (
 	dataFileHeader         = "id,date,activity,hours,jira,category"
-	defaultDateTimePattern = "02-01-2006 15:04"
+	defaultDateTimePattern = "02 Jan 2006 15:04"
+	defaultDatePattern     = "02 Jan 2006"
 )
 
 var rec = logRecord{}

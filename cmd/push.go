@@ -162,7 +162,7 @@ func jsonBodyStr(jr *model.JiraRequestRow) string {
 	return fmt.Sprintf(jsonBodyTemplate, jr.Timespent, jr.Comment, convertDateToDateTimeIso(jr.Started))
 }
 
-//convertDateToIDateTimeIso converts date "02-01-2006" to iso "2006-01-02T15:04:05.000-0700"
+//convertDateToIDateTimeIso converts date "02 Jan 2006 15:04" to iso "2006-01-02T15:04:05.000-0700"
 func convertDateToDateTimeIso(date string) string {
 	parsedDate, err := time.ParseInLocation("02 Jan 2006 15:04", date, time.Local)
 	if err != nil {
