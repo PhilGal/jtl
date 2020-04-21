@@ -12,11 +12,13 @@ import (
 	"github.com/philgal/jtl/cmd/internal/data"
 )
 
+//MonthlyReport represents a monthly report
 type MonthlyReport struct {
 	weeklyReports      []*WeeklyReport
 	reportsByWeekStart map[string]*WeeklyReport
 }
 
+//NewMonthlyReport creates new report from the given CsvRecords
 func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 	mr := &MonthlyReport{}
 	for _, r := range csvRecords {
@@ -36,6 +38,7 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 	return mr
 }
 
+//Print implements Printable
 func (r *MonthlyReport) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)

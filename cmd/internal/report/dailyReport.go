@@ -12,12 +12,14 @@ import (
 	"github.com/philgal/jtl/cmd/internal/data"
 )
 
+//DailyReport represents a daily report
 type DailyReport struct {
 	totalTasks         int
 	timeSpentInMinutes int
 	csvRecords         data.CsvRecords
 }
 
+//NewDailyReport creates new report from the given CsvRecords
 func NewDailyReport(csvRecords data.CsvRecords) *DailyReport {
 	dr := &DailyReport{}
 	dr.csvRecords = csvRecords
@@ -40,6 +42,7 @@ func (r *DailyReport) timeSpent() string {
 	return minutesToDurationString(r.timeSpentInMinutes)
 }
 
+//Print implements Printable
 func (r *DailyReport) Print() {
 	log.Println(r)
 	t := table.NewWriter()

@@ -1,5 +1,6 @@
 package report
 
+//WeeklyReport represents a weekly report
 type WeeklyReport struct {
 	weekStart    string
 	weekEnd      string
