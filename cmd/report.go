@@ -42,10 +42,16 @@ type aliasReport struct {
 }
 
 var monthlyReport *report.MonthlyReport
+var dailyReport *report.DailyReport
 
 func displayReport() {
+
 	csv := data.NewCsvFile(config.DataFilePath())
 	csv.ReadAll()
 	monthlyReport = report.NewMonthlyReport(csv.Records)
 	monthlyReport.Print()
+
+	// csv.Read(data.TodaysRowsCsvRecordPredicate)
+	dailyReport = report.NewDailyReport(csv.Records)
+	dailyReport.Print()
 }

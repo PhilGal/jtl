@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/go-playground/validator"
+	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/validation"
 )
 
@@ -42,6 +44,11 @@ func (r *CsvRecord) GetIdx() int {
 //AsRow represents a CSV-writable row
 func (r *CsvRecord) AsRow() []string {
 	return []string{r.ID, r.StartedTs, r.Comment, r.TimeSpent, r.Ticket, r.Category}
+}
+
+//IsPushed returns true is the item has been already pushed to Jira server
+func (r *CsvRecord) IsPushed() bool {
+	return r.ID != ""
 }
 
 //NewCsvRecord created a new CsvRecord from a slice representing a single CSV row
@@ -114,6 +121,16 @@ var RowsWithoutIDsCsvRecordPredicate = func(r CsvRecord) bool {
 	return r.ID == ""
 }
 
+//TodaysRowsCsvRecordPredicate filters rows with startedTs = today
+var TodaysRowsCsvRecordPredicate = func(r CsvRecord) bool {
+	startedTs, err := time.Parse(config.DefaultDateTimePattern, r.StartedTs)
+	if err != nil {
+		log.Fatalln("Error in TodaysRowsCsvRecordPredicate:", err)
+	}
+	// return startedTs.Truncate(time.Hour).Equal(time.Now().Truncate(time.Hour))
+	return startedTs.Format(config.DefaultDatePattern) == time.Now().Format(config.DefaultDatePattern)
+}
+
 //NewCsvFile creates a new CsvFile with the given path and default header
 func NewCsvFile(path string) CsvFile {
 	return CsvFile{Path: path, Header: GetCsvHeader(), Records: []CsvRecord{}}
@@ -123,7 +140,6 @@ func NewCsvFile(path string) CsvFile {
 func (f *CsvFile) AddRecord(rec CsvRecord) {
 	rec._idx = len(f.Records)
 	f.Records = append(f.Records, rec)
-	log.Println("Added CSV Record at index", rec._idx)
 }
 
 //UpdateRecord replaces record at the given index with the new record.
@@ -165,7 +181,6 @@ func (f *CsvFile) Read(recordFilter CsvRecordPredicate) {
 		csvRec, _ := NewCsvRecord(rec) //ignore validation errors when reading from file
 		csvRec._idx = idx
 		if recordFilter(csvRec) {
-			log.Printf("Reading filtered row %q\n", csvRec)
 			f.AddRecord(csvRec)
 			countFiltered++
 		}
