@@ -45,13 +45,13 @@ var monthlyReport *report.MonthlyReport
 var dailyReport *report.DailyReport
 
 func displayReport() {
-
 	csv := data.NewCsvFile(config.DataFilePath())
 	csv.ReadAll()
-	monthlyReport = report.NewMonthlyReport(csv.Records)
-	monthlyReport.Print()
-
-	// csv.Read(data.TodaysRowsCsvRecordPredicate)
-	dailyReport = report.NewDailyReport(csv.Records)
-	dailyReport.Print()
+	reports := []report.Printable{
+		report.NewMonthlyReport(csv.Records),
+		report.NewDailyReport(csv.Records),
+	}
+	for _, report := range reports {
+		report.Print()
+	}
 }
