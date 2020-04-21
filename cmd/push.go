@@ -105,30 +105,36 @@ func preview(jr model.JiraRequest) {
 func post(cred *model.Credentials, jiraReq model.JiraRequest, restClient rest.Client) []model.JiraResponse {
 	responses := []model.JiraResponse{}
 	for _, row := range jiraReq {
-		req, _ := buildHTTPRequest(row.Jiraticket, cred, &row)
-		res, err := restClient.Do(req)
-		if err != nil {
-			log.Fatalf("Failed to send %v: %v\n", req, err)
-		}
-		defer res.Body.Close()
-		body, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		//if response was successful
-		jiraRes := model.JiraResponse{RowIdx: row.GetIdx(), IsSuccess: false}
-		if res.StatusCode == 201 {
-			//unmarshall response
-			err = json.Unmarshal(body, &jiraRes)
-			if err != nil {
-				log.Println("Error unmarshalling json:", err)
-			}
-			jiraRes.IsSuccess = true
-		}
+		jiraRes := postSingleRequest(cred, row, restClient)
 		responses = append(responses, jiraRes)
-		log.Printf("Jira server responded: %v\n{%q}\n", res.Status, body)
 	}
 	return responses
+}
+
+func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restClient rest.Client) model.JiraResponse {
+	req, _ := buildHTTPRequest(row.Jiraticket, cred, &row)
+	res, err := restClient.Do(req)
+	if err != nil {
+		log.Fatalf("Failed to send %v: %v\n", req, err)
+	}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//if response was successful
+	jiraRes := model.JiraResponse{RowIdx: row.GetIdx(), IsSuccess: false}
+	if res.StatusCode == 201 {
+		//unmarshall response
+		err = json.Unmarshal(body, &jiraRes)
+		if err != nil {
+			log.Println("Error unmarshalling json:", err)
+		}
+		jiraRes.IsSuccess = true
+	}
+
+	log.Printf("Jira server responded: %v\n{%q}\n", res.Status, body)
+	return jiraRes
 }
 
 func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords data.CsvRecords) {
