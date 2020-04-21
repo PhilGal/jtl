@@ -1,6 +1,7 @@
 package report
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -44,6 +45,7 @@ func (r *DailyReport) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 	t.AppendHeader(table.Row{"started at", "ticket", "time tracked", "comment", "pushed to Jira?"})
+	var totalPushed int
 	for _, rec := range r.csvRecords {
 		if !data.TodaysRowsCsvRecordPredicate(rec) {
 			continue
@@ -52,13 +54,13 @@ func (r *DailyReport) Print() {
 		var isPushed string
 		if rec.IsPushed() {
 			isPushed = "Y"
+			totalPushed++
 		} else {
 			isPushed = "N"
 		}
 		t.AppendRow(table.Row{rec.StartedTs, rec.Ticket, rec.TimeSpent, rec.Comment, isPushed})
 	}
-	t.AppendFooter(table.Row{"today", time.Now().Format(config.DefaultDatePattern)})
-	t.AppendFooter(table.Row{"total tasks", r.timeSpent()})
-	t.AppendFooter(table.Row{"total tasks", r.totalTasks})
+
+	t.AppendFooter(table.Row{"today: " + time.Now().Format(config.DefaultDatePattern), "", r.timeSpent(), "", fmt.Sprintf("%v/%v", totalPushed, r.totalTasks)})
 	t.Render()
 }

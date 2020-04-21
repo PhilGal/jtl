@@ -48,8 +48,8 @@ func displayReport() {
 	csv := data.NewCsvFile(config.DataFilePath())
 	csv.ReadAll()
 	reports := []report.Printable{
-		report.NewMonthlyReport(csv.Records),
 		report.NewDailyReport(csv.Records),
+		report.NewMonthlyReport(csv.Records),
 	}
 	for _, report := range reports {
 		report.Print()

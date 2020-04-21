@@ -1,6 +1,7 @@
 package report
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -38,16 +39,15 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 func (r *MonthlyReport) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"Week Start Date", "Week End Date", "Total tasks", "Total time"})
+	t.AppendHeader(table.Row{"Week", "Total tasks", "Total time"})
 	for _, wr := range r.weeklyReports {
 		t.AppendRow([]interface{}{
-			wr.weekStart,
-			wr.weekEnd,
+			fmt.Sprintf("%v - %v", wr.weekStart, wr.weekEnd),
 			wr.totalTasks,
 			wr.totalTime(),
 		})
 	}
-	t.AppendFooter(table.Row{config.DataFilePath(), "Total", r.totalTasks(), r.totalTime()})
+	t.AppendFooter(table.Row{"Total for:" + config.DataFileName(), r.totalTasks(), r.totalTime()})
 	t.Render()
 }
 

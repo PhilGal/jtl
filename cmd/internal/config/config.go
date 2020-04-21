@@ -72,7 +72,7 @@ func InitDataFile() {
 	dataFileHeader := viper.GetString("dataFileHeader")
 	createNewDataFile := func() {
 		dataDir := path.Join(homeDir(), ".jtl", "data")
-		f := path.Join(dataDir, dataFileName())
+		f := path.Join(dataDir, DataFileName())
 		createDirIfNotExists(dataDir)
 		createFileIfNotExists(f, dataFileHeader)
 		//upgrade file to full path in context
@@ -89,7 +89,8 @@ func InitDataFile() {
 	}
 }
 
-func dataFileName() string {
+//DataFileName returns today's default datafile name without path.
+func DataFileName() string {
 	now := time.Now()
 	return fmt.Sprintf("%v.csv", now.Format("Jan-2006"))
 }
