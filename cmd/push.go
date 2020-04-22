@@ -25,6 +25,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/philgal/jtl/cmd/internal/config"
@@ -104,14 +105,21 @@ func preview(jr model.JiraRequest) {
 
 func post(cred *model.Credentials, jiraReq model.JiraRequest, restClient rest.Client) []model.JiraResponse {
 	responses := []model.JiraResponse{}
+	respChn := make(chan model.JiraResponse, len(jiraReq))
+	wg := sync.WaitGroup{}
 	for _, row := range jiraReq {
-		jiraRes := postSingleRequest(cred, row, restClient)
-		responses = append(responses, jiraRes)
+		wg.Add(1)
+		go postSingleRequest(cred, row, restClient, respChn, &wg)
+	}
+	wg.Wait()
+	close(respChn)
+	for resp := range respChn {
+		responses = append(responses, resp)
 	}
 	return responses
 }
 
-func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restClient rest.Client) model.JiraResponse {
+func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restClient rest.Client, respChn chan model.JiraResponse, wg *sync.WaitGroup) {
 	req, _ := buildHTTPRequest(row.Jiraticket, cred, &row)
 	res, err := restClient.Do(req)
 	if err != nil {
@@ -134,7 +142,8 @@ func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restCl
 	}
 
 	log.Printf("Jira server responded: %v\n{%q}\n", res.Status, body)
-	return jiraRes
+	respChn <- jiraRes
+	wg.Done()
 }
 
 func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords data.CsvRecords) {
