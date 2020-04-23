@@ -1,6 +1,0 @@
-BUGS:
-BACKLOG:
-- Implement "report" feature with summaries
-	- Report flag -d for a "day" report. "Today tracked, left, gaps."
-- Update help messages
-- Clean up commands output (extra fmt.Prints)
