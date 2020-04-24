@@ -28,6 +28,9 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 		wr.weekStart = weekStart
 		wr.weekEnd = weekEnd
 		wr.totalTasks++
+		if r.IsPushed() {
+			wr.pushedTasks++
+		}
 		tsm, err := timeSpentToMinutes(r.TimeSpent)
 		if err != nil {
 			log.Println("Unable to convert timeSpent to minutes!", err)
@@ -46,7 +49,7 @@ func (r *MonthlyReport) Print() {
 	for _, wr := range r.weeklyReports {
 		t.AppendRow([]interface{}{
 			fmt.Sprintf("%v - %v", wr.weekStart, wr.weekEnd),
-			wr.totalTasks,
+			fmt.Sprintf("%v (%v pushed)", wr.totalTasks, wr.pushedTasks),
 			wr.totalTime(),
 		})
 	}
