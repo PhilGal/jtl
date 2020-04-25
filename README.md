@@ -1,4 +1,5 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/PhilGal/jtl)](https://goreportcard.com/report/github.com/PhilGal/jtl)
+![Build](https://github.com/PhilGal/jtl/workflows/Build/badge.svg)
 
 # jtl - jira time logger
 ## Description
