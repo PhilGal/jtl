@@ -7,12 +7,12 @@ on:
 jobs:
   build:
     name: Build
-      strategy:
-        matrix:
-          go-version: 1.14.x
-          platform: [ubuntu-latest, macos-latest]
-      runs-on: ${{ matrix.platform }}
-      steps:
+    strategy:
+      matrix:
+        go-version: 1.14.x
+        platform: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
       - name: Set up Go 1.14.x
         uses: actions/setup-go@v1
         with:
@@ -27,8 +27,8 @@ jobs:
                 curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
                 dep ensure
             fi
-        - name: Build
-          run: go build -v .
+      - name: Build
+        run: go build -v .
   test:
     name: "Run all tests"
     strategy:
