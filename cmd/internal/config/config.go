@@ -65,7 +65,6 @@ func Init() {
 			"username": "",
 			"password": "",
 		})
-		viper.SetDefault("alias", map[string]string(nil))
 		viper.SetDefault("DateTimePattern", DefaultDateTimePattern)
 
 		if !fileExists(configFullPath) {
