@@ -1,0 +1,7 @@
+alias: {}
+credentials:
+  password: ""
+  username: ""
+datafileheader: id,date,activity,hours,jira,category
+datetimepattern: 02 Jan 2006 15:04
+host: ""

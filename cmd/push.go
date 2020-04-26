@@ -79,14 +79,22 @@ func push(cmd *cobra.Command, restClient rest.Client) {
 	csvFile := data.NewCsvFile(config.DataFilePath())
 	csvFile.ReadAll()
 	jreq := model.NewJiraRequest(&csvFile.Records)
+
+	if viper.GetString("Host") == "" {
+		fmt.Println("Jira host is not set in config, printing preview")
+		preview(jreq)
+		return
+	}
+
 	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {
 		preview(jreq)
-	} else {
-		resp := post(readCredentials(), jreq, restClient)
-		updatePushedRecordsIds(resp, csvFile.Records)
-		log.Printf("CSV records, updated after push: %q\n", csvFile.Records)
-		csvFile.Write()
+		return
 	}
+
+	resp := post(readCredentials(), jreq, restClient)
+	updatePushedRecordsIds(resp, csvFile.Records)
+	log.Printf("CSV records, updated after push: %q\n", csvFile.Records)
+	csvFile.Write()
 }
 
 func preview(jr model.JiraRequest) {

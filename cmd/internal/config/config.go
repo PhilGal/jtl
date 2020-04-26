@@ -50,22 +50,37 @@ func Init() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".jtl" (without extension).
-		viper.AddConfigPath(path.Join(home, ".jtl"))
-		viper.SetConfigName("config")
-		viper.Set("defaultDateTimePattern", "02 Jan 2006 15:04")
-		viper.Set("defaultDatePattern", "02 Jan 2006")
+		configPath := path.Join(home, ".jtl")
+		configName := "config"
+		configType := "yaml"
+		configFullPath := fmt.Sprintf("%v.%v", path.Join(configPath, configName), configType)
+
+		viper.AddConfigPath(configPath)
+		viper.SetConfigName(configName)
+		viper.SetConfigType(configType)
+
 		viper.Set("dataFileHeader", "id,date,activity,hours,jira,category")
+		viper.SetDefault("host", "")
+		viper.SetDefault("credentials", map[string]string{
+			"username": "",
+			"password": "",
+		})
+		viper.SetDefault("alias", map[string]string(nil))
+		viper.SetDefault("DateTimePattern", DefaultDateTimePattern)
+
+		if !fileExists(configFullPath) {
+			fmt.Println("Config file not found. Initializing default config:", configFullPath)
+			err := viper.SafeWriteConfig()
+			if err != nil {
+				fmt.Println("Error writing config file", err)
+			}
+		}
 	}
-
-	viper.AutomaticEnv() // read in environment variables that match
-
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("Config file not loaded", err)
-	}
+		fmt.Println("Error reading config file", err)
 
-	viper.SetDefault("DateTimePattern", DefaultDateTimePattern)
+	}
 }
 
 func InitDataFile() {
