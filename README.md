@@ -20,13 +20,25 @@ Same goes for the config file with `--config` option.
 ### Download executable
 
 Go to [releases](https://github.com/PhilGal/jtl/releases) and download a latest executable for your OS.
+Once you get your executable, install/run it as you would usually install or run any command line program: run from where it is, add to PATH, etc.
 
 ### Build from source
 
 Install go >= 1.14.x
 
-`git clone https://github.com/PhilGal/jtl.git`
-`cd jtl`
-`go build`
+```
+❯ git clone https://github.com/PhilGal/jtl.git
+❯ cd jtl
+❯ go install
+```
 
-Once you get your executable, install/run it as you would usually install or run any command line program: run from where it is, add to PATH, etc.
+Running `go install` will put executable into your `$GOPATH`. Make sure you have `$GOPATH/bin` in your `$PATH` and if it there you'll be able to run `jtl` from your terminal/command prompt.
+
+```
+❯ echo $GOPATH
+/usr/local/Cellar/go/1.14.1
+❯ which jtl
+/usr/local/Cellar/go/1.14.1/bin/jtl
+```
+
+ 
