@@ -32,7 +32,7 @@ Install go >= 1.14.x
 ❯ go install
 ```
 
-Running `go install` will put executable into your `$GOPATH`. Make sure you have `$GOPATH/bin` in your `$PATH` and if it there you'll be able to run `jtl` from your terminal/command prompt.
+Running `go install` will put an executable into your `$GOPATH` directory. Make sure you have `$GOPATH/bin` in your `$PATH` and once it is there you'll be able to run `jtl` from your terminal/command prompt.
 
 ```
 ❯ echo $GOPATH
