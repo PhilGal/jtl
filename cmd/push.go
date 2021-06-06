@@ -86,7 +86,7 @@ func push(cmd *cobra.Command, restClient rest.Client) {
 		return
 	}
 
-	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview == true {
+	if shouldPreview, _ := cmd.Flags().GetBool("preview"); shouldPreview {
 		preview(jreq)
 		return
 	}
@@ -191,7 +191,7 @@ func jsonBodyStr(jr *model.JiraRequestRow) string {
 func convertDateToDateTimeIso(date string) string {
 	parsedDate, err := time.ParseInLocation(config.DefaultDateTimePattern, date, time.Local)
 	if err != nil {
-		fmt.Printf("Error! %v", fmt.Errorf("Couldn't parse date, %w", err))
+		fmt.Printf("Error! %v", fmt.Errorf("couldn't parse date, %w", err))
 		log.Fatal(err)
 	}
 	const iso = "2006-01-02T15:04:05.000-0700"

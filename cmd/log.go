@@ -17,6 +17,7 @@ package cmd
 import (
 	"log"
 	"time"
+	"strings"
 
 	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/cmd/internal/data"
@@ -65,20 +66,15 @@ func (rec logRecord) asArray() []string {
 	dataRow[2] = rec.message
 	dataRow[3] = rec.time
 	aliaces := viper.GetStringMapString("alias")
-	if len(aliaces) > 0 {
-		alias := rec.ticket
-		aliasTicket := aliaces[alias]
-		if aliasTicket != "" {
-			dataRow[4] = aliasTicket
-			dataRow[5] = alias
-		} else {
-			dataRow[4] = rec.ticket
-			dataRow[5] = "jira"
-		}
+	log.Print(aliaces)
+	if len(aliaces) > 0 && aliaces[strings.ToLower(rec.ticket)] != "" {
+		dataRow[4] = aliaces[strings.ToLower(rec.ticket)]
+		dataRow[5] = rec.ticket
 	} else {
 		dataRow[4] = rec.ticket
 		dataRow[5] = "jira"
 	}
+	log.Print(dataRow)
 	return dataRow
 }
 
