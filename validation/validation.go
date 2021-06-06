@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"fmt"
 	"log"
 	"regexp"
 	"strings"
@@ -35,6 +36,7 @@ func validateRegexp(fl validator.FieldLevel, regexpPattern string, message strin
 	val := strings.Trim(fl.Field().String(), " ")
 	match, err := regexp.MatchString(regexpPattern, val)
 	if err != nil {
+		fmt.Println(err)
 		log.Fatalf("%v: %v\n", message, err)
 	}
 	return match

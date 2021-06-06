@@ -125,6 +125,7 @@ var RowsWithoutIDsCsvRecordPredicate = func(r CsvRecord) bool {
 var TodaysRowsCsvRecordPredicate = func(r CsvRecord) bool {
 	startedTs, err := time.Parse(config.DefaultDateTimePattern, r.StartedTs)
 	if err != nil {
+		fmt.Printf("Error! %v", fmt.Errorf("Couldn't parse date, %w", err))
 		log.Fatalln("Error in TodaysRowsCsvRecordPredicate:", err)
 	}
 	// return startedTs.Truncate(time.Hour).Equal(time.Now().Truncate(time.Hour))

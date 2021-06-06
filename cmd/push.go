@@ -132,6 +132,7 @@ func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restCl
 	res, err := restClient.Do(req)
 	if err != nil {
 		log.Fatalf("Failed to send %v: %v\n", req, err)
+		fmt.Printf("Failed to send %v: %v\n", req, err)
 	}
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
@@ -190,6 +191,7 @@ func jsonBodyStr(jr *model.JiraRequestRow) string {
 func convertDateToDateTimeIso(date string) string {
 	parsedDate, err := time.ParseInLocation(config.DefaultDateTimePattern, date, time.Local)
 	if err != nil {
+		fmt.Printf("Error! %v", fmt.Errorf("Couldn't parse date, %w", err))
 		log.Fatal(err)
 	}
 	const iso = "2006-01-02T15:04:05.000-0700"

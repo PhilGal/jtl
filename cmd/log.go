@@ -43,7 +43,7 @@ Ticket values specified in a config will the be logged and pushed.
 
 Examples:
   jtl log -j JIRA-101 -t 30m -s "14 Apr 2020 10:00" -m "Comment"
-  jtl log -j l666 -t 1h -s "06 Jun 2020 06:00" -m "Some repeatedly meeting!"
+  jtl log -j l666 -t 1h -s "06 Jun 2020 06:00" -m "Some repeating meeting!"
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		//use App for testing
@@ -53,56 +53,63 @@ Examples:
 }
 
 type logRecord struct {
-	timeSpent   string
-	message     string
-	dateStarted string
-	jiraTicket  string
+	time    string
+	message string
+	date    string
+	ticket  string
 }
 
-func init() {
-	rootCmd.AddCommand(logCmd)
-	//`{"timeSpent": "%vh", "comment":"%v", "started": "%v"}`
-
-	//todo improve duration parsing
-	logCmd.Flags().StringP("jiraTicket", "j", "", "[Required] Jira ticket. Ticket aliases can be used. See > jtl help log")
-	logCmd.MarkFlagRequired("jiraTicket")
-	logCmd.Flags().StringP("timeSpent", "t", "1h", "[Required] Time spent. Default - 1h")
-	logCmd.MarkFlagRequired("timeSpent")
-	logCmd.Flags().StringP("message", "m", "", "Comment to the work log. Will be displayed in Jira. Default - empty")
-	logCmd.Flags().StringP("started", "s", time.Now().Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
-}
-
-func runLogCommand(cmd *cobra.Command, args []string) {
-
-	rec.jiraTicket, _ = cmd.Flags().GetString("jiraTicket")
-	rec.timeSpent, _ = cmd.Flags().GetString("timeSpent")
-	rec.message, _ = cmd.Flags().GetString("message")
-	rec.dateStarted, _ = cmd.Flags().GetString("started")
+func (rec logRecord) asArray() []string {
 	dataRow := make([]string, 6)
-	dataRow[1] = rec.dateStarted
+	dataRow[1] = rec.date
 	dataRow[2] = rec.message
-	dataRow[3] = rec.timeSpent
+	dataRow[3] = rec.time
 	aliaces := viper.GetStringMapString("alias")
 	if len(aliaces) > 0 {
-		alias := rec.jiraTicket
+		alias := rec.ticket
 		aliasTicket := aliaces[alias]
 		if aliasTicket != "" {
 			dataRow[4] = aliasTicket
 			dataRow[5] = alias
 		} else {
-			dataRow[4] = rec.jiraTicket
+			dataRow[4] = rec.ticket
 			dataRow[5] = "jira"
 		}
 	} else {
-		dataRow[4] = rec.jiraTicket
+		dataRow[4] = rec.ticket
 		dataRow[5] = "jira"
 	}
-	csv := data.NewCsvFile(config.DataFilePath())
-	csv.ReadAll()
-	newRec, err := data.NewCsvRecord(dataRow)
+	return dataRow
+}
+
+const (
+	ticketCmdStr  = "ticket"
+	timeCmdStr    = "time"
+	dateCmdStr    = "date"
+	messageCmdStr = "message"
+)
+
+func init() {
+	rootCmd.AddCommand(logCmd)
+	logCmd.Flags().StringP(ticketCmdStr, "j", "", "[Required] Jira ticket. Ticket aliases can be used. See > jtl help log")
+	logCmd.MarkFlagRequired(ticketCmdStr)
+	//todo improve duration parsing
+	logCmd.Flags().StringP(timeCmdStr, "t", "8h", "[Required] Time spent. Default - 8h")
+	logCmd.Flags().StringP(messageCmdStr, "m", "", "Comment to the work log. Will be displayed in Jira. Default - empty")
+	logCmd.Flags().StringP(dateCmdStr, "d", time.Now().Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
+}
+
+func runLogCommand(cmd *cobra.Command, args []string) {
+	rec.ticket, _ = cmd.Flags().GetString(ticketCmdStr)
+	rec.time, _ = cmd.Flags().GetString(timeCmdStr)
+	rec.message, _ = cmd.Flags().GetString(messageCmdStr)
+	rec.date, _ = cmd.Flags().GetString(dateCmdStr)
+	newRec, err := data.NewCsvRecord(rec.asArray())
 	if err != nil {
 		log.Fatalln(err)
 	} else {
+		csv := data.NewCsvFile(config.DataFilePath())
+		csv.ReadAll()
 		csv.AddRecord(newRec)
 		csv.Write()
 	}
