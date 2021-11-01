@@ -21,6 +21,9 @@ func timeSpentToMinutes(timeSpent string) (int, error) {
 	sub := strings.SplitN(timeSpent, " ", 2)
 	if len(sub) > 1 {
 		v0, err := timeSpentToMinutes(sub[0])
+		if err != nil {
+			return 0, err
+		}
 		v1, err := timeSpentToMinutes(sub[1])
 		return v0 + v1, err
 	}
@@ -40,28 +43,7 @@ func timeSpentToMinutes(timeSpent string) (int, error) {
 }
 
 func weekBoundaries(t time.Time) (string, string) {
-
-	var weekStart time.Time
-
-	addDays := func(t time.Time, daysToAdd int) time.Time {
-		return t.AddDate(0, 0, daysToAdd)
-	}
-	calculateWeekEnd := func(t time.Time) time.Time {
-		return addDays(t, 4)
-	}
-
-	switch t.Weekday() {
-	case time.Monday:
-		weekStart = t
-	case time.Tuesday:
-		weekStart = addDays(t, -1)
-	case time.Wednesday:
-		weekStart = addDays(t, -2)
-	case time.Thursday:
-		weekStart = addDays(t, -3)
-	case time.Friday:
-		weekStart = addDays(t, -4)
-	}
-
-	return weekStart.Format(config.DefaultDatePattern), calculateWeekEnd(weekStart).Format(config.DefaultDatePattern)
+	weekStart := t.AddDate(0, 0, int(time.Monday-t.Weekday()))
+	weekEnd := weekStart.AddDate(0, 0, 4)
+	return weekStart.Format(config.DefaultDatePattern), weekEnd.Format(config.DefaultDatePattern)
 }

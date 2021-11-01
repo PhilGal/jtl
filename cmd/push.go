@@ -73,6 +73,7 @@ var creds model.Credentials
 //PushToServer reads report data and logs work on jira server
 func PushToServer(cmd *cobra.Command) {
 	push(cmd, rest.HTTPClient)
+	displayReport()
 }
 
 func push(cmd *cobra.Command, restClient rest.Client) {
