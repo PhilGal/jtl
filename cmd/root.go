@@ -22,6 +22,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var Version string
+
 var rec = logRecord{}
 
 var rootCmd = &cobra.Command{

@@ -10,7 +10,7 @@ import (
 )
 
 func minutesToDurationString(minutes int) string {
-	durationString := time.Duration(time.Duration(minutes) * time.Minute).String()
+	durationString := (time.Duration(minutes) * time.Minute).String()
 	return strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S")
 }
 
