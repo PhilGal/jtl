@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/philgal/jtl/cmd/internal/config"
@@ -49,11 +50,15 @@ func Execute() {
 	}
 }
 
+var dataFilePathFlag string
+
 func init() {
+	log.Println("Initializing configs...")
+	configFilePathFlag := rootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.jtl/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&dataFilePathFlag, "data", "", "data file (default is $HOME/data/<month-year>.csv)")
+	config.SetConfigFilePath(*configFilePathFlag)
+	log.Printf("Data file path from the flag: %s\n", dataFilePathFlag)
+	config.SetDataFilePath(dataFilePathFlag)
 	cobra.OnInitialize(config.Init)
 	cobra.OnInitialize(config.InitDataFile)
-	configFilePathFlag := rootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.jtl/config.yaml)")
-	dataFilePathFlag := rootCmd.PersistentFlags().String("data", "", "data file (default is $HOME/data/<month-year>.csv)")
-	config.SetConfigFilePath(*configFilePathFlag)
-	config.SetDataFilePath(*dataFilePathFlag)
 }

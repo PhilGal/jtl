@@ -29,6 +29,7 @@ func SetConfigFilePath(p string) {
 }
 
 func SetDataFilePath(p string) {
+	log.Printf("Setting data file from config: %s", p)
 	dataFile = p
 }
 
@@ -94,10 +95,12 @@ func InitDataFile() {
 	}
 
 	if dataFile == "" {
+		log.Printf("Data file is not found: creating a new one!")
 		createNewDataFile()
 	} else {
+		log.Printf("Using existing data file %s\n", dataFile)
 		if !fileExists(dataFile) {
-			fmt.Println("Provided data file doesn't exist. Default one will be used.")
+			log.Printf("Provided data file doesn't exist. Default one will be used.")
 			createNewDataFile()
 		}
 	}
