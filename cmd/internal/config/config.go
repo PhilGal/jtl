@@ -112,7 +112,7 @@ func GenerateDataFileName() string {
 	return fmt.Sprintf("%v.csv", now.Format("Jan-2006"))
 }
 
-//GenerateDataFileName returns today's default datafile name without path.
+//GetCurrentDataFileName returns current datafile name without path.
 func GetCurrentDataFileName() string {
 	dataFile = viper.GetString("data")
 	return dataFile[strings.LastIndex(dataFile, "/")+1:]
