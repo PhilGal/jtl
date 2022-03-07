@@ -57,6 +57,6 @@ func init() {
 	cobra.OnInitialize(config.InitDataFile)
 	rootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.jtl/config.yaml)")
 	rootCmd.PersistentFlags().String("data", "", "data file (default is $HOME/data/<month-year>.csv)")
-	viper.BindPFlag("data", rootCmd.PersistentFags().Lookup("data"))
+	viper.BindPFlag("data", rootCmd.PersistentFlags().Lookup("data"))
 	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 }
