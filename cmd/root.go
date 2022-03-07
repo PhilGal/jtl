@@ -20,6 +20,7 @@ import (
 
 	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var Version string
@@ -54,8 +55,8 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(config.Init)
 	cobra.OnInitialize(config.InitDataFile)
-	configFilePathFlag := rootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.jtl/config.yaml)")
-	dataFilePathFlag := rootCmd.PersistentFlags().String("data", "", "data file (default is $HOME/data/<month-year>.csv)")
-	config.SetConfigFilePath(*configFilePathFlag)
-	config.SetDataFilePath(*dataFilePathFlag)
+	rootCmd.PersistentFlags().String("config", "", "config file (default is $HOME/.jtl/config.yaml)")
+	rootCmd.PersistentFlags().String("data", "", "data file (default is $HOME/data/<month-year>.csv)")
+	viper.BindPFlag("data", rootCmd.PersistentFlags().Lookup("data"))
+	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 }

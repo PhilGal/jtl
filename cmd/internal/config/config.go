@@ -39,6 +39,7 @@ const (
 )
 
 func Init() {
+	cfgFile = viper.GetString("config")
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
@@ -93,6 +94,7 @@ func InitDataFile() {
 		dataFile = f
 	}
 
+	dataFile = viper.GetString("data")
 	if dataFile == "" {
 		createNewDataFile()
 	} else {
