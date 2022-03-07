@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -87,7 +88,7 @@ func InitDataFile() {
 	dataFileHeader := viper.GetString("dataFileHeader")
 	createNewDataFile := func() {
 		dataDir := path.Join(homeDir(), ".jtl", "data")
-		f := path.Join(dataDir, DataFileName())
+		f := path.Join(dataDir, GenerateDataFileName())
 		createDirIfNotExists(dataDir)
 		createFileIfNotExists(f, dataFileHeader)
 		//upgrade file to full path in context
@@ -105,10 +106,16 @@ func InitDataFile() {
 	}
 }
 
-//DataFileName returns today's default datafile name without path.
-func DataFileName() string {
+//GenerateDataFileName returns today's default datafile name without path.
+func GenerateDataFileName() string {
 	now := time.Now()
 	return fmt.Sprintf("%v.csv", now.Format("Jan-2006"))
+}
+
+//GenerateDataFileName returns today's default datafile name without path.
+func GetCurrentDataFileName() string {
+	dataFile = viper.GetString("data")
+	return dataFile[strings.LastIndex(dataFile, "/")+1:]
 }
 
 func createDirIfNotExists(path string) {
