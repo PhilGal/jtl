@@ -14,17 +14,19 @@ import (
 
 //DailyReport represents a daily report
 type DailyReport struct {
+	showAll            bool
 	totalTasks         int
 	timeSpentInMinutes int
 	csvRecords         data.CsvRecords
 }
 
 //NewDailyReport creates new report from the given CsvRecords
-func NewDailyReport(csvRecords data.CsvRecords) *DailyReport {
+func NewDailyReport(csvRecords data.CsvRecords, showAll bool) *DailyReport {
 	dr := &DailyReport{}
+	dr.showAll = showAll
 	dr.csvRecords = csvRecords
 	for _, r := range csvRecords {
-		if !data.TodaysRowsCsvRecordPredicate(r) {
+		if !showAll && !data.TodaysRowsCsvRecordPredicate(r) {
 			continue
 		}
 		dr.totalTasks++
@@ -50,7 +52,7 @@ func (r *DailyReport) Print() {
 	t.AppendHeader(table.Row{"started at", "ticket", "time tracked", "comment", "pushed to Jira?"})
 	var totalPushed int
 	for _, rec := range r.csvRecords {
-		if !data.TodaysRowsCsvRecordPredicate(rec) {
+		if !r.showAll && !data.TodaysRowsCsvRecordPredicate(rec) {
 			continue
 		}
 		//TODO: extract

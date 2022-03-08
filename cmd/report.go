@@ -27,28 +27,32 @@ var reportCmd = &cobra.Command{
 	Use:   "report",
 	Short: "Displays summarized report for data file",
 	Run: func(cmd *cobra.Command, args []string) {
-		displayReport()
+		displayAll, _ := cmd.Flags().GetBool("all")
+		if displayAll {
+			displayAllRecords()
+		} else {
+			displayReport()
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(reportCmd)
+	reportCmd.Flags().BoolP("all", "a", false, "Display all records from the current data file")
 }
 
-type aliasReport struct {
-	alias      string
-	totalTime  string //30h
-	totalTasks int
+func displayAllRecords() {
+	csv := data.NewCsvFile(config.DataFilePath())
+	csv.ReadAll()
+	dailyRecords := report.NewDailyReport(csv.Records, true)
+	dailyRecords.Print()
 }
-
-var monthlyReport *report.MonthlyReport
-var dailyReport *report.DailyReport
 
 func displayReport() {
 	csv := data.NewCsvFile(config.DataFilePath())
 	csv.ReadAll()
 	reports := []report.Printable{
-		report.NewDailyReport(csv.Records),
+		report.NewDailyReport(csv.Records, false),
 		report.NewMonthlyReport(csv.Records),
 	}
 	for _, report := range reports {

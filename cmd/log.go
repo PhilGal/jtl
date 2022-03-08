@@ -16,8 +16,8 @@ package cmd
 
 import (
 	"log"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/cmd/internal/data"

@@ -114,7 +114,6 @@ func GenerateDataFileName() string {
 
 //GetCurrentDataFileName returns current datafile name without path.
 func GetCurrentDataFileName() string {
-	dataFile = viper.GetString("data")
 	return dataFile[strings.LastIndex(dataFile, "/")+1:]
 }
 
