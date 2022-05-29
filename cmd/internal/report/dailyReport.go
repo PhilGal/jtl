@@ -38,18 +38,6 @@ func NewDailyReport(csvRecords data.CsvRecords, showAll bool) *DailyReport {
 	return dr
 }
 
-func addTimeSpent(r data.CsvRecord, timeSpentInMinutes int) int {
-	tsm, err := timeSpentToMinutes(r.TimeSpent)
-	if err != nil {
-		log.Fatalf("Error: %v", err)
-	}
-	return timeSpentInMinutes + tsm
-}
-
-func (r *DailyReport) timeSpent(minutes int) string {
-	return minutesToDurationString(minutes)
-}
-
 //Print displays DailyReport to stdout in a form of formatted a table with a header, rows for individual logs, and a summary row.
 //It also displays if the log item has been pushed to the Jira server, and number of pushed records out of all today's logs
 func (r *DailyReport) Print() {
@@ -80,4 +68,16 @@ func (r *DailyReport) Print() {
 		fmt.Sprintf("%v/%v", totalPushed, r.totalTasks), //pushed to jira
 	})
 	t.Render()
+}
+
+func addTimeSpent(r data.CsvRecord, timeSpentInMinutes int) int {
+	tsm, err := durationToMinutes(r.TimeSpent)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+	return timeSpentInMinutes + tsm
+}
+
+func (r *DailyReport) timeSpent(minutes int) string {
+	return minutesToDurationString(minutes)
 }

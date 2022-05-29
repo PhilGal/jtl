@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/philgal/jtl/cmd/internal/config"
 )
@@ -14,32 +15,33 @@ func minutesToDurationString(minutes int) string {
 	return strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S")
 }
 
-func timeSpentToMinutes(timeSpent string) (int, error) {
+//durationToMinutes converts string duration d "2D", "4h", "2H 30m", "1d 7h 40m", etc, to minutes.
+//if it fails to process a duration, it returns (-1, error)
+func durationToMinutes(d string) (int, error) {
+	duration := strings.ToLower(d)
 
-	//2d, 4h, 2h 30m, 1d 7h 40m
-	//TODO add restrictions for 1h = 60m, ...
-	sub := strings.SplitN(timeSpent, " ", 2)
+	sub := strings.SplitN(duration, " ", 2)
 	if len(sub) > 1 {
-		v0, err := timeSpentToMinutes(sub[0])
+		v0, err := durationToMinutes(sub[0])
 		if err != nil {
 			return 0, err
 		}
-		v1, err := timeSpentToMinutes(sub[1])
+		v1, err := durationToMinutes(sub[1])
 		return v0 + v1, err
 	}
-	//1 working day = 8h
-	value, _ := strconv.Atoi(strings.TrimRight(timeSpent, "dhm"))
-	hour := 60
-	day := hour * 8
-	if strings.HasSuffix(timeSpent, "d") {
-		value = day * value
-	} else if strings.HasSuffix(timeSpent, "h") {
-		value = hour * value
-	} else if strings.HasSuffix(timeSpent, "m") {
-	} else {
-		return 0, fmt.Errorf("")
+	//TODO add restrictions for 1h = 60m, ...
+	durationValue, _ := strconv.Atoi(strings.TrimRight(duration, "dhm"))
+	durationUnit, _ := utf8.DecodeLastRuneInString(duration)
+	switch durationUnit {
+	case 'd':
+		return 8 * 60 * durationValue, nil //consider one working day = 8h
+	case 'h':
+		return 60 * durationValue, nil
+	case 'm':
+		return durationValue, nil
+	default:
+		return -1, fmt.Errorf("Invalid duration unit: %c", durationUnit)
 	}
-	return value, nil
 }
 
 func weekBoundaries(t time.Time) (string, string) {

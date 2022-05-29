@@ -31,7 +31,7 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 		if r.IsPushed() {
 			wr.pushedTasks++
 		}
-		tsm, err := timeSpentToMinutes(r.TimeSpent)
+		tsm, err := durationToMinutes(r.TimeSpent)
 		if err != nil {
 			log.Println("Unable to convert timeSpent to minutes!", err)
 		}
