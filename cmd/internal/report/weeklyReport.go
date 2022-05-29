@@ -1,6 +1,6 @@
 package report
 
-//WeeklyReport represents a weekly report
+//WeeklyReport represents a summary of tickets logged in a week, including tracked hours and number of pushed to Jira
 type WeeklyReport struct {
 	weekStart    string
 	weekEnd      string

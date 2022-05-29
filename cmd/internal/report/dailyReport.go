@@ -12,14 +12,14 @@ import (
 	"github.com/philgal/jtl/cmd/internal/data"
 )
 
-//DailyReport represents a daily report
+//DailyReport represents a day summary and individual logged tickets
 type DailyReport struct {
 	totalTasks         int
 	timeSpentInMinutes int
 	csvRecords         data.CsvRecords
 }
 
-//NewDailyReport creates new report from the given CsvRecords
+//NewDailyReport generates DailyReport by extracting today's data from all of records in the provided data CSV
 func NewDailyReport(csvRecords data.CsvRecords) *DailyReport {
 	dr := &DailyReport{}
 	dr.csvRecords = csvRecords
@@ -33,7 +33,6 @@ func NewDailyReport(csvRecords data.CsvRecords) *DailyReport {
 			log.Fatalf("Error: %v", err)
 		}
 		dr.timeSpentInMinutes += tsm
-		// }
 	}
 	return dr
 }
@@ -42,7 +41,8 @@ func (r *DailyReport) timeSpent() string {
 	return minutesToDurationString(r.timeSpentInMinutes)
 }
 
-//Print implements Printable
+//Print displays DailyReport to stdout in a form of formatted a table with a header, rows for individual logs, and a summary row.
+//It also displays if the log item has been pushed to the Jira server, and number of pushed records out of all today's logs
 func (r *DailyReport) Print() {
 	log.Println(r)
 	t := table.NewWriter()
@@ -53,7 +53,6 @@ func (r *DailyReport) Print() {
 		if !data.TodaysRowsCsvRecordPredicate(rec) {
 			continue
 		}
-		//TODO: extract
 		var isPushed string
 		if rec.IsPushed() {
 			isPushed = "Y"
