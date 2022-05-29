@@ -14,31 +14,40 @@ import (
 
 //DailyReport represents a day summary and individual logged tickets
 type DailyReport struct {
-	totalTasks         int
-	timeSpentInMinutes int
-	csvRecords         data.CsvRecords
+	showAll                 bool
+	tasksToday              int
+	totalTasks              int
+	timeSpentInMinutesToday int
+	timeSpentInMinutes      int
+	csvRecords              data.CsvRecords
 }
 
-//NewDailyReport generates DailyReport by extracting today's data from all of records in the provided data CSV
-func NewDailyReport(csvRecords data.CsvRecords) *DailyReport {
+//NewDailyReport generates DailyReport by extracting today's data from all records in the provided data CSV.
+func NewDailyReport(csvRecords data.CsvRecords, showAll bool) *DailyReport {
 	dr := &DailyReport{}
+	dr.showAll = showAll
 	dr.csvRecords = csvRecords
 	for _, r := range csvRecords {
-		if !data.TodaysRowsCsvRecordPredicate(r) {
-			continue
+		if data.TodaysRowsCsvRecordPredicate(r) {
+			dr.tasksToday++
+			dr.timeSpentInMinutesToday = addTimeSpent(r, dr.timeSpentInMinutesToday)
 		}
 		dr.totalTasks++
-		tsm, err := timeSpentToMinutes(r.TimeSpent)
-		if err != nil {
-			log.Fatalf("Error: %v", err)
-		}
-		dr.timeSpentInMinutes += tsm
+		dr.timeSpentInMinutes = addTimeSpent(r, dr.timeSpentInMinutes)
 	}
 	return dr
 }
 
-func (r *DailyReport) timeSpent() string {
-	return minutesToDurationString(r.timeSpentInMinutes)
+func addTimeSpent(r data.CsvRecord, timeSpentInMinutes int) int {
+	tsm, err := timeSpentToMinutes(r.TimeSpent)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+	return timeSpentInMinutes + tsm
+}
+
+func (r *DailyReport) timeSpent(minutes int) string {
+	return minutesToDurationString(minutes)
 }
 
 //Print displays DailyReport to stdout in a form of formatted a table with a header, rows for individual logs, and a summary row.
@@ -47,10 +56,10 @@ func (r *DailyReport) Print() {
 	log.Println(r)
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"started at", "ticket", "time tracked", "comment", "pushed to Jira?"})
+	t.AppendHeader(table.Row{"started at", "ticket", "time tracked (today)", "comment", "pushed to Jira? (today)"})
 	var totalPushed int
 	for _, rec := range r.csvRecords {
-		if !data.TodaysRowsCsvRecordPredicate(rec) {
+		if !r.showAll && !data.TodaysRowsCsvRecordPredicate(rec) {
 			continue
 		}
 		var isPushed string
@@ -63,6 +72,12 @@ func (r *DailyReport) Print() {
 		t.AppendRow(table.Row{rec.StartedTs, rec.Ticket, rec.TimeSpent, rec.Comment, isPushed})
 	}
 
-	t.AppendFooter(table.Row{"today: " + time.Now().Format(config.DefaultDatePattern), "", r.timeSpent(), "", fmt.Sprintf("%v/%v", totalPushed, r.totalTasks)})
+	t.AppendFooter(table.Row{
+		"today: " + time.Now().Format(config.DefaultDatePattern),
+		"", //ticket
+		fmt.Sprintf("%v (%v)", r.timeSpent(r.timeSpentInMinutes), r.timeSpent(r.timeSpentInMinutesToday)), //time tracked
+		"", //comment
+		fmt.Sprintf("%v/%v", totalPushed, r.totalTasks), //pushed to jira
+	})
 	t.Render()
 }

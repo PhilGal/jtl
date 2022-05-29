@@ -53,7 +53,7 @@ func (r *MonthlyReport) Print() {
 			wr.totalTime(),
 		})
 	}
-	t.AppendFooter(table.Row{"Total for:" + config.DataFileName(), r.totalTasks(), r.totalTime()})
+	t.AppendFooter(table.Row{"Total for: " + config.GetCurrentDataFileName(), r.totalTasks(), r.totalTime()})
 	t.Render()
 }
 
