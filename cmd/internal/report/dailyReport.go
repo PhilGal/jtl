@@ -63,9 +63,11 @@ func (r *DailyReport) Print() {
 	t.AppendFooter(table.Row{
 		"today: " + time.Now().Format(config.DefaultDatePattern),
 		"", //ticket
-		fmt.Sprintf("%v (%v)", r.timeSpent(r.timeSpentInMinutes), r.timeSpent(r.timeSpentInMinutesToday)), //time tracked
+		fmt.Sprintf("%v (%v)",
+			minutesToDurationString(r.timeSpentInMinutes),
+			minutesToDurationString(r.timeSpentInMinutesToday)), //time tracked
 		"", //comment
-		fmt.Sprintf("%v/%v", totalPushed, r.totalTasks), //pushed to jira
+		fmt.Sprintf("%v/%v", totalPushed, r.tasksToday), //pushed to jira
 	})
 	t.Render()
 }
@@ -76,8 +78,4 @@ func addTimeSpent(r data.CsvRecord, timeSpentInMinutes int) int {
 		log.Fatalf("Error: %v", err)
 	}
 	return timeSpentInMinutes + tsm
-}
-
-func (r *DailyReport) timeSpent(minutes int) string {
-	return minutesToDurationString(minutes)
 }

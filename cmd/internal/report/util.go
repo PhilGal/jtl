@@ -11,6 +11,9 @@ import (
 )
 
 func minutesToDurationString(minutes int) string {
+	if minutes <= 0 {
+		return "0m"
+	}
 	durationString := (time.Duration(minutes) * time.Minute).String()
 	return strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S")
 }
@@ -40,7 +43,7 @@ func durationToMinutes(d string) (int, error) {
 	case 'm':
 		return durationValue, nil
 	default:
-		return -1, fmt.Errorf("Invalid duration unit: %c", durationUnit)
+		return -1, fmt.Errorf("invalid duration unit: %c", durationUnit)
 	}
 }
 

@@ -16,11 +16,16 @@ import (
 type MonthlyReport struct {
 	weeklyReports      []*WeeklyReport
 	reportsByWeekStart map[string]*WeeklyReport
+	totalMinutes       int
+	totalTasks         int
+	totalTasksPushed   int
 }
 
 //NewMonthlyReport generates MonthlyReport by extracting weekly-grouped items from all records in the provided data CSV
 func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 	mr := &MonthlyReport{}
+	//Create weekly reports.
+	//Iterate by CSV rows and append new weekly reports based on weekStart/weekEnd dates deducted from the individual records
 	for _, r := range csvRecords {
 		startedTs, _ := time.ParseInLocation(config.DefaultDateTimePattern, r.StartedTs, time.Local)
 		weekStart, weekEnd := weekBoundaries(startedTs)
@@ -36,7 +41,12 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 			log.Println("Unable to convert timeSpent to minutes!", err)
 		}
 		wr.totalMinutes += tsm
-		// wr.hoursLeft = wr._dueHours - wr.totalHours
+	}
+	//Summarize totals from weekly reports
+	for _, wr := range mr.weeklyReports {
+		mr.totalMinutes += wr.totalMinutes
+		mr.totalTasks += wr.totalTasks
+		mr.totalTasksPushed += wr.pushedTasks
 	}
 	return mr
 }
@@ -45,32 +55,20 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 func (r *MonthlyReport) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"Week", "Total tasks", "Total time"})
+	t.AppendHeader(table.Row{"Week", "Total tasks (pushed)", "Total time"})
 	for _, wr := range r.weeklyReports {
 		t.AppendRow([]interface{}{
 			fmt.Sprintf("%v - %v", wr.weekStart, wr.weekEnd),
-			fmt.Sprintf("%v (%v pushed)", wr.totalTasks, wr.pushedTasks),
-			wr.totalTime(),
+			fmt.Sprintf("%v (%v)", wr.totalTasks, wr.pushedTasks),
+			minutesToDurationString(wr.totalMinutes),
 		})
 	}
-	t.AppendFooter(table.Row{"Total for: " + config.GetCurrentDataFileName(), r.totalTasks(), r.totalTime()})
+	t.AppendFooter(table.Row{
+		"Total for: " + config.GetCurrentDataFileName(),
+		fmt.Sprintf("%v (%v)", r.totalTasks, r.totalTasksPushed),
+		minutesToDurationString(r.totalMinutes),
+	})
 	t.Render()
-}
-
-func (r *MonthlyReport) totalTime() string {
-	var totalMinutes int
-	for _, wr := range r.weeklyReports {
-		totalMinutes += wr.totalMinutes
-	}
-	return minutesToDurationString(totalMinutes)
-}
-
-func (r *MonthlyReport) totalTasks() int {
-	var totalTasks int
-	for _, wr := range r.weeklyReports {
-		totalTasks += wr.totalTasks
-	}
-	return totalTasks
 }
 
 func (r *MonthlyReport) weeklyReportByWeekStart(date string) *WeeklyReport {
