@@ -83,6 +83,9 @@ func Test_NewMonthlyReport(t *testing.T) {
 						totalTasks:   1,
 					},
 				},
+				totalMinutes:     775, //755 + 20
+				totalTasks:       3,
+				totalTasksPushed: 0,
 			},
 		},
 	}
@@ -90,6 +93,9 @@ func Test_NewMonthlyReport(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewMonthlyReport(tt.csvRecords)
+			assert.Equal(tt.want.totalMinutes, got.totalMinutes)
+			assert.Equal(tt.want.totalTasks, got.totalTasks)
+			assert.Equal(tt.want.totalTasksPushed, got.totalTasksPushed)
 			assert.Equal(2, len(got.weeklyReports))
 			for idx, wr := range tt.want.weeklyReports {
 				assert.Exactly(wr, got.weeklyReports[idx])
