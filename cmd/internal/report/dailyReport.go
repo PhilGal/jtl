@@ -2,6 +2,7 @@ package report
 
 import (
 	"fmt"
+	"github.com/philgal/jtl/util"
 	"log"
 	"os"
 	"time"
@@ -64,8 +65,8 @@ func (r *DailyReport) Print() {
 		"today: " + time.Now().Format(config.DefaultDatePattern),
 		"", //ticket
 		fmt.Sprintf("%v (%v)",
-			minutesToDurationString(r.timeSpentInMinutes),
-			minutesToDurationString(r.timeSpentInMinutesToday)), //time tracked
+			util.MinutesToDurationString(r.timeSpentInMinutes),
+			util.MinutesToDurationString(r.timeSpentInMinutesToday)), //time tracked
 		"", //comment
 		fmt.Sprintf("%v/%v", totalPushed, r.tasksToday), //pushed to jira
 	})
@@ -73,9 +74,9 @@ func (r *DailyReport) Print() {
 }
 
 func addTimeSpent(r data.CsvRecord, timeSpentInMinutes int) int {
-	tsm, err := durationToMinutes(r.TimeSpent)
+	tsm, err := util.DurationToMinutes(r.TimeSpent)
 	if err != nil {
-		log.Fatalf("Error: %v", err)
+		log.Fatalf("Cannot open a report. Error: %v", err)
 	}
 	return timeSpentInMinutes + tsm
 }

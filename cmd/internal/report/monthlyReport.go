@@ -2,6 +2,7 @@ package report
 
 import (
 	"fmt"
+	"github.com/philgal/jtl/util"
 	"log"
 	"os"
 	"time"
@@ -36,7 +37,7 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 		if r.IsPushed() {
 			wr.pushedTasks++
 		}
-		tsm, err := durationToMinutes(r.TimeSpent)
+		tsm, err := util.DurationToMinutes(r.TimeSpent)
 		if err != nil {
 			log.Println("Unable to convert timeSpent to minutes!", err)
 		}
@@ -60,13 +61,13 @@ func (r *MonthlyReport) Print() {
 		t.AppendRow([]interface{}{
 			fmt.Sprintf("%v - %v", wr.weekStart, wr.weekEnd),
 			fmt.Sprintf("%v (%v)", wr.totalTasks, wr.pushedTasks),
-			minutesToDurationString(wr.totalMinutes),
+			util.MinutesToDurationString(wr.totalMinutes),
 		})
 	}
 	t.AppendFooter(table.Row{
 		"Total for: " + config.GetCurrentDataFileName(),
 		fmt.Sprintf("%v (%v)", r.totalTasks, r.totalTasksPushed),
-		minutesToDurationString(r.totalMinutes),
+		util.MinutesToDurationString(r.totalMinutes),
 	})
 	t.Render()
 }

@@ -67,7 +67,7 @@ func NewCsvRecord(rec []string) (CsvRecord, error) {
 
 	if err := validation.Validate.Struct(csvRec); err != nil {
 		validationError := err.(validator.ValidationErrors)
-		return CsvRecord{}, fmt.Errorf("Invalid CsvRecord! %q", validationError)
+		return CsvRecord{}, fmt.Errorf("invalid CsvRecord! %q", validationError)
 	}
 
 	return csvRec, nil
@@ -125,7 +125,7 @@ var RowsWithoutIDsCsvRecordPredicate = func(r CsvRecord) bool {
 var TodaysRowsCsvRecordPredicate = func(r CsvRecord) bool {
 	startedTs, err := time.Parse(config.DefaultDateTimePattern, r.StartedTs)
 	if err != nil {
-		fmt.Printf("Error! %v", fmt.Errorf("Couldn't parse date, %w", err))
+		fmt.Printf("Error! %v", fmt.Errorf("couldn't parse date \"%s\", %w", r.StartedTs, err))
 		log.Fatalln("Error in TodaysRowsCsvRecordPredicate:", err)
 	}
 	// return startedTs.Truncate(time.Hour).Equal(time.Now().Truncate(time.Hour))

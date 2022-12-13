@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -43,8 +44,8 @@ Ticket values specified in a config will the be logged and pushed.
   -----------------------
 
 Examples:
-  jtl log -j JIRA-101 -t 30m -s "14 Apr 2020 10:00" -m "Comment"
-  jtl log -j l666 -t 1h -s "06 Jun 2020 06:00" -m "Some repeating meeting!"
+  jtl log -j JIRA-101 -t 30m -d "14 Apr 2020 10:00" -m "Comment"
+  jtl log -j l666 -t 1h -d "06 Jun 2020 06:00" -m "Some repeating meeting!"
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		//use App for testing
@@ -90,7 +91,7 @@ func init() {
 	logCmd.Flags().StringP(ticketCmdStr, "j", "", "[Required] Jira ticket. Ticket aliases can be used. See > jtl help log")
 	logCmd.MarkFlagRequired(ticketCmdStr)
 	//todo improve duration parsing
-	logCmd.Flags().StringP(timeCmdStr, "t", "8h", "[Required] Time spent. Default - 8h")
+	logCmd.Flags().StringP(timeCmdStr, "t", "6h", "[Required] Time spent. Default - 6h")
 	logCmd.Flags().StringP(messageCmdStr, "m", "", "Comment to the work log. Will be displayed in Jira. Default - empty")
 	logCmd.Flags().StringP(dateCmdStr, "d", time.Now().Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
 }
@@ -108,5 +109,6 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 		csv.ReadAll()
 		csv.AddRecord(newRec)
 		csv.Write()
+		fmt.Printf("Added 1 record: %+v", newRec)
 	}
 }

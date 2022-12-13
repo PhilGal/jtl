@@ -15,6 +15,7 @@
 package report
 
 import (
+	"github.com/philgal/jtl/util"
 	"testing"
 
 	"github.com/philgal/jtl/cmd/internal/data"
@@ -36,7 +37,7 @@ func Test_timeSpentToMinutes(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := durationToMinutes(tt.timeSpent)
+			got, err := util.DurationToMinutes(tt.timeSpent)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("timeSpentToMinutes() error = %v, wantErr %v", err, tt.wantErr)
 				return
