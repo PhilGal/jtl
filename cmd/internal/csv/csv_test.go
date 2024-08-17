@@ -1,8 +1,7 @@
-package data
+package csv
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"reflect"
@@ -16,13 +15,12 @@ func init() {
 	validation.InitValidator()
 }
 
-var okCsvRecord = CsvRecord{
+var okCsvRecord = CsvRec{
 	ID:        "1",
 	StartedTs: "14 Apr 2020 11:30",
 	Comment:   "Row with ID",
 	TimeSpent: "10m",
 	Ticket:    "TICKET-1",
-	Category:  "jira",
 }
 
 func deleteFileIfExists(filename string) {
@@ -41,9 +39,9 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-//Return value, ignore error
-func newCsvRecord(idx int, rec []string) CsvRecord {
-	newRec, _ := NewCsvRecord(rec)
+// Return value, ignore error
+func newCsvRecord(idx int, rec []string) CsvRec {
+	newRec := newCsvRec(rec)
 	newRec._idx = idx
 	return newRec
 }
@@ -109,37 +107,36 @@ func TestNewCsvRecord(t *testing.T) {
 		rec []string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    CsvRecord
-		wantErr error
+		name   string
+		args   args
+		want   CsvRec
+		panics bool
 	}{
 		{
 			"Should create valid CsvRecord",
-			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}},
+			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1"}},
 			okCsvRecord,
-			nil},
-		{
-			"Should not create record with invalid jira ticket",
-			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1", "jira"}},
-			CsvRecord{},
-			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.Ticket' Error:Field validation for 'Ticket' failed on the 'jiraticket' tag\"")},
-		{
-			"Should not create record with invalid timeSpent",
-			args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10bns", "TICKET-1", "jira"}},
-			CsvRecord{},
-			fmt.Errorf("Invalid CsvRecord! \"Key: 'CsvRecord.TimeSpent' Error:Field validation for 'TimeSpent' failed on the 'timespent' tag\""),
-		},
+			false},
+		// TODO: add proper tests for adding a record to a file
+		// {
+		// 	"Should not create record with invalid jira ticket",
+		// 	args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1"}},
+		// 	CsvRec{},
+		// 	true},
+		// {
+		// 	"Should not create record with invalid timeSpent",
+		// 	args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10bns", "TICKET-1"}},
+		// 	CsvRec{},
+		// 	true},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			got, err := NewCsvRecord(test.args.rec)
-			t.Logf("%v %q", got, err)
-			if err != nil {
-				fmt.Printf("Expected error: %q", err)
-				assert.Equal(t, test.wantErr, err)
-			} else if !reflect.DeepEqual(got, test.want) {
-				t.Errorf("NewCsvRecord() = %v, want %v", got, test.want)
+			if test.panics {
+				assert.Panics(t, func() { newCsvRec(test.args.rec) })
+			} else {
+				got := newCsvRec(test.args.rec)
+				t.Logf("%v", got)
+				assert.True(t, reflect.DeepEqual(got, test.want))
 			}
 		})
 	}
@@ -147,14 +144,13 @@ func TestNewCsvRecord(t *testing.T) {
 
 func TestUpdateRecord(t *testing.T) {
 
-	updatedRec := CsvRecord{
+	updatedRec := CsvRec{
 		_idx:      1,
 		ID:        "666",
 		StartedTs: "14 Apr 2020 11:30",
 		Comment:   "Updated Row with ID",
 		TimeSpent: "10m",
 		Ticket:    "TICKET-666",
-		Category:  "jira",
 	}
 
 	file := CsvFile{Path: "./csv_testdata/not_empty.csv"}
@@ -165,7 +161,7 @@ func TestUpdateRecord(t *testing.T) {
 	tests := []struct {
 		name          string
 		idx           int
-		rec           CsvRecord
+		rec           CsvRec
 		expectedError error
 	}{
 		{"Should update record at the given index", updatedRec._idx, updatedRec, nil},

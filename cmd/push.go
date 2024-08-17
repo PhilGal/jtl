@@ -20,7 +20,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -29,12 +29,12 @@ import (
 	"time"
 
 	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/csv"
 	"github.com/philgal/jtl/cmd/internal/model"
 	"github.com/philgal/jtl/cmd/internal/rest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 // pushCmd represents the push command
@@ -62,7 +62,6 @@ The preview output contains host, username and prepared requests bodies for POST
 
 func init() {
 	rootCmd.AddCommand(pushCmd)
-
 	pushCmd.Flags().BoolP("preview", "p", false, "Preview request to be sent to Jira server")
 }
 
@@ -70,14 +69,14 @@ const jiraURLTemplate = "/rest/api/2/issue/%v/worklog"
 
 var creds model.Credentials
 
-//PushToServer reads report data and logs work on jira server
+// PushToServer reads report data and logs work on jira server
 func PushToServer(cmd *cobra.Command) {
 	push(cmd, rest.HTTPClient)
 	displayReport()
 }
 
 func push(cmd *cobra.Command, restClient rest.Client) {
-	csvFile := data.NewCsvFile(config.DataFilePath())
+	csvFile := csv.NewCsvFile(config.DataFilePath())
 	csvFile.ReadAll()
 	jreq := model.NewJiraRequest(&csvFile.Records)
 
@@ -136,7 +135,7 @@ func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restCl
 		fmt.Printf("Failed to send %v: %v\n", req, err)
 	}
 	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -156,7 +155,7 @@ func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restCl
 	wg.Done()
 }
 
-func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords data.CsvRecords) {
+func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords csv.CsvRecords) {
 	if len(resp) == 0 {
 		return
 	}
@@ -188,7 +187,7 @@ func jsonBodyStr(jr *model.JiraRequestRow) string {
 	return fmt.Sprintf(jsonBodyTemplate, jr.Timespent, jr.Comment, convertDateToDateTimeIso(jr.Started))
 }
 
-//convertDateToIDateTimeIso converts date "02 Jan 2006 15:04" to iso "2006-01-02T15:04:05.000-0700"
+// convertDateToIDateTimeIso converts date "02 Jan 2006 15:04" to iso "2006-01-02T15:04:05.000-0700"
 func convertDateToDateTimeIso(date string) string {
 	parsedDate, err := time.ParseInLocation(config.DefaultDateTimePattern, date, time.Local)
 	if err != nil {
@@ -220,7 +219,7 @@ func readCredentials() *model.Credentials {
 	creds.Username, _ = reader.ReadString('\n')
 
 	fmt.Print("Enter Password: ")
-	bytePassword, err := terminal.ReadPassword(0)
+	bytePassword, err := term.ReadPassword(0)
 	if err == nil {
 		fmt.Println("\nError reading password from user: ", err)
 		log.Println("\nError reading password from user: ", err)

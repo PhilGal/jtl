@@ -16,11 +16,12 @@ package cmd
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"os"
 	"testing"
 
-	"github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/csv"
 	"github.com/philgal/jtl/cmd/internal/model"
 	"github.com/philgal/jtl/cmd/internal/rest"
 	"github.com/philgal/jtl/validation"
@@ -42,10 +43,10 @@ var restClient rest.Client
 type MockRestClient struct{}
 
 func (c *MockRestClient) Do(req *http.Request) (*http.Response, error) {
-	jsonb, _ := ioutil.ReadFile("./cmd_testdata/jira_response.json")
+	jsonb, _ := os.ReadFile("./cmd_testdata/jira_response.json")
 	return &http.Response{
 		StatusCode: 201,
-		Body:       ioutil.NopCloser(bytes.NewReader(jsonb)),
+		Body:       io.NopCloser(bytes.NewReader(jsonb)),
 	}, nil
 }
 
@@ -59,7 +60,7 @@ func TestPost(t *testing.T) {
 	// t.Run("Should post correct values", func(t *testing.T) {
 	// 	post()
 	// })
-	csvFile := data.NewCsvFile("./cmd_testdata/not_empty.csv")
+	csvFile := csv.NewCsvFile("./cmd_testdata/not_empty.csv")
 	csvFile.ReadAll()
 
 	t.Run("Should unmarshall correct response", func(t *testing.T) {
@@ -75,7 +76,7 @@ func TestPost(t *testing.T) {
 
 func TestUpdateAfterPost(t *testing.T) {
 
-	csvFile := data.NewCsvFile("./cmd_testdata/not_empty.csv")
+	csvFile := csv.NewCsvFile("./cmd_testdata/not_empty.csv")
 	csvFile.ReadAll()
 
 	t.Run("Should update row with id from response", func(t *testing.T) {

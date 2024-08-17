@@ -9,26 +9,26 @@ import (
 	"github.com/jedib0t/go-pretty/table"
 
 	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/csv"
 )
 
-//DailyReport represents a day summary and individual logged tickets
+// DailyReport represents a day summary and individual logged tickets
 type DailyReport struct {
 	showAll                 bool
 	tasksToday              int
 	totalTasks              int
 	timeSpentInMinutesToday int
 	timeSpentInMinutes      int
-	csvRecords              data.CsvRecords
+	csvRecords              csv.CsvRecords
 }
 
-//NewDailyReport generates DailyReport by extracting today's data from all records in the provided data CSV.
-func NewDailyReport(csvRecords data.CsvRecords, showAll bool) *DailyReport {
+// NewDailyReport generates DailyReport by extracting today's data from all records in the provided data CSV.
+func NewDailyReport(csvRecords csv.CsvRecords, showAll bool) *DailyReport {
 	dr := &DailyReport{}
 	dr.showAll = showAll
 	dr.csvRecords = csvRecords
 	for _, r := range csvRecords {
-		if data.TodaysRowsCsvRecordPredicate(r) {
+		if csv.TodaysRowsCsvRecordPredicate(r) {
 			dr.tasksToday++
 			dr.timeSpentInMinutesToday = addTimeSpent(r, dr.timeSpentInMinutesToday)
 		}
@@ -38,8 +38,8 @@ func NewDailyReport(csvRecords data.CsvRecords, showAll bool) *DailyReport {
 	return dr
 }
 
-//Print displays DailyReport to stdout in a form of formatted a table with a header, rows for individual logs, and a summary row.
-//It also displays if the log item has been pushed to the Jira server, and number of pushed records out of all today's logs
+// Print displays DailyReport to stdout in a form of formatted a table with a header, rows for individual logs, and a summary row.
+// It also displays if the log item has been pushed to the Jira server, and number of pushed records out of all today's logs
 func (r *DailyReport) Print() {
 	log.Println(r)
 	t := table.NewWriter()
@@ -47,7 +47,7 @@ func (r *DailyReport) Print() {
 	t.AppendHeader(table.Row{"started at", "ticket", "time tracked (today)", "comment", "pushed to Jira? (today)"})
 	var totalPushed int
 	for _, rec := range r.csvRecords {
-		if !r.showAll && !data.TodaysRowsCsvRecordPredicate(rec) {
+		if !r.showAll && !csv.TodaysRowsCsvRecordPredicate(rec) {
 			continue
 		}
 		var isPushed string
@@ -72,7 +72,7 @@ func (r *DailyReport) Print() {
 	t.Render()
 }
 
-func addTimeSpent(r data.CsvRecord, timeSpentInMinutes int) int {
+func addTimeSpent(r csv.CsvRec, timeSpentInMinutes int) int {
 	tsm, err := durationToMinutes(r.TimeSpent)
 	if err != nil {
 		log.Fatalf("Error: %v", err)

@@ -17,8 +17,7 @@ package report
 import (
 	"testing"
 
-	"github.com/philgal/jtl/cmd/internal/data"
-
+	"github.com/philgal/jtl/cmd/internal/csv"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -50,7 +49,7 @@ func Test_timeSpentToMinutes(t *testing.T) {
 
 func Test_NewMonthlyReport(t *testing.T) {
 
-	csvRecords := data.CsvRecords{
+	csvRecords := csv.CsvRecords{
 		//week 13-17 Apr
 		{TimeSpent: "3h", Ticket: "JIRA-1", StartedTs: "14 Apr 2020 12:00"},        //"middle" of the week
 		{TimeSpent: "1d 1h 35m", Ticket: "JIRA-1", StartedTs: "17 Apr 2020 12:00"}, //last day of the week
@@ -60,7 +59,7 @@ func Test_NewMonthlyReport(t *testing.T) {
 
 	tests := []struct {
 		name       string
-		csvRecords data.CsvRecords
+		csvRecords csv.CsvRecords
 		want       MonthlyReport
 	}{
 		// TODO: Add test cases

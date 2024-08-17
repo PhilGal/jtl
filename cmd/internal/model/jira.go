@@ -3,7 +3,7 @@ package model
 import (
 	"strings"
 
-	data "github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/csv"
 )
 
 type JiraRequestRow struct {
@@ -20,10 +20,10 @@ func (rr *JiraRequestRow) GetIdx() int {
 
 type JiraRequest []JiraRequestRow
 
-//NewJiraRequest creates JiraRequest from CsvRecords
-func NewJiraRequest(recs *data.CsvRecords) JiraRequest {
+// NewJiraRequest creates JiraRequest from CsvRecords
+func NewJiraRequest(recs *csv.CsvRecords) JiraRequest {
 	jr := JiraRequest{}
-	for _, row := range recs.Filter(data.RowsWithoutIDsCsvRecordPredicate) {
+	for _, row := range recs.Filter(func(r csv.CsvRec) bool { return r.IsPushed() }) {
 		//Rows with IDs are pushed, don't them into request
 		req := JiraRequestRow{
 			_rowIdx:    row.GetIdx(),

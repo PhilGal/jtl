@@ -16,7 +16,7 @@ package cmd
 
 import (
 	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/csv"
 	"github.com/philgal/jtl/cmd/internal/report"
 
 	"github.com/spf13/cobra"
@@ -42,18 +42,18 @@ func init() {
 }
 
 func displayAllRecords() {
-	csv := data.NewCsvFile(config.DataFilePath())
-	csv.ReadAll()
-	dailyRecords := report.NewDailyReport(csv.Records, true)
+	fcsv := csv.NewCsvFile(config.DataFilePath())
+	fcsv.ReadAll()
+	dailyRecords := report.NewDailyReport(fcsv.Records, true)
 	dailyRecords.Print()
 }
 
 func displayReport() {
-	csv := data.NewCsvFile(config.DataFilePath())
-	csv.ReadAll()
+	fcsv := csv.NewCsvFile(config.DataFilePath())
+	fcsv.ReadAll()
 	reports := []report.Printable{
-		report.NewDailyReport(csv.Records, false),
-		report.NewMonthlyReport(csv.Records),
+		report.NewDailyReport(fcsv.Records, false),
+		report.NewMonthlyReport(fcsv.Records),
 	}
 	for _, report := range reports {
 		report.Print()

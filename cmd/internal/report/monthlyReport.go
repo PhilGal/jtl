@@ -9,10 +9,10 @@ import (
 	"github.com/jedib0t/go-pretty/table"
 
 	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/csv"
 )
 
-//MonthlyReport displays a short month summary of log items grouped by weeks of a month
+// MonthlyReport displays a short month summary of log items grouped by weeks of a month
 type MonthlyReport struct {
 	weeklyReports      []*WeeklyReport
 	reportsByWeekStart map[string]*WeeklyReport
@@ -21,8 +21,8 @@ type MonthlyReport struct {
 	totalTasksPushed   int
 }
 
-//NewMonthlyReport generates MonthlyReport by extracting weekly-grouped items from all records in the provided data CSV
-func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
+// NewMonthlyReport generates MonthlyReport by extracting weekly-grouped items from all records in the provided data CSV
+func NewMonthlyReport(csvRecords csv.CsvRecords) *MonthlyReport {
 	mr := &MonthlyReport{}
 	//Create weekly reports.
 	//Iterate by CSV rows and append new weekly reports based on weekStart/weekEnd dates deducted from the individual records
@@ -51,7 +51,7 @@ func NewMonthlyReport(csvRecords data.CsvRecords) *MonthlyReport {
 	return mr
 }
 
-//Print displays a MonthlyReport to stdout in a form of formatted a table with a header, rows for weekly summary, and a total monthly summary row.
+// Print displays a MonthlyReport to stdout in a form of formatted a table with a header, rows for weekly summary, and a total monthly summary row.
 func (r *MonthlyReport) Print() {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)

@@ -36,7 +36,7 @@ func SetDataFilePath(p string) {
 const (
 	DefaultDateTimePattern = "02 Jan 2006 15:04"
 	DefaultDatePattern     = "02 Jan 2006"
-	DataFileHeader         = "id,date,activity,hours,jira,category"
+	DataFileHeader         = "id,date,activity,hours,jira"
 )
 
 func Init() {
@@ -61,7 +61,7 @@ func Init() {
 		viper.SetConfigName(configName)
 		viper.SetConfigType(configType)
 
-		viper.Set("dataFileHeader", "id,date,activity,hours,jira,category")
+		viper.Set("dataFileHeader", "id,date,activity,hours,jira")
 		viper.SetDefault("host", "")
 		viper.SetDefault("credentials", map[string]string{
 			"username": "",
@@ -106,13 +106,13 @@ func InitDataFile() {
 	}
 }
 
-//GenerateDataFileName returns today's default datafile name without path.
+// GenerateDataFileName returns today's default datafile name without path.
 func GenerateDataFileName() string {
 	now := time.Now()
 	return fmt.Sprintf("%v.csv", now.Format("Jan-2006"))
 }
 
-//GetCurrentDataFileName returns current datafile name without path.
+// GetCurrentDataFileName returns current datafile name without path.
 func GetCurrentDataFileName() string {
 	return dataFile[strings.LastIndex(dataFile, "/")+1:]
 }

@@ -25,8 +25,6 @@ import (
 
 var Version string
 
-var rec = logRecord{}
-
 var rootCmd = &cobra.Command{
 	Use:   "jtl",
 	Short: "Jtl is a command-line tool for posting worktime logs to a Jira server",

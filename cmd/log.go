@@ -15,14 +15,11 @@
 package cmd
 
 import (
-	"log"
-	"strings"
 	"time"
 
 	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/data"
+	"github.com/philgal/jtl/cmd/internal/csv"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // logCmd represents the log command
@@ -53,31 +50,6 @@ Examples:
 	},
 }
 
-type logRecord struct {
-	time    string
-	message string
-	date    string
-	ticket  string
-}
-
-func (rec logRecord) asArray() []string {
-	dataRow := make([]string, 6)
-	dataRow[1] = rec.date
-	dataRow[2] = rec.message
-	dataRow[3] = rec.time
-	aliaces := viper.GetStringMapString("alias")
-	log.Print(aliaces)
-	if len(aliaces) > 0 && aliaces[strings.ToLower(rec.ticket)] != "" {
-		dataRow[4] = aliaces[strings.ToLower(rec.ticket)]
-		dataRow[5] = rec.ticket
-	} else {
-		dataRow[4] = rec.ticket
-		dataRow[5] = "jira"
-	}
-	log.Print(dataRow)
-	return dataRow
-}
-
 const (
 	ticketCmdStr  = "ticket"
 	timeCmdStr    = "time"
@@ -96,17 +68,19 @@ func init() {
 }
 
 func runLogCommand(cmd *cobra.Command, args []string) {
-	rec.ticket, _ = cmd.Flags().GetString(ticketCmdStr)
-	rec.time, _ = cmd.Flags().GetString(timeCmdStr)
-	rec.message, _ = cmd.Flags().GetString(messageCmdStr)
-	rec.date, _ = cmd.Flags().GetString(dateCmdStr)
-	newRec, err := data.NewCsvRecord(rec.asArray())
-	if err != nil {
-		log.Fatalln(err)
-	} else {
-		csv := data.NewCsvFile(config.DataFilePath())
-		csv.ReadAll()
-		csv.AddRecord(newRec)
-		csv.Write()
-	}
+	var ticket, timeSpent, date, comment string
+	ticket, _ = cmd.Flags().GetString(ticketCmdStr)
+	timeSpent, _ = cmd.Flags().GetString(timeCmdStr)
+	comment, _ = cmd.Flags().GetString(messageCmdStr)
+	date, _ = cmd.Flags().GetString(dateCmdStr)
+	fcsv := csv.NewCsvFile(config.DataFilePath())
+	fcsv.ReadAll()
+	fcsv.AddRecord(csv.CsvRec{
+		ID:        "",
+		StartedTs: date,
+		Comment:   comment,
+		TimeSpent: timeSpent,
+		Ticket:    ticket,
+	})
+	fcsv.Write()
 }
