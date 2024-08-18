@@ -16,10 +16,12 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"slices"
 	"time"
 
+	"github.com/philgal/jtl/cmd/duration"
 	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/cmd/internal/csv"
 	"github.com/spf13/cobra"
@@ -103,6 +105,28 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 		return atime.Compare(btime)
 	})
 
+	var logDate, _ = time.Parse(config.DefaultDateTimePattern, date)
+	//if dates are equal, count hours
+
+	timeSpentToDate := timeSpentToDateInMin(fcsv, logDate)
+	// for example 500 > 480 -> 20m to log
+	// fixme: make max daily duration configurable
+	if timeSpentToDate >= duration.EIGHT_HOURS_IN_MIN {
+		fmt.Printf("You have already logged %s, will not log more\n", duration.MinutesToDurationString(timeSpentToDate))
+		return
+	}
+	if duration.DurationToMinutes(timeSpent)+timeSpentToDate <= duration.EIGHT_HOURS_IN_MIN {
+		timeSpent = duration.MinutesToDurationString(timeSpentToDate - duration.EIGHT_HOURS_IN_MIN)
+		fmt.Printf("Time spent will is trimmed to %s, to not to exceed %s\n",
+			timeSpent,
+			duration.MinutesToDurationString(duration.EIGHT_HOURS_IN_MIN))
+	}
+	// var sameDateRecs = fcsv.Records.Filter(func(rec csv.CsvRec) bool {
+	// 	recDate, _ := time.Parse(config.DefaultDatePattern, rec.StartedTs)
+	// 	logDate, _ := time.Parse(config.DefaultDatePattern, date)
+	// 	return recDate.Equal(logDate)
+	// })
+
 	fcsv.AddRecord(csv.CsvRec{
 		ID:        "",
 		StartedTs: date,
@@ -113,4 +137,19 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 
 	log.Print(fcsv.Records)
 	fcsv.Write()
+}
+
+func timeSpentToDateInMin(fcsv csv.CsvFile, logDate time.Time) int {
+	var totalTimeSpentOnDate int
+	for _, rec := range slices.Backward(fcsv.Records) {
+		recDate, _ := time.Parse(config.DefaultDateTimePattern, rec.StartedTs)
+		// logs files are already collected by months of the year, so it's enough to compare days
+		if recDate.Day() == logDate.Day() {
+			totalTimeSpentOnDate += duration.DurationToMinutes(rec.TimeSpent)
+		} else {
+			// items are sorted, so first occurrence of mismatched date means there will no more matches.
+			return totalTimeSpentOnDate
+		}
+	}
+	return totalTimeSpentOnDate
 }

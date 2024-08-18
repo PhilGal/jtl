@@ -2,12 +2,12 @@ package report
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 
 	"github.com/jedib0t/go-pretty/table"
 
+	"github.com/philgal/jtl/cmd/duration"
 	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/cmd/internal/csv"
 )
@@ -36,11 +36,7 @@ func NewMonthlyReport(csvRecords csv.CsvRecords) *MonthlyReport {
 		if r.IsPushed() {
 			wr.pushedTasks++
 		}
-		tsm, err := durationToMinutes(r.TimeSpent)
-		if err != nil {
-			log.Println("Unable to convert timeSpent to minutes!", err)
-		}
-		wr.totalMinutes += tsm
+		wr.totalMinutes += duration.DurationToMinutes(r.TimeSpent)
 	}
 	//Summarize totals from weekly reports
 	for _, wr := range mr.weeklyReports {
@@ -60,13 +56,13 @@ func (r *MonthlyReport) Print() {
 		t.AppendRow([]interface{}{
 			fmt.Sprintf("%v - %v", wr.weekStart, wr.weekEnd),
 			fmt.Sprintf("%v (%v)", wr.totalTasks, wr.pushedTasks),
-			minutesToDurationString(wr.totalMinutes),
+			duration.MinutesToDurationString(wr.totalMinutes),
 		})
 	}
 	t.AppendFooter(table.Row{
 		"Total for: " + config.GetCurrentDataFileName(),
 		fmt.Sprintf("%v (%v)", r.totalTasks, r.totalTasksPushed),
-		minutesToDurationString(r.totalMinutes),
+		duration.MinutesToDurationString(r.totalMinutes),
 	})
 	t.Render()
 }
@@ -83,4 +79,10 @@ func (r *MonthlyReport) weeklyReportByWeekStart(date string) *WeeklyReport {
 	r.reportsByWeekStart[date] = &newReport
 	r.weeklyReports = append(r.weeklyReports, &newReport)
 	return &newReport
+}
+
+func weekBoundaries(t time.Time) (string, string) {
+	weekStart := t.AddDate(0, 0, int(time.Monday-t.Weekday()))
+	weekEnd := weekStart.AddDate(0, 0, 4)
+	return weekStart.Format(config.DefaultDatePattern), weekEnd.Format(config.DefaultDatePattern)
 }

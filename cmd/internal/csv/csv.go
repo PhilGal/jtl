@@ -53,10 +53,10 @@ func (r *CsvRec) IsPushed() bool {
 type CsvRecords []CsvRec
 
 // Filter returns a copy of records, filtered using the given recordFilter
-func (recs *CsvRecords) Filter(recordFilter CsvRecordPredicate) CsvRecords {
+func (recs *CsvRecords) Filter(predicate func(CsvRec) bool) CsvRecords {
 	filteredRecs := CsvRecords{}
 	for _, r := range *recs {
-		if recordFilter(r) {
+		if predicate(r) {
 			filteredRecs = append(filteredRecs, r)
 		}
 	}
@@ -82,19 +82,6 @@ type CsvFile struct {
 	Path    string
 	Header  CsvHeader
 	Records CsvRecords
-}
-
-// CsvRecordPredicate used as a condition for rows filtering when reading CSV file
-type CsvRecordPredicate func(CsvRec) bool
-
-// AllRowsCsvRecordPredicate is an always true condition. All rows will be processed
-var AllRowsCsvRecordPredicate = func(r CsvRec) bool {
-	return true
-}
-
-// RowsWithoutIDsCsvRecordPredicate filters rows with IDs. Only rows without IDs will be processed
-var RowsWithoutIDsCsvRecordPredicate = func(r CsvRec) bool {
-	return r.IsPushed()
 }
 
 // TodaysRowsCsvRecordPredicate filters rows with startedTs = today
@@ -136,12 +123,12 @@ func (f *CsvFile) UpdateRecord(idx int, rec CsvRec) error {
 
 // ReadAll reads CSV file from disk with all records
 func (f *CsvFile) ReadAll() {
-	f.Read(AllRowsCsvRecordPredicate)
+	f.Read(func(cr CsvRec) bool { return true })
 }
 
 // ReadAll reads CSV file from disk with records which satisfy recordFilter predicate.
 // Records, not matching the predicate will not be added to CsvFile.Records
-func (f *CsvFile) Read(recordFilter CsvRecordPredicate) {
+func (f *CsvFile) Read(recordFilter func(CsvRec) bool) {
 	fcsv, err := os.Open(f.Path)
 	if err != nil {
 		log.Fatal(err)

@@ -8,6 +8,7 @@ import (
 
 	"github.com/jedib0t/go-pretty/table"
 
+	"github.com/philgal/jtl/cmd/duration"
 	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/cmd/internal/csv"
 )
@@ -64,8 +65,8 @@ func (r *DailyReport) Print() {
 		"today: " + time.Now().Format(config.DefaultDatePattern),
 		"", //ticket
 		fmt.Sprintf("%v (%v)",
-			minutesToDurationString(r.timeSpentInMinutes),
-			minutesToDurationString(r.timeSpentInMinutesToday)), //time tracked
+			duration.MinutesToDurationString(r.timeSpentInMinutes),
+			duration.MinutesToDurationString(r.timeSpentInMinutesToday)), //time tracked
 		"", //comment
 		fmt.Sprintf("%v/%v", totalPushed, r.tasksToday), //pushed to jira
 	})
@@ -73,9 +74,6 @@ func (r *DailyReport) Print() {
 }
 
 func addTimeSpent(r csv.CsvRec, timeSpentInMinutes int) int {
-	tsm, err := durationToMinutes(r.TimeSpent)
-	if err != nil {
-		log.Fatalf("Error: %v", err)
-	}
+	tsm := duration.DurationToMinutes(r.TimeSpent)
 	return timeSpentInMinutes + tsm
 }
