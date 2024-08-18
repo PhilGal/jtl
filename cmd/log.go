@@ -45,7 +45,7 @@ Examples:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		//use App for testing
-		runLogCommand(cmd, args)
+		runLogCommand(cmd)
 		displayReport()
 	},
 }
@@ -61,13 +61,13 @@ func init() {
 	rootCmd.AddCommand(logCmd)
 	logCmd.Flags().StringP(ticketCmdStr, "j", "", "[Required] Jira ticket. Ticket aliases can be used. See > jtl help log")
 	logCmd.MarkFlagRequired(ticketCmdStr)
-	//todo improve duration parsing
-	logCmd.Flags().StringP(timeCmdStr, "t", "8h", "[Required] Time spent. Default - 8h")
+	//todo improve duration parsing 
+	logCmd.Flags().StringP(timeCmdStr, "t", "4h", "[Required] Time spent. Default - 4h")
 	logCmd.Flags().StringP(messageCmdStr, "m", "", "Comment to the work log. Will be displayed in Jira. Default - empty")
 	logCmd.Flags().StringP(dateCmdStr, "d", time.Now().Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
 }
 
-func runLogCommand(cmd *cobra.Command, args []string) {
+func runLogCommand(cmd *cobra.Command) {
 	var ticket, timeSpent, date, comment string
 	ticket, _ = cmd.Flags().GetString(ticketCmdStr)
 	timeSpent, _ = cmd.Flags().GetString(timeCmdStr)
@@ -75,6 +75,15 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 	date, _ = cmd.Flags().GetString(dateCmdStr)
 	fcsv := csv.NewCsvFile(config.DataFilePath())
 	fcsv.ReadAll()
+
+	// total: 4h before pause, 4h after
+	// traverse from most recent record
+	// sum hours logged in the same day as `date`
+	// case =0:  log 4h from 8:45, 4h from 13:00 
+	// case >0:
+
+
+
 	fcsv.AddRecord(csv.CsvRec{
 		ID:        "",
 		StartedTs: date,
