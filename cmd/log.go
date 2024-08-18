@@ -15,6 +15,9 @@
 package cmd
 
 import (
+	"errors"
+	"log"
+	"slices"
 	"time"
 
 	"github.com/philgal/jtl/cmd/internal/config"
@@ -45,7 +48,7 @@ Examples:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		//use App for testing
-		runLogCommand(cmd)
+		runLogCommand(cmd, args)
 		displayReport()
 	},
 }
@@ -59,17 +62,25 @@ const (
 
 func init() {
 	rootCmd.AddCommand(logCmd)
-	logCmd.Flags().StringP(ticketCmdStr, "j", "", "[Required] Jira ticket. Ticket aliases can be used. See > jtl help log")
-	logCmd.MarkFlagRequired(ticketCmdStr)
-	//todo improve duration parsing 
+	//todo improve duration parsing
 	logCmd.Flags().StringP(timeCmdStr, "t", "4h", "[Required] Time spent. Default - 4h")
-	logCmd.Flags().StringP(messageCmdStr, "m", "", "Comment to the work log. Will be displayed in Jira. Default - empty")
+	logCmd.Flags().StringP(messageCmdStr, "m", "wip", "Comment to the work log. Will be displayed in Jira. Default - \"wip\"")
 	logCmd.Flags().StringP(dateCmdStr, "d", time.Now().Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
 }
 
-func runLogCommand(cmd *cobra.Command) {
+func runLogCommand(cmd *cobra.Command, args []string) {
+
+	if len(args) < 1 {
+		log.Fatal("too few arguments")
+	}
+
 	var ticket, timeSpent, date, comment string
-	ticket, _ = cmd.Flags().GetString(ticketCmdStr)
+
+	ticket = args[0]
+	if len(ticket) < 5 {
+		log.Fatalf("invalid ticket %s", ticket)
+	}
+
 	timeSpent, _ = cmd.Flags().GetString(timeCmdStr)
 	comment, _ = cmd.Flags().GetString(messageCmdStr)
 	date, _ = cmd.Flags().GetString(dateCmdStr)
@@ -79,10 +90,18 @@ func runLogCommand(cmd *cobra.Command) {
 	// total: 4h before pause, 4h after
 	// traverse from most recent record
 	// sum hours logged in the same day as `date`
-	// case =0:  log 4h from 8:45, 4h from 13:00 
+	// case =0:  log 4h from 8:45, 4h from 13:00
 	// case >0:
 
-
+	// calculate how much is left of the date
+	slices.SortFunc(fcsv.Records, func(a csv.CsvRec, b csv.CsvRec) int {
+		atime, aerr := time.Parse(config.DefaultDateTimePattern, a.StartedTs)
+		btime, berr := time.Parse(config.DefaultDateTimePattern, b.StartedTs)
+		if err := errors.Join(aerr, berr); err != nil {
+			log.Fatal("cannot compare log records: ", err)
+		}
+		return atime.Compare(btime)
+	})
 
 	fcsv.AddRecord(csv.CsvRec{
 		ID:        "",
@@ -91,5 +110,7 @@ func runLogCommand(cmd *cobra.Command) {
 		TimeSpent: timeSpent,
 		Ticket:    ticket,
 	})
+
+	log.Print(fcsv.Records)
 	fcsv.Write()
 }

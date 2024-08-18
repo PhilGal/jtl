@@ -55,7 +55,7 @@ func TestCsvFile_Write(t *testing.T) {
 		writtenFile := CsvFile{
 			Path:    path,
 			Header:  GetCsvHeader(),
-			Records: CsvRecords{newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1", "jira"})},
+			Records: CsvRecords{newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1"})},
 		}
 		writtenFile.Write()
 
@@ -80,8 +80,8 @@ func TestCsvFile_ReadAll(t *testing.T) {
 				Path:   "./csv_testdata/not_empty.csv",
 				Header: GetCsvHeader(),
 				Records: CsvRecords{
-					newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1", "jira"}),
-					newCsvRecord(1, []string{"", "15 Apr 2020 11:30", "Row without ID", "10m", "TICKET-2", "jira"}),
+					newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1"}),
+					newCsvRecord(1, []string{"", "15 Apr 2020 11:30", "Row without ID", "10m", "TICKET-2"}),
 				},
 			},
 			rowsExpected: 2,
@@ -165,7 +165,7 @@ func TestUpdateRecord(t *testing.T) {
 		expectedError error
 	}{
 		{"Should update record at the given index", updatedRec._idx, updatedRec, nil},
-		{"Should return error if the given index is out of range", idxOutOfBounds, okCsvRecord, errors.New("Index is out of range")},
+		{"Should return error if the given index is out of range", idxOutOfBounds, okCsvRecord, errors.New("index is out of range")},
 	}
 
 	for _, test := range tests {

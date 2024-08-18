@@ -23,7 +23,7 @@ type JiraRequest []JiraRequestRow
 // NewJiraRequest creates JiraRequest from CsvRecords
 func NewJiraRequest(recs *csv.CsvRecords) JiraRequest {
 	jr := JiraRequest{}
-	for _, row := range recs.Filter(func(r csv.CsvRec) bool { return r.IsPushed() }) {
+	for _, row := range recs.Filter(func(r csv.CsvRec) bool { return !r.IsPushed() }) {
 		//Rows with IDs are pushed, don't them into request
 		req := JiraRequestRow{
 			_rowIdx:    row.GetIdx(),

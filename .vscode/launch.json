@@ -12,7 +12,7 @@
             "mode": "auto",
             "program": "${workspaceFolder}",
             "env": {},
-            "args": ["log", "-j","TEST-01", "-t", "30m"]
+            "args": ["log", "TEST-01", "-t", "30m"]
         },
         {
             "name": "jtl push -p",

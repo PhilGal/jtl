@@ -36,7 +36,7 @@ func SetDataFilePath(p string) {
 const (
 	DefaultDateTimePattern = "02 Jan 2006 15:04"
 	DefaultDatePattern     = "02 Jan 2006"
-	DataFileHeader         = "id,date,activity,hours,jira"
+	DataFileHeader         = "id,date,activity,hours"
 )
 
 func Init() {
@@ -61,7 +61,7 @@ func Init() {
 		viper.SetConfigName(configName)
 		viper.SetConfigType(configType)
 
-		viper.Set("dataFileHeader", "id,date,activity,hours,jira")
+		viper.Set("dataFileHeader", "id,date,activity,hours")
 		viper.SetDefault("host", "")
 		viper.SetDefault("credentials", map[string]string{
 			"username": "",

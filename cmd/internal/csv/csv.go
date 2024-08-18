@@ -126,7 +126,7 @@ func (f *CsvFile) AddRecord(rec CsvRec) {
 // UpdateRecord replaces record at the given index with the new record.
 func (f *CsvFile) UpdateRecord(idx int, rec CsvRec) error {
 	if idx < 0 || idx > len(f.Records) {
-		return errors.New("ndex is out of range")
+		return errors.New("index is out of range")
 	}
 	rec._idx = idx
 	f.Records[idx] = rec
