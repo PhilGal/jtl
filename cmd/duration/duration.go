@@ -2,6 +2,7 @@ package duration
 
 import (
 	"fmt"
+	"github.com/philgal/jtl/cmd/internal/config"
 	"strconv"
 	"strings"
 	"time"
@@ -15,7 +16,7 @@ func MinutesToDurationString(minutes int) string {
 		return "0m"
 	}
 	durationString := (time.Duration(minutes) * time.Minute).String()
-	return strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S")
+	return strings.TrimSuffix(strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S"), "0m")
 }
 
 // durationToMinutes converts string duration d "2D", "4h", "2H 30m", "1d 7h 40m", etc, to minutes.
@@ -42,4 +43,14 @@ func DurationToMinutes(d string) int {
 	default:
 		panic(fmt.Sprintf("invalid duration unit: %c", durationUnit))
 	}
+}
+
+func DateTimeToTime(date string) time.Time {
+	t, _ := time.Parse(config.DefaultDateTimePattern, date)
+	return t
+}
+
+func DateTimeToDate(date string) time.Time {
+	d := DateTimeToTime(date).Truncate(24 * time.Hour)
+	return d
 }
