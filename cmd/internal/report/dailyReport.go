@@ -65,8 +65,8 @@ func (r *DailyReport) Print() {
 		"today: " + time.Now().Format(config.DefaultDatePattern),
 		"", //ticket
 		fmt.Sprintf("%v (%v)",
-			duration.MinutesToDurationString(r.timeSpentInMinutes),
-			duration.MinutesToDurationString(r.timeSpentInMinutesToday)), //time tracked
+			duration.ToString(r.timeSpentInMinutes),
+			duration.ToString(r.timeSpentInMinutesToday)), //time tracked
 		"", //comment
 		fmt.Sprintf("%v/%v", totalPushed, r.tasksToday), //pushed to jira
 	})
@@ -74,6 +74,6 @@ func (r *DailyReport) Print() {
 }
 
 func addTimeSpent(r csv.CsvRec, timeSpentInMinutes int) int {
-	tsm := duration.DurationToMinutes(r.TimeSpent)
+	tsm := duration.ToMinutes(r.TimeSpent)
 	return timeSpentInMinutes + tsm
 }

@@ -9,9 +9,13 @@ import (
 	"unicode/utf8"
 )
 
-const EIGHT_HOURS_IN_MIN = 8 * 60
+type Time struct {
+	time.Time
+}
 
-func MinutesToDurationString(minutes int) string {
+const EightHoursInMin = 8 * 60
+
+func ToString(minutes int) string {
 	if minutes <= 0 {
 		return "0m"
 	}
@@ -19,15 +23,15 @@ func MinutesToDurationString(minutes int) string {
 	return strings.TrimSuffix(strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S"), "0m")
 }
 
-// durationToMinutes converts string duration d "2D", "4h", "2H 30m", "1d 7h 40m", etc, to minutes.
+// ToMinutes converts string duration d "2D", "4h", "2H 30m", "1d 7h 40m", etc, to minutes.
 // if it fails to process a duration, it returns (-1, error)
-func DurationToMinutes(d string) int {
+func ToMinutes(d string) int {
 	duration := strings.ToLower(d)
 
 	sub := strings.SplitN(duration, " ", 2)
 	if len(sub) > 1 {
-		v0 := DurationToMinutes(sub[0])
-		v1 := DurationToMinutes(sub[1])
+		v0 := ToMinutes(sub[0])
+		v1 := ToMinutes(sub[1])
 		return v0 + v1
 	}
 	//TODO add restrictions for 1h = 60m, ...
@@ -45,12 +49,23 @@ func DurationToMinutes(d string) int {
 	}
 }
 
-func DateTimeToTime(date string) time.Time {
+// ParseTime converts a string date into time.Time using custom datetime pattern from the config
+func ParseTime(date string) Time {
 	t, _ := time.Parse(config.DefaultDateTimePattern, date)
-	return t
+	return Time{t}
 }
 
-func DateTimeToDate(date string) time.Time {
-	d := DateTimeToTime(date).Truncate(24 * time.Hour)
-	return d
+// ParseTimeTruncatedToDate converts a string date into time.Time using custom datetime pattern from the config, then trims the time part to zeroes
+func ParseTimeTruncatedToDate(date string) Time {
+	return ParseTime(date).TruncateToDate()
+}
+
+func (t Time) TruncateToDate() Time {
+	return Time{t.Truncate(24 * time.Hour)}
+}
+
+// Overrides
+
+func (t Time) Compare(other Time) int {
+	return t.Time.Compare(other.Time)
 }

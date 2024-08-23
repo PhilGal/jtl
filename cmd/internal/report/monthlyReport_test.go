@@ -17,6 +17,7 @@ package report
 import (
 	"testing"
 
+	"github.com/philgal/jtl/cmd/duration"
 	"github.com/philgal/jtl/cmd/internal/csv"
 	"github.com/stretchr/testify/assert"
 )
@@ -27,19 +28,14 @@ func Test_timeSpentToMinutes(t *testing.T) {
 		name      string
 		timeSpent string
 		want      int
-		wantErr   bool
 	}{
-		{"Should parse 1h", "1h", 60, false},
-		{"Should parse 1d 2h", "1d 2h", (8 + 2) * 60, false},
-		{"Should parse 2d 3h 25m", "2d 3h 25m", (16+3)*60 + 25, false},
+		{"Should parse 1h", "1h", 60},
+		{"Should parse 1d 2h", "1d 2h", (8 + 2) * 60},
+		{"Should parse 2d 3h 25m", "2d 3h 25m", (16+3)*60 + 25},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := durationToMinutes(tt.timeSpent)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("timeSpentToMinutes() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			got := duration.ToMinutes(tt.timeSpent)
 			if got != tt.want {
 				t.Errorf("timeSpentToMinutes() = %v, want %v", got, tt.want)
 			}

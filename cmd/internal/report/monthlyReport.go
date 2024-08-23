@@ -36,7 +36,7 @@ func NewMonthlyReport(csvRecords csv.CsvRecords) *MonthlyReport {
 		if r.IsPushed() {
 			wr.pushedTasks++
 		}
-		wr.totalMinutes += duration.DurationToMinutes(r.TimeSpent)
+		wr.totalMinutes += duration.ToMinutes(r.TimeSpent)
 	}
 	//Summarize totals from weekly reports
 	for _, wr := range mr.weeklyReports {
@@ -56,13 +56,13 @@ func (r *MonthlyReport) Print() {
 		t.AppendRow([]interface{}{
 			fmt.Sprintf("%v - %v", wr.weekStart, wr.weekEnd),
 			fmt.Sprintf("%v (%v)", wr.totalTasks, wr.pushedTasks),
-			duration.MinutesToDurationString(wr.totalMinutes),
+			duration.ToString(wr.totalMinutes),
 		})
 	}
 	t.AppendFooter(table.Row{
 		"Total for: " + config.GetCurrentDataFileName(),
 		fmt.Sprintf("%v (%v)", r.totalTasks, r.totalTasksPushed),
-		duration.MinutesToDurationString(r.totalMinutes),
+		duration.ToString(r.totalMinutes),
 	})
 	t.Render()
 }
