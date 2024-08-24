@@ -109,18 +109,18 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 	//if dates are equal, count hours
 	sameDateRecs := sameDateRecords(&fcsv.Records, logDate)
 
-	timeSpentToDate := timeSpentToDateInMin(&sameDateRecs, logDate)
+	minutesSpentToDate := timeSpentToDateInMin(&sameDateRecs, logDate)
 	// for example 500 > 480 -> 20m to log
 	// fixme: make max daily duration configurable
-	if timeSpentToDate >= duration.EightHoursInMin {
-		fmt.Printf("You have already logged %s, will not log more\n", duration.ToString(timeSpentToDate))
+	if minutesSpentToDate >= duration.EightHoursInMin {
+		fmt.Printf("You have already logged %s, will not log more\n", duration.ToString(minutesSpentToDate))
 		return
 	}
 
 	fmt.Printf("Same date records: %v\n", sameDateRecs)
 
-	if duration.ToMinutes(timeSpent)+timeSpentToDate <= duration.EightHoursInMin {
-		timeSpentMin := int(math.Min(float64(duration.EightHoursInMin-timeSpentToDate), duration.EightHoursInMin/2))
+	if duration.ToMinutes(timeSpent)+minutesSpentToDate <= duration.EightHoursInMin {
+		timeSpentMin := int(math.Min(float64(duration.EightHoursInMin-minutesSpentToDate), duration.EightHoursInMin/2))
 		timeSpent = duration.ToString(timeSpentMin)
 		fmt.Printf("Time spent will is trimmed to %s, to not to exceed %s\n",
 			timeSpent,
