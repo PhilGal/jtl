@@ -24,7 +24,27 @@ import (
 	"github.com/philgal/jtl/cmd/duration"
 	"github.com/philgal/jtl/cmd/internal/config"
 	"github.com/philgal/jtl/cmd/internal/csv"
+	"github.com/philgal/jtl/cmd/internal/model"
 	"github.com/spf13/cobra"
+)
+
+var (
+	// Args
+	ticket string
+	// Flags
+	timeSpent string
+	comment   string
+	startedTs string
+	// Helpers
+	now      time.Time = time.Now()
+	dayStart           = time.Date(now.Year(), now.Month(), now.Day(), 8, 45, 0, 0, time.Local) // fixme: make day start time configurable
+)
+
+const (
+	ticketCmdStr  = "ticket"
+	timeCmdStr    = "time"
+	dateCmdStr    = "date"
+	messageCmdStr = "message"
 )
 
 // logCmd represents the log command
@@ -48,49 +68,24 @@ Examples:
   jtl log -j JIRA-101 -t 30m -s "14 Apr 2020 10:00" -m "Comment"
   jtl log -j l666 -t 1h -s "06 Jun 2020 06:00" -m "Some repeating meeting!"
 `,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		//use App for testing
-		runLogCommand(cmd, args)
+		ticket = args[0]
+		model.ValidateJiraTicketFormat(ticket)
+		runLogCommand()
 		displayReport()
 	},
 }
 
-const (
-	ticketCmdStr  = "ticket"
-	timeCmdStr    = "time"
-	dateCmdStr    = "date"
-	messageCmdStr = "message"
-)
-
-// fixme: make day start time configurable
-var now = time.Now()
-var dayStart = time.Date(now.Year(), now.Month(), now.Day(), 8, 45, 0, 0, time.Local)
-
 func init() {
-
 	rootCmd.AddCommand(logCmd)
 	//todo improve duration parsing
-	logCmd.Flags().StringP(timeCmdStr, "t", "4h", "[Required] Time spent. Default - 4h")
-	logCmd.Flags().StringP(messageCmdStr, "m", "wip", "Comment to the work log. Will be displayed in Jira. Default - \"wip\"")
-	logCmd.Flags().StringP(dateCmdStr, "d", dayStart.Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
+	logCmd.Flags().StringVarP(&timeSpent, timeCmdStr, "t", "4h", "[Required] Time spent. Default - 4h")
+	logCmd.Flags().StringVarP(&comment, messageCmdStr, "m", "wip", "Comment to the work log. Will be displayed in Jira. Default - \"wip\"")
+	logCmd.Flags().StringVarP(&startedTs, dateCmdStr, "d", dayStart.Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
 }
 
-func runLogCommand(cmd *cobra.Command, args []string) {
-
-	if len(args) < 1 {
-		log.Fatal("too few arguments")
-	}
-
-	var ticket, timeSpent, startedTs, comment string
-
-	ticket = args[0]
-	if len(ticket) < 5 {
-		log.Fatalf("invalid ticket %s", ticket)
-	}
-
-	timeSpent, _ = cmd.Flags().GetString(timeCmdStr)
-	comment, _ = cmd.Flags().GetString(messageCmdStr)
-	startedTs, _ = cmd.Flags().GetString(dateCmdStr)
+func runLogCommand() {
 	fcsv := csv.NewCsvFile(config.DataFilePath())
 	fcsv.ReadAll()
 
@@ -120,12 +115,17 @@ func runLogCommand(cmd *cobra.Command, args []string) {
 	fmt.Printf("Same date records: %v\n", sameDateRecs)
 
 	if duration.ToMinutes(timeSpent)+minutesSpentToDate <= duration.EightHoursInMin {
+
+		// we have some time to log: do dynamic timeSpent & startedTs calculation for all today's records
+		// if today's records are empty, fill 8h with multiple records of 4h.
+		// if today's records are not empty, calculate timeSpent and startedTs based on the existing records
+
 		timeSpentMin := int(math.Min(float64(duration.EightHoursInMin-minutesSpentToDate), duration.EightHoursInMin/2))
 		timeSpent = duration.ToString(timeSpentMin)
 		fmt.Printf("Time spent will is trimmed to %s, to not to exceed %s\n",
 			timeSpent,
 			duration.ToString(duration.EightHoursInMin))
-		// adjust startedTs to the last record: last rec.StartedTs + calculated time spent = new startedTs
+		// adjust startedTs to the last record: new startedTs = last rec.StartedTs + calculated time spent
 		if reclen := len(sameDateRecs); reclen > 0 {
 			lastRec := sameDateRecs[reclen-1]
 			lastRecStaredAt := duration.ParseTime(lastRec.StartedTs)

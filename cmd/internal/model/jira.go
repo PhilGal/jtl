@@ -1,9 +1,13 @@
 package model
 
 import (
+	"fmt"
+	"os"
+	"regexp"
 	"strings"
 
 	"github.com/philgal/jtl/cmd/internal/csv"
+	"github.com/spf13/viper"
 )
 
 type JiraRequestRow struct {
@@ -58,4 +62,13 @@ func (creds *Credentials) Trim() *Credentials {
 
 func (creds *Credentials) IsValid() bool {
 	return creds.Username != "" && creds.Password != ""
+}
+
+func ValidateJiraTicketFormat(ticket string) {
+	pkeyPattern := viper.GetString("projectkeypattern")
+	rx := regexp.MustCompile(pkeyPattern)
+	if !rx.MatchString(ticket) {
+		fmt.Printf("Ticket (project key) %s must match pattern %s\n", ticket, pkeyPattern)
+		os.Exit(1)
+	}
 }
