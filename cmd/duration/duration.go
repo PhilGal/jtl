@@ -2,11 +2,12 @@ package duration
 
 import (
 	"fmt"
-	"github.com/philgal/jtl/cmd/internal/config"
 	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"github.com/philgal/jtl/cmd/internal/config"
 )
 
 type Time struct {
@@ -19,8 +20,19 @@ func ToString(minutes int) string {
 	if minutes <= 0 {
 		return "0m"
 	}
-	durationString := (time.Duration(minutes) * time.Minute).String()
-	return strings.TrimSuffix(strings.TrimSuffix(strings.TrimSuffix(durationString, "0s"), "0S"), "0m")
+	h := minutes / 60
+	m := minutes % 60
+	sb := strings.Builder{}
+	if h > 0 {
+		sb.WriteString(strconv.Itoa(h) + "h")
+	}
+	if m > 0 {
+		if h > 0 {
+			sb.WriteString(" ")
+		}
+		sb.WriteString(strconv.Itoa(m) + "m")
+	}
+	return sb.String()
 }
 
 // ToMinutes converts string duration d "2D", "4h", "2H 30m", "1d 7h 40m", etc, to minutes.

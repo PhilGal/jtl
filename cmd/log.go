@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"os"
 	"slices"
 	"time"
 
@@ -85,6 +86,12 @@ func init() {
 	logCmd.Flags().StringVarP(&startedTs, dateCmdStr, "d", dayStart.Format(config.DefaultDateTimePattern), "Date and time when the work has been started. Default - current timestamp")
 }
 
+var sameDateRecordsFilter = func(logDate time.Time) func(rec csv.Record) bool {
+	return func(rec csv.Record) bool {
+		return duration.ParseTimeTruncatedToDate(rec.StartedTs).Equal(logDate.Truncate(24 * time.Hour))
+	}
+}
+
 func runLogCommand() {
 	fcsv := csv.NewCsvFile(config.DataFilePath())
 	fcsv.ReadAll()
@@ -96,61 +103,81 @@ func runLogCommand() {
 	// case >0:
 
 	// calculate how much is left of the startedTs
-	slices.SortFunc(fcsv.Records, func(a csv.CsvRec, b csv.CsvRec) int {
+	slices.SortFunc(fcsv.Records, func(a csv.Record, b csv.Record) int {
 		return duration.ParseTimeTruncatedToDate(a.StartedTs).Compare(duration.ParseTimeTruncatedToDate(b.StartedTs))
 	})
 
 	logDate, _ := time.Parse(config.DefaultDateTimePattern, startedTs)
 	//if dates are equal, count hours
-	sameDateRecs := sameDateRecords(&fcsv.Records, logDate)
+	sameDateRecs := fcsv.Filter(sameDateRecordsFilter(logDate))
+	minutesSpentToDate := timeSpentToDateInMin(sameDateRecs, logDate)
 
-	minutesSpentToDate := timeSpentToDateInMin(&sameDateRecs, logDate)
 	// for example 500 > 480 -> 20m to log
-	// fixme: make max daily duration configurable
-	if minutesSpentToDate >= duration.EightHoursInMin {
-		fmt.Printf("You have already logged %s, will not log more\n", duration.ToString(minutesSpentToDate))
-		return
-	}
+	// todo: make max daily duration configurable
+	if duration.ToMinutes(timeSpent)+minutesSpentToDate >= duration.EightHoursInMin {
+		// todo: make this logic optional if some "distribute" flag is set
+		adjustableRecords := csv.Filter(sameDateRecs, func(r csv.Record) bool { return r.ID == "" })
+		if len(adjustableRecords) == 0 {
+			fmt.Printf("You have already logged %s, will not log more\n", duration.ToString(minutesSpentToDate))
+			return
+		}
 
-	fmt.Printf("Same date records: %v\n", sameDateRecs)
+		// calc timeSpent for each record
+		totalTimeSpentToLog := math.Min(float64(minutesSpentToDate+duration.ToMinutes(timeSpent)), duration.EightHoursInMin)
+		totalRecordsToLog := len(sameDateRecs) + 1
+		timeSpentPerRec := int(totalTimeSpentToLog / float64(totalRecordsToLog))
+		timeSpent = duration.ToString(timeSpentPerRec)
 
-	if duration.ToMinutes(timeSpent)+minutesSpentToDate <= duration.EightHoursInMin {
-
+		for idx, r := range adjustableRecords {
+			// calc startedTs for each record
+			if idx > 0 {
+				prevRec := adjustableRecords[idx-1]
+				startedTs, _ := time.Parse(config.DefaultDateTimePattern, prevRec.StartedTs)
+				startedTs = startedTs.Add(time.Duration(timeSpentPerRec) * time.Minute)
+				r.StartedTs = startedTs.Format(config.DefaultDateTimePattern)
+			}
+			// set the values
+			r.TimeSpent = duration.ToString(timeSpentPerRec)
+			fcsv.UpdateRecord(r)
+		}
+	} else {
 		// we have some time to log: do dynamic timeSpent & startedTs calculation for all today's records
 		// if today's records are empty, fill 8h with multiple records of 4h.
 		// if today's records are not empty, calculate timeSpent and startedTs based on the existing records
-
 		timeSpentMin := int(math.Min(float64(duration.EightHoursInMin-minutesSpentToDate), duration.EightHoursInMin/2))
 		timeSpent = duration.ToString(timeSpentMin)
 		fmt.Printf("Time spent will is trimmed to %s, to not to exceed %s\n",
 			timeSpent,
 			duration.ToString(duration.EightHoursInMin))
-		// adjust startedTs to the last record: new startedTs = last rec.StartedTs + calculated time spent
-		if reclen := len(sameDateRecs); reclen > 0 {
-			lastRec := sameDateRecs[reclen-1]
-			lastRecStaredAt := duration.ParseTime(lastRec.StartedTs)
-			startedTs = lastRecStaredAt.Add(time.Minute * time.Duration(duration.ToMinutes(lastRec.TimeSpent))).Format(config.DefaultDateTimePattern)
-		}
+	}
+
+	// adjust startedTs to the last record: new startedTs = last rec.StartedTs + calculated time spent
+	sameDateRecs = fcsv.Filter(sameDateRecordsFilter(logDate))
+	if l := len(sameDateRecs); l > 0 {
+		lastRec := sameDateRecs[l-1]
+		lastRecStaredAt := duration.ParseTime(lastRec.StartedTs)
+		startedTs = lastRecStaredAt.Add(time.Minute * time.Duration(duration.ToMinutes(lastRec.TimeSpent))).Format(config.DefaultDateTimePattern)
 	}
 
 	if timeSpent != "0m" {
-		fcsv.AddRecord(csv.CsvRec{
+		fcsv.AddRecord(csv.Record{
 			ID:        "",
 			StartedTs: startedTs,
 			Comment:   comment,
 			TimeSpent: timeSpent,
 			Ticket:    ticket,
 		})
-		log.Print(fcsv.Records)
+		log.Print("Writing a file ", fcsv.Records)
 		fcsv.Write()
 	} else {
 		fmt.Println("Calculated time spent is 0m, will not log!")
+		os.Exit(1)
 	}
 }
 
-func timeSpentToDateInMin(sameDateRecs *csv.CsvRecords, logDate time.Time) int {
+func timeSpentToDateInMin(sameDateRecs []csv.Record, logDate time.Time) int {
 	var totalTimeSpentOnDate int
-	for _, rec := range slices.Backward(*sameDateRecs) {
+	for _, rec := range slices.Backward(sameDateRecs) {
 		recDate, _ := time.Parse(config.DefaultDateTimePattern, rec.StartedTs)
 		// logs files are already collected by months of the year, so it's enough to compare days
 		if recDate.Day() == logDate.Day() {
@@ -163,8 +190,8 @@ func timeSpentToDateInMin(sameDateRecs *csv.CsvRecords, logDate time.Time) int {
 	return totalTimeSpentOnDate
 }
 
-func sameDateRecords(recs *csv.CsvRecords, logDate time.Time) csv.CsvRecords {
-	return (*recs).Filter(func(rec csv.CsvRec) bool {
+func sameDateRecords(recs []csv.Record, logDate time.Time) []csv.Record {
+	return csv.Filter(recs, func(rec csv.Record) bool {
 		return duration.ParseTimeTruncatedToDate(rec.StartedTs).Equal(logDate.Truncate(24 * time.Hour))
 	})
 }

@@ -1,7 +1,7 @@
 package csv
 
 import (
-	"errors"
+	"github.com/philgal/jtl/cmd/internal/config"
 	"log"
 	"os"
 	"reflect"
@@ -15,7 +15,7 @@ func init() {
 	validation.InitValidator()
 }
 
-var okCsvRecord = CsvRec{
+var okCsvRecord = Record{
 	ID:        "1",
 	StartedTs: "14 Apr 2020 11:30",
 	Comment:   "Row with ID",
@@ -40,7 +40,7 @@ func fileExists(filename string) bool {
 }
 
 // Return value, ignore error
-func newCsvRecord(idx int, rec []string) CsvRec {
+func newCsvRecord(idx int, rec []string) Record {
 	newRec := newCsvRec(rec)
 	newRec._idx = idx
 	return newRec
@@ -52,10 +52,11 @@ func TestCsvFile_Write(t *testing.T) {
 	path := "./csv_testdata/write_file_test.csv"
 	t.Cleanup(func() { deleteFileIfExists(path) })
 	t.Run("Write one row into a file", func(t *testing.T) {
-		writtenFile := CsvFile{
-			Path:    path,
-			Header:  GetCsvHeader(),
-			Records: CsvRecords{newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1"})},
+		writtenFile := File{
+			Path:   path,
+			Header: config.Header(),
+			//Records: []Record{newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "US demo", "10m", "TICKET-1"})},
+			Records: []Record{{ID: "1", StartedTs: "14 Apr 2020 11:30", Comment: "US demo", TimeSpent: "10m", Ticket: "TICKET-1"}},
 		}
 		writtenFile.Write()
 
@@ -71,17 +72,17 @@ func TestCsvFile_Write(t *testing.T) {
 func TestCsvFile_ReadAll(t *testing.T) {
 	tests := []struct {
 		name         string
-		file         CsvFile
+		file         File
 		rowsExpected int
 	}{
 		{
 			name: "Should reads all rows from not empty file",
-			file: CsvFile{
+			file: File{
 				Path:   "./csv_testdata/not_empty.csv",
-				Header: GetCsvHeader(),
-				Records: CsvRecords{
-					newCsvRecord(0, []string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "TICKET-1"}),
-					newCsvRecord(1, []string{"", "15 Apr 2020 11:30", "Row without ID", "10m", "TICKET-2"}),
+				Header: config.Header(),
+				Records: []Record{
+					{_idx: 0, ID: "1", StartedTs: "14 Apr 2020 11:30", Comment: "Row with ID", TimeSpent: "10m", Ticket: "TICKET-1"},
+					{_idx: 1, ID: "", StartedTs: "15 Apr 2020 11:30", Comment: "Row without ID", TimeSpent: "10m", Ticket: "TICKET-2"},
 				},
 			},
 			rowsExpected: 2,
@@ -89,13 +90,13 @@ func TestCsvFile_ReadAll(t *testing.T) {
 
 		{
 			name:         "Should reads all rows from an empty file",
-			file:         CsvFile{Path: "./csv_testdata/empty.csv"},
+			file:         File{Path: "./csv_testdata/empty.csv"},
 			rowsExpected: 0,
 		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			readFile := CsvFile{Path: test.file.Path}
+			readFile := File{Path: test.file.Path}
 			readFile.ReadAll()
 			assert.Exactly(t, test.file, readFile)
 		})
@@ -109,7 +110,7 @@ func TestNewCsvRecord(t *testing.T) {
 	tests := []struct {
 		name   string
 		args   args
-		want   CsvRec
+		want   Record
 		panics bool
 	}{
 		{
@@ -121,12 +122,12 @@ func TestNewCsvRecord(t *testing.T) {
 		// {
 		// 	"Should not create record with invalid jira ticket",
 		// 	args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10m", "ticket1"}},
-		// 	CsvRec{},
+		// 	Record{},
 		// 	true},
 		// {
 		// 	"Should not create record with invalid timeSpent",
 		// 	args{[]string{"1", "14 Apr 2020 11:30", "Row with ID", "10bns", "TICKET-1"}},
-		// 	CsvRec{},
+		// 	Record{},
 		// 	true},
 	}
 	for _, test := range tests {
@@ -137,44 +138,6 @@ func TestNewCsvRecord(t *testing.T) {
 				got := newCsvRec(test.args.rec)
 				t.Logf("%v", got)
 				assert.True(t, reflect.DeepEqual(got, test.want))
-			}
-		})
-	}
-}
-
-func TestUpdateRecord(t *testing.T) {
-
-	updatedRec := CsvRec{
-		_idx:      1,
-		ID:        "666",
-		StartedTs: "14 Apr 2020 11:30",
-		Comment:   "Updated Row with ID",
-		TimeSpent: "10m",
-		Ticket:    "TICKET-666",
-	}
-
-	file := CsvFile{Path: "./csv_testdata/not_empty.csv"}
-	file.ReadAll()
-
-	idxOutOfBounds := len(file.Records) + 1
-
-	tests := []struct {
-		name          string
-		idx           int
-		rec           CsvRec
-		expectedError error
-	}{
-		{"Should update record at the given index", updatedRec._idx, updatedRec, nil},
-		{"Should return error if the given index is out of range", idxOutOfBounds, okCsvRecord, errors.New("index is out of range")},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			err := file.UpdateRecord(test.idx, test.rec)
-			assert.EqualValues(t, err, test.expectedError)
-			if err == nil {
-				assert.Exactly(t, test.rec, file.Records[test.idx])
-				assert.Equal(t, test.idx, file.Records[test.idx]._idx)
 			}
 		})
 	}

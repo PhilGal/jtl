@@ -64,7 +64,7 @@ func TestPost(t *testing.T) {
 	csvFile.ReadAll()
 
 	t.Run("Should unmarshall correct response", func(t *testing.T) {
-		jreq := model.NewJiraRequest(&csvFile.Records)
+		jreq := model.NewJiraRequest(csvFile.Records)
 		jres := post(&model.Credentials{}, jreq, restClient)
 
 		expected := []model.JiraResponse{{RowIdx: 1, Id: "100028", IssueId: "10002", Timespent: "3h 20m", Comment: "I did some work here.", Started: "2020-04-09T00:28:56.595+0000", IsSuccess: true}}
@@ -80,7 +80,7 @@ func TestUpdateAfterPost(t *testing.T) {
 	csvFile.ReadAll()
 
 	t.Run("Should update row with id from response", func(t *testing.T) {
-		jreq := model.NewJiraRequest(&csvFile.Records)
+		jreq := model.NewJiraRequest(csvFile.Records)
 		jres := post(&model.Credentials{}, jreq, restClient)
 
 		assert.Equal(t, "1", csvFile.Records[0].ID)

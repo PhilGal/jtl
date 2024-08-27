@@ -22,9 +22,9 @@ type MonthlyReport struct {
 }
 
 // NewMonthlyReport generates MonthlyReport by extracting weekly-grouped items from all records in the provided data CSV
-func NewMonthlyReport(csvRecords csv.CsvRecords) *MonthlyReport {
+func NewMonthlyReport(csvRecords []csv.Record) *MonthlyReport {
 	mr := &MonthlyReport{}
-	//Create weekly reports.
+	//Create weekly reports
 	//Iterate by CSV rows and append new weekly reports based on weekStart/weekEnd dates deducted from the individual records
 	for _, r := range csvRecords {
 		startedTs, _ := time.ParseInLocation(config.DefaultDateTimePattern, r.StartedTs, time.Local)

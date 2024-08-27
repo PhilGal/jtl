@@ -20,11 +20,11 @@ type DailyReport struct {
 	totalTasks              int
 	timeSpentInMinutesToday int
 	timeSpentInMinutes      int
-	csvRecords              csv.CsvRecords
+	csvRecords              []csv.Record
 }
 
 // NewDailyReport generates DailyReport by extracting today's data from all records in the provided data CSV.
-func NewDailyReport(csvRecords csv.CsvRecords, showAll bool) *DailyReport {
+func NewDailyReport(csvRecords []csv.Record, showAll bool) *DailyReport {
 	dr := &DailyReport{}
 	dr.showAll = showAll
 	dr.csvRecords = csvRecords
@@ -73,7 +73,7 @@ func (r *DailyReport) Print() {
 	t.Render()
 }
 
-func addTimeSpent(r csv.CsvRec, timeSpentInMinutes int) int {
+func addTimeSpent(r csv.Record, timeSpentInMinutes int) int {
 	tsm := duration.ToMinutes(r.TimeSpent)
 	return timeSpentInMinutes + tsm
 }

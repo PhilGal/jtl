@@ -1,3 +1,3 @@
-ID,StartedTs,Comment,TimeSpent,Ticket
+id,date,activity,hours,jira
 1,14 Apr 2020 11:30,Row with ID,10m,TICKET-1
 ,15 Apr 2020 11:30,Row without ID,10m,TICKET-2

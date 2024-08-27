@@ -12,32 +12,24 @@ import (
 	"github.com/spf13/viper"
 )
 
+const (
+	DefaultDateTimePattern = "02 Jan 2006 15:04"
+	DefaultDatePattern     = "02 Jan 2006"
+	DataFileHeader         = "id,date,activity,hours,jira"
+)
+
 var (
 	cfgFile  string
 	dataFile string
 )
 
-func ConfigFilePath() string {
-	return cfgFile
-}
-
 func DataFilePath() string {
 	return dataFile
 }
 
-func SetConfigFilePath(p string) {
-	cfgFile = p
+func Header() []string {
+	return strings.Split(DataFileHeader, ",")
 }
-
-func SetDataFilePath(p string) {
-	dataFile = p
-}
-
-const (
-	DefaultDateTimePattern = "02 Jan 2006 15:04"
-	DefaultDatePattern     = "02 Jan 2006"
-	DataFileHeader         = "id,date,activity,hours"
-)
 
 func Init() {
 	cfgFile = viper.GetString("config")
@@ -61,7 +53,6 @@ func Init() {
 		viper.SetConfigName(configName)
 		viper.SetConfigType(configType)
 
-		viper.Set("dataFileHeader", "id,date,activity,hours")
 		viper.SetDefault("host", "")
 		viper.SetDefault("credentials", map[string]string{
 			"username": "",
@@ -85,12 +76,11 @@ func Init() {
 }
 
 func InitDataFile() {
-	dataFileHeader := viper.GetString("dataFileHeader")
 	createNewDataFile := func() {
 		dataDir := path.Join(homeDir(), ".jtl", "data")
 		f := path.Join(dataDir, GenerateDataFileName())
 		createDirIfNotExists(dataDir)
-		createFileIfNotExists(f, dataFileHeader)
+		createFileIfNotExists(f)
 		//upgrade file to full path in context
 		dataFile = f
 	}
@@ -128,7 +118,7 @@ func createDirIfNotExists(path string) {
 	}
 }
 
-func createFileIfNotExists(filename string, dataFileHeader string) {
+func createFileIfNotExists(filename string) {
 	if !fileExists(filename) {
 		f, err := os.Create(filename)
 		defer func() {
@@ -139,7 +129,7 @@ func createFileIfNotExists(filename string, dataFileHeader string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		f.WriteString(dataFileHeader)
+		f.WriteString(DataFileHeader)
 	}
 }
 

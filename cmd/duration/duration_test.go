@@ -27,3 +27,24 @@ func TestDateTimeToDate(t *testing.T) {
 		})
 	}
 }
+
+func TestMinutesToDuraion(t *testing.T) {
+	tests := []struct {
+		name    string
+		minutes int
+		want    string
+	}{
+		{"0m", 0, "0m"},
+		{"1m", 1, "1m"},
+		{"1h", 60, "1h"},
+		{"2h 40m", 160, "2h 40m"},
+		{"8h", 480, "8h"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ToString(tt.minutes); got != tt.want {
+				t.Errorf("ToString(%v) = %v, want %v", tt.minutes, got, tt.want)
+			}
+		})
+	}
+}
