@@ -66,13 +66,8 @@ func NewCsvFile(path string) File {
 
 // AddRecord adds (appends) a given record
 func (f *File) AddRecord(rec Record) {
-	// if err := validation.Validate.Struct(*rec); err != nil {
-	// fmt.Println("invalid record %w", err)
-	// os.Exit(1)
-	// }
 	rec._idx = len(f.Records)
 	f.Records = append(f.Records, rec)
-	fmt.Printf("Added record %+v; total records: %d\n", rec, len(f.Records))
 }
 
 // UpdateRecord replaces record at the given index with the new record.
