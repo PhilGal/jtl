@@ -19,8 +19,11 @@ const (
 )
 
 var (
-	cfgFile  string
-	dataFile string
+	cfgFile               string
+	dataFile              string
+	now                   time.Time = time.Now()
+	DefaultDayStart                 = time.Date(now.Year(), now.Month(), now.Day(), 8, 45, 0, 0, time.Local).Format(DefaultDateTimePattern)
+	DefaultTicketDuration           = "4h"
 )
 
 func DataFilePath() string {

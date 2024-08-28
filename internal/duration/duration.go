@@ -1,7 +1,6 @@
 package duration
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -57,7 +56,7 @@ func ToMinutes(d string) int {
 	case 'm':
 		return durationValue
 	default:
-		panic(fmt.Sprintf("invalid duration unit: %c", durationUnit))
+		return 0
 	}
 }
 

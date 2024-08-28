@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/philgal/jtl/internal/config"
+	"github.com/philgal/jtl/internal/duration"
 )
 
 // File represents a CSV file with header and records. Use Read() and Write() to read and write data from/to disk
@@ -62,6 +63,12 @@ var TodaysRowsCsvRecordPredicate = func(r Record) bool {
 // NewCsvFile creates a new File with the given path and default header
 func NewCsvFile(path string) File {
 	return File{Path: path, Header: config.Header(), Records: []Record{}}
+}
+
+func ReadFile(path string) File {
+	file := NewCsvFile(config.DataFilePath())
+	file.ReadAll()
+	return file
 }
 
 // AddRecord adds (appends) a given record
@@ -150,6 +157,12 @@ func Filter(recs []Record, predicate func(Record) bool) []Record {
 
 func (f *File) Filter(predicate func(Record) bool) []Record {
 	return Filter(f.Records, predicate)
+}
+
+var SameDateRecordsFilter = func(logDate time.Time) func(rec Record) bool {
+	return func(rec Record) bool {
+		return duration.ParseTimeTruncatedToDate(rec.StartedTs).Equal(logDate.Truncate(24 * time.Hour))
+	}
 }
 
 func newCsvRec(rec []string) Record {

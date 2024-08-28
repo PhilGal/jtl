@@ -2,3 +2,10 @@ jtl
 jtl.exe
 jtl.log
 todo.txt
+
+bin
+.idea
+.fleet
+.vscode
+
+.DS_Store
