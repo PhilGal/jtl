@@ -22,10 +22,10 @@ import (
 	"slices"
 	"time"
 
-	"github.com/philgal/jtl/cmd/duration"
-	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/csv"
-	"github.com/philgal/jtl/cmd/internal/model"
+	"github.com/philgal/jtl/internal/config"
+	"github.com/philgal/jtl/internal/csv"
+	"github.com/philgal/jtl/internal/duration"
+	"github.com/philgal/jtl/internal/model"
 	"github.com/spf13/cobra"
 )
 

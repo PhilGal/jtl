@@ -1,13 +1,14 @@
 package csv
 
 import (
-	"github.com/philgal/jtl/cmd/internal/config"
 	"log"
 	"os"
 	"reflect"
 	"testing"
 
-	"github.com/philgal/jtl/validation"
+	"github.com/philgal/jtl/internal/config"
+
+	"github.com/philgal/jtl/internal/validation"
 	"github.com/stretchr/testify/assert"
 )
 

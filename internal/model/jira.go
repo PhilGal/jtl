@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/philgal/jtl/cmd/internal/csv"
+	"github.com/philgal/jtl/internal/csv"
 	"github.com/spf13/viper"
 )
 

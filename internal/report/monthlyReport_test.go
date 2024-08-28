@@ -17,8 +17,8 @@ package report
 import (
 	"testing"
 
-	"github.com/philgal/jtl/cmd/duration"
-	"github.com/philgal/jtl/cmd/internal/csv"
+	"github.com/philgal/jtl/internal/csv"
+	"github.com/philgal/jtl/internal/duration"
 	"github.com/stretchr/testify/assert"
 )
 

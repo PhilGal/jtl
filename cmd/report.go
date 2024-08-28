@@ -15,9 +15,9 @@
 package cmd
 
 import (
-	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/csv"
-	"github.com/philgal/jtl/cmd/internal/report"
+	"github.com/philgal/jtl/internal/config"
+	"github.com/philgal/jtl/internal/csv"
+	"github.com/philgal/jtl/internal/report"
 
 	"github.com/spf13/cobra"
 )

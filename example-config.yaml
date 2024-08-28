@@ -1,7 +1,4 @@
 host: https://jira.server.url
 credentials:
-    username: <username>
-    password: <password>
-alias:
-    jt1: JIRATICKET-1
-    l666: ANOTHERLONGTICKET-666
+  username: <username>
+  password: <password>

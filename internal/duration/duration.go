@@ -7,7 +7,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/philgal/jtl/cmd/internal/config"
+	"github.com/philgal/jtl/internal/config"
 )
 
 type Time struct {

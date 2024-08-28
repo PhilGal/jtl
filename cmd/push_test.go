@@ -21,10 +21,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/philgal/jtl/cmd/internal/csv"
-	"github.com/philgal/jtl/cmd/internal/model"
-	"github.com/philgal/jtl/cmd/internal/rest"
-	"github.com/philgal/jtl/validation"
+	"github.com/philgal/jtl/internal/csv"
+	"github.com/philgal/jtl/internal/model"
+	"github.com/philgal/jtl/internal/rest"
+	"github.com/philgal/jtl/internal/validation"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -8,7 +8,7 @@ These are common Jtl commands used in various situations:
   * log your work as you go to a local file (see: `jtl help log`),
   * display summary report (see: `jtl help report`),
   * finally, push all data from file to your company's remote server (see: `jtl help push`)
-  
+
 For better experience, it is recommended to add a valid configuration file `$HOME/.jtl/config.yaml`. Type 'jtl help push' for more details.
 
 When you call any command, a programm is trying to locate a data file `$HOME/data/<month-year>.csv` Thus, each month you'll have a new data file.
@@ -24,7 +24,7 @@ Once you get your executable, install/run it as you would usually install or run
 
 ### Build from source
 
-Install go >= 1.14.x
+Install Go on your machine. You can download it from [here](https://golang.org/dl/).
 
 ```
 ❯ git clone https://github.com/PhilGal/jtl.git
@@ -36,9 +36,7 @@ Running `go install` will put an executable into your `$GOPATH` directory. Make 
 
 ```
 ❯ echo $GOPATH
-/usr/local/Cellar/go/1.14.1
+/usr/local/Cellar/go/{version}
 ❯ which jtl
-/usr/local/Cellar/go/1.14.1/bin/jtl
+/usr/local/Cellar/go/{version}/bin/jtl
 ```
-
- 

@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/philgal/jtl/cmd/internal/config"
+	"github.com/philgal/jtl/internal/config"
 )
 
 // File represents a CSV file with header and records. Use Read() and Write() to read and write data from/to disk

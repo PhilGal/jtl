@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/philgal/jtl/cmd/internal/config"
+	"github.com/philgal/jtl/internal/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -33,7 +33,7 @@ var rootCmd = &cobra.Command{
   # log your work as you go to a local file (see: 'jtl help log'),
   # display summary report (see: 'jtl help report'),
   # finally, push all data from file to your company's remote server (see: 'jtl help push')
-  
+
 For better experience, it is recommended to add a valid configuration file $HOME/.jtl/config.yaml. Type 'jtl help push' for more details.
 
 When you call any command, a programm is trying to locate a data file $HOME/data/<month-year>.csv Thus, each month you'll have a new data file.
