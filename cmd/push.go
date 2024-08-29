@@ -28,10 +28,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/philgal/jtl/cmd/internal/config"
-	"github.com/philgal/jtl/cmd/internal/csv"
-	"github.com/philgal/jtl/cmd/internal/model"
-	"github.com/philgal/jtl/cmd/internal/rest"
+	"github.com/philgal/jtl/internal/config"
+	"github.com/philgal/jtl/internal/csv"
+	"github.com/philgal/jtl/internal/model"
+	"github.com/philgal/jtl/internal/rest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"golang.org/x/term"
@@ -52,8 +52,8 @@ For correct work this command reqiures a configured <host> and user <credentials
 However, if username and password are not defined, a user will be prompted to enter them.
 
 Preview mode:
-To make sure the data to be pushed is correct, the command can be executed with -p flag. 
-The preview output contains host, username and prepared requests bodies for POST request to Jira. 
+To make sure the data to be pushed is correct, the command can be executed with -p flag.
+The preview output contains host, username and prepared requests bodies for POST request to Jira.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		PushToServer(cmd)
@@ -78,7 +78,7 @@ func PushToServer(cmd *cobra.Command) {
 func push(cmd *cobra.Command, restClient rest.Client) {
 	csvFile := csv.NewCsvFile(config.DataFilePath())
 	csvFile.ReadAll()
-	jreq := model.NewJiraRequest(&csvFile.Records)
+	jreq := model.NewJiraRequest(csvFile.Records)
 
 	if viper.GetString("Host") == "" {
 		fmt.Println("Jira host is not set in config, printing preview")
@@ -155,7 +155,7 @@ func postSingleRequest(cred *model.Credentials, row model.JiraRequestRow, restCl
 	wg.Done()
 }
 
-func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords csv.CsvRecords) {
+func updatePushedRecordsIds(resp []model.JiraResponse, csvRecords []csv.Record) {
 	if len(resp) == 0 {
 		return
 	}
